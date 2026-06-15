@@ -14,7 +14,7 @@ The system level (global) permissions are defined in the file ``global-permissio
         :ref:`Main Menu UI <main-menu-tool-log-console>` depending on where the permission is configured (project or global/system)
     * - view_log_levels
       - User is permitted to view log levels from the :ref:`Main Menu UI <override-logging-levels>`
-        or via the API :base_url:`Loggers get all <_static/api/studio.html#tag/loggers/operation/loggersGetAll>`
+        or via the API :base_url:`Get all loggers and their configured priority levels <_static/api/studio.html#tag/loggers/operation/loggersGetAll>`
     * - audit_log
       - User is permitted to access the audit logs in the UI from the :ref:`main menu <nav-menu-audit>` or the
         :ref:`project tools <studio-logging>` via the API :base_url:`Get audit log <_static/api/studio.html#tag/audit/operation/getAuditLog>`
@@ -58,29 +58,6 @@ The system level (global) permissions are defined in the file ``global-permissio
     * - create_users
       - User is permitted to :ref:`create new users <creating-a-user>` |br|
         Required when using the API to :base_url:`Create user <_static/api/studio.html#tag/users/operation/createUser>`
-    * - delete_users
-      - User is permitted to :ref:`delete users <deleting-a-user>` |br|
-        Required when using the API to :base_url:`Create user <_static/api/studio.html#tag/users/operation/deleteUser>`
-    * - encryption_tool
-      - User is permitted to access the :ref:`encryption tool <studio-encryption-tool>` |br|
-        Required when using the API to :base_url:`Encrypt a text value <_static/api/studio.html#tag/security/operation/encrypt>`
-    * - install_plugins
-      - User is permitted to :ref:`install plugins <plugin-management>` |br|
-        Required when using the following APIs:
-
-        - :base_url:`Install plugin <_static/api/studio.html#tag/marketplace/operation/installPlugin>`
-        - :base_url:`Copy local plugin <_static/api/studio.html#tag/marketplace/operation/copyPlugin>`
-    * - list_plugins
-      - User is permitted to list installed plugins |br|
-        Required when using the API to :base_url:`get the list of marketplace plugins installed in the given site <_static/api/studio.html#tag/marketplace/operation/getInstalledPlugins>`
-    * - manage_access_token
-      - User is permitted to :ref:`manage the access tokens <nav-menu-token-management>` |br|
-        Required when using the following APIs:
-
-        - :base_url:`Get access tokens <_static/api/studio.html#tag/security/operation/getAccessTokens>`
-        - :base_url:`Create access token <_static/api/studio.html#tag/security/operation/createAccessToken>`
-        - :base_url:`Update access token <_static/api/studio.html#tag/security/operation/updateAccessToken>`
-        - :base_url:`Delete access token <_static/api/studio.html#tag/security/operation/deleteAccessToken>`
     * - read_users
       - User is permitted to read users. Used in the :ref:`Users Management Console <users-management>` |br|
         Required when using the following APIs:
@@ -97,14 +74,56 @@ The system level (global) permissions are defined in the file ``global-permissio
         - :base_url:`Enable user <_static/api/studio.html#tag/users/operation/enableUser>`
         - :base_url:`Disable user <_static/api/studio.html#tag/users/operation/disableUser>`
         - :base_url:`Reset user password <_static/api/studio.html#tag/users/operation/resetUserPassword>`
+    * - delete_users
+      - User is permitted to :ref:`delete users <deleting-a-user>` |br|
+        Required when using the API to :base_url:`Create user <_static/api/studio.html#tag/users/operation/deleteUser>`
+    * - encryption_tool
+      - User is permitted to access the :ref:`encryption tool <studio-encryption-tool>` |br|
+        Required when using the API to :base_url:`Encrypt a text value <_static/api/studio.html#tag/security/operation/encrypt>`
+    * - install_plugins
+      - User is permitted to :ref:`install plugins <plugin-management>` |br|
+        Required when using the following APIs:
+
+        - :base_url:`Install plugin <_static/api/studio.html#tag/marketplace/operation/installPlugin>`
+        - :base_url:`Copy local plugin <_static/api/studio.html#tag/marketplace/operation/copyPlugin>`
+    * - list_plugins
+      - User is permitted to list installed plugins |br|
+        Required when using the API to :base_url:`get the list of marketplace plugins installed in the given site <_static/api/studio.html#tag/marketplace/operation/getInstalledPlugins>`
     * - search_plugins
       - User is permitted to :ref:`search for plugins <plugin-management>`
+    * - manage_access_token
+      - User is permitted to :ref:`manage the access tokens <nav-menu-token-management>` |br|
+        Required when using the following APIs:
+
+        - :base_url:`Get access tokens <_static/api/studio.html#tag/security/operation/getAccessTokens>`
+        - :base_url:`Create access token <_static/api/studio.html#tag/security/operation/createAccessToken>`
+        - :base_url:`Update access token <_static/api/studio.html#tag/security/operation/updateAccessToken>`
+        - :base_url:`Delete access token <_static/api/studio.html#tag/security/operation/deleteAccessToken>`
+    * - create_cluster |enterpriseOnly|
+      - User is allowed to create a cluster |br|
+        Required when using the following APIs:
+
+        - :base_url:`Get the local Studio instance cluster mode <_static/api/studio.html#tag/cluster/operation/getClusterMode>`
+        - :base_url:`Get all the members of the cluster <_static/api/studio.html#tag/cluster/operation/getClusterMembers>`
     * - read_cluster |enterpriseOnly|
       - User is allowed to list the cluster members and the cluster mode (PRIMARY vs REPLICA) |br|
         Required when using the following APIs:
 
         - :base_url:`Get the local Studio instance cluster mode <_static/api/studio.html#tag/cluster/operation/getClusterMode>`
         - :base_url:`Get all the members of the cluster <_static/api/studio.html#tag/cluster/operation/getClusterMembers>`
+    * - update_cluster |enterpriseOnly|
+      - User is allowed to list the cluster members and the cluster mode (PRIMARY vs REPLICA) |br|
+        Required when using the following APIs:
+
+        - :base_url:`Get the local Studio instance cluster mode <_static/api/studio.html#tag/cluster/operation/getClusterMode>`
+        - :base_url:`Get all the members of the cluster <_static/api/studio.html#tag/cluster/operation/getClusterMembers>`
+    * - delete_cluster |enterpriseOnly|
+      - User is allowed to delete cluster members |br|
+        Required when using the following APIs:
+
+        - :base_url:`Get the local Studio instance cluster mode <_static/api/studio.html#tag/cluster/operation/getClusterMode>`
+        - :base_url:`Get all the members of the cluster <_static/api/studio.html#tag/cluster/operation/getClusterMembers>`
+
     * - write_global_configuration
       - User is permitted to write global configuration content for Studio
     * - system_properties_manage
