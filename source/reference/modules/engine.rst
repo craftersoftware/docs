@@ -4047,6 +4047,8 @@ To enable the Engine Preview Mode security filters, set ``crafter.security.previ
     # If the preview security filters should be enabled
     crafter.security.preview.enabled=true
 
+Setting ``crafter.security.preview.enabled`` to false disables the preview server security.
+
 There may be some URLs that may not need filtering in Preview mode by the security filter when it is enabled.
 To exclude a URL from being intercepted and validated by the security filter, add the URL to the
 ``crafter.security.preview.urlsToExclude`` property:

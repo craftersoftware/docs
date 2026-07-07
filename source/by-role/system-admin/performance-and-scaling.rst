@@ -1286,7 +1286,7 @@ Before performing any valid intervention on the database, it will need to be sta
 
    .. code-block:: bash
 
-      CRAFTER_HOME/bin/dbms/bin/mysql -u <db_root_user> -p --socket=/tmp/MariaDB4j.33306.sock
+      CRAFTER_HOME/bin/dbms/bin/mariadb -u <db_root_user> -p --socket=/tmp/MariaDB4j.33306.sock
 
    |
 
@@ -1299,7 +1299,7 @@ Before performing any valid intervention on the database, it will need to be sta
 
    .. code-block:: text
 
-      ./mysql -u root -p --socket=/tmp/MariaDB4j.33306.sock
+      ./mariadb -u root -p --socket=/tmp/MariaDB4j.33306.sock
       Enter password:
       Welcome to the MariaDB monitor. Commands end with ; or \g.
       Your MariaDB connection id is 8

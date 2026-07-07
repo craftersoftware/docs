@@ -90,6 +90,38 @@ Here are the instructions for upgrading CrafterCMS based on how it was installed
 
 |hr|
 
+.. _upgrade-notes-for-craftercms-4.5.1:
+
+----------------------------------
+Upgrade Notes for CrafterCMS 4.5.1
+----------------------------------
+Before upgrading to CrafterCMS version ``4.5.1``, if you have users born in CrafterCMS version ``3.x``, verify if there's a foreign key name containing ``FK`` in your installation by logging in to the database and running the following:
+
+.. code-block:: bash
+    :caption: *Verify if a foreign key name containing FK exists before upgrading*
+
+    MariaDB [crafter]> SELECT TABLE_NAME, CONSTRAINT_NAME, REFERENCED_TABLE_NAME
+    ->         FROM INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS
+    ->         WHERE CONSTRAINT_SCHEMA = DATABASE()
+    ->             AND TABLE_NAME = 'group'
+    ->             AND REFERENCED_TABLE_NAME = 'organization';
+    +------------+-----------------+-----------------------+
+    | TABLE_NAME | CONSTRAINT_NAME | REFERENCED_TABLE_NAME |
+    +------------+-----------------+-----------------------+
+    | group      | group_ibfk_1    | organization          |
+    +------------+-----------------+-----------------------+
+
+If the query returns any foreign key name (CONSTRAINT_NAME) that isn't exactly `group_ix_org_id`, then you need to drop the foreign key name containing ``FK``.
+
+Update the query to match `group_ibfk_1` or any other foreign key name value returned from the query above:
+
+.. code-block:: bash
+    :caption: *Drop the constraint name returned from the previous query*
+
+    ALTER TABLE `group` DROP FOREIGN KEY `group_ibfk_1`;
+
+You may now proceed to upgrade your installation by following the instructions listed above for upgrading based on your installation type.
+
 ----------------
 Upgrading Search
 ----------------

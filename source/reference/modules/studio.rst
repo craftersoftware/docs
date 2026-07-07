@@ -6154,6 +6154,8 @@ Here's an example of using the token with Curl, where ``{Generated-Preview-Token
 
 The dialog above that shows the preview token generated also shows other examples on how to use the preview token.
 
+Sometimes you may need to disable security for accessing delivery APIs in preview mode from within the authoring environment, when working on a feature. To disable the preview API security, you'll need to set the Engine ``crafter.security.preview.enabled`` property to ``false``. See :ref:`engine-security-preview-mode` for more information.
+
 |
 
 .. _settings:

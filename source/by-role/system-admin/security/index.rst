@@ -88,7 +88,7 @@ Here are the parameters for which you must change the default values:
 
        .. code-block:: bash
 
-          /mysql -u root -p --socket=/tmp/MariaDB4j.33306.sock
+          ./mariadb -u root -p --socket=/tmp/MariaDB4j.33306.sock
 
        |
 

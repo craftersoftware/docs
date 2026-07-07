@@ -1,4 +1,5 @@
 :last-updated: 5.0.0
+:is-up-to-date: True
 
 .. meta::
     :description lang=en:
@@ -32,10 +33,6 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml <https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml>`_
 |br|
 `com.fasterxml.jackson.datatype:jackson-datatype-jsr310 <https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310>`_
-|br|
-`com.github.jknack:handlebars-springmvc <https://mvnrepository.com/artifact/com.github.jknack/handlebars-springmvc>`_
-|br|
-`com.github.jknack:handlebars <https://mvnrepository.com/artifact/com.github.jknack/handlebars>`_
 |br|
 `com.github.lookfirst:sardine <https://mvnrepository.com/artifact/com.github.lookfirst/sardine>`_
 |br|
@@ -487,7 +484,7 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 |br|
 `react-redux <https://www.npmjs.com/package/react-redux>`_
 |br|
-`react-router-dom <https://www.npmjs.com/package/react-router-dom>`_
+`react-router <https://www.npmjs.com/package/react-router>`_
 |br|
 `react-swipeable-views-utils <https://www.npmjs.com/package/react-swipeable-views-utils>`_
 |br|
