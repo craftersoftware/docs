@@ -3417,13 +3417,13 @@ Let's take a look at an example.
 
 Create a site using the website editorial blueprint, then create the folder ``mytempimages`` under ``/static-assets/images``.
 
-Say, you do not want files under ``/static-assets/images/mytempimages`` to be published when a user performs a bulk publish or *Approve & Publish* of multiple items from the dashboard. We'll add to the ``studio.configuration.publishing.blacklist.regex`` the regex for items under ``/static-assets/images/mytempimages``
+Say, you do not want files under ``/static-assets/images/mytempimages`` to be published when a user performs a bulk publish or *Approve & Publish* of multiple items from the dashboard. We'll add to the ``studio.configuration.publishing.blacklist.pathspecs`` the pathspecs for items under ``/static-assets/images/mytempimages``
 
 .. code-block:: yaml
     :caption: *studio-config-override.yaml*
 
     # Publishing blacklist configuration, items matching regexes on this list will never be published
-    studio.configuration.publishing.blacklist.regex: >-
+    studio.configuration.publishing.blacklist.pathspecs: >-
         .*/\.keep,\/static-assets\/images\/mytempimages\/.*
 
 |
