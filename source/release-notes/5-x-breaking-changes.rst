@@ -21,6 +21,7 @@ Breaking Changes in CrafterCMS 5.0.0
 
 - The following APIs are removed from CrafterCMS 5.0.0:
 
+  - /api/1/services/api/1/site/create.json
   - /api/1/services/api/1/site/delete-site.json
   - /api/1/services/api/1/site/get-canned-message.json
   - /api/1/services/api/1/content/change-content-type.json

@@ -38,6 +38,10 @@ New Features
 
     - :base_url:`Get the git log for a site repository <_static/api/studio.html#tag/repository/operation/getRepositoryLog>`: GET /api/2/repository/log
 
+  - Sites
+
+    - :base_url:`Create a site <_static/api/studio.html#tag/sites/operation/createSite>`: POST /api/2/sites
+
   - Content
 
     - :base_url:`Upload file <_static/api/studio.html#tag/content/operation/contentUpload>`: PUT /api/2/content/{siteId}
