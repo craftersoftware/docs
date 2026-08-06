@@ -111,7 +111,7 @@ To view more information about each command, just enter ``./crafter-cli <command
 
    |
 
-Crafter CLI for DevContentOps processes source code is managed in GitHub: https://github.com/craftercms/cli
+Crafter CLI for DevContentOps processes source code is managed in GitHub: https://github.com/craftersoftware/craftercms/tree/support/4.x/cli
 
 ----------
 Using cURL

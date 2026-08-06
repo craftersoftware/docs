@@ -25,10 +25,18 @@ Configuration
 .. image:: /_static/images/form-controls/form-control-form-section.webp
     :width: 40%
     :alt: Form Control Form Section Example
-    :align: left
+    :align: center
+
+|
 
 .. list-table::
+   :align: left
+   :header-rows: 1
 
+   * - Name
+     - Description
+   * - **Section Basics**
+     -
    * - Title
      - Control title to show the author on the input form
    * - Description

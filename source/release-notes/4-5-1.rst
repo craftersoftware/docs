@@ -22,26 +22,26 @@ New Features
 ^^^^^^^^^^^^
 Enhancements
 ^^^^^^^^^^^^
-* `Improved Studio startup time <https://github.com/craftercms/craftercms/issues/8652>`__
+* `Improved Studio startup time <https://github.com/craftersoftware/craftercms/issues/8652>`__
 
 ^^^^^^^^^
 Bug Fixes
 ^^^^^^^^^
-* `Fixed issue with the context rebuild failing after trying to get a content item during init <https://github.com/craftercms/craftercms/issues/8734>`__
+* `Fixed issue with the context rebuild failing after trying to get a content item during init <https://github.com/craftersoftware/craftercms/issues/8734>`__
 
-* `Fixed issue with Transcode Video form in dark mode <https://github.com/craftercms/craftercms/issues/8718>`__
+* `Fixed issue with Transcode Video form in dark mode <https://github.com/craftersoftware/craftercms/issues/8718>`__
 
-* `Fixed issue with incorrect internal-name field extracted on save when embedded content data source is used <https://github.com/craftercms/craftercms/issues/5905>`__
+* `Fixed issue with incorrect internal-name field extracted on save when embedded content data source is used <https://github.com/craftersoftware/craftercms/issues/5905>`__
 
-* `Fixed issue with indexing components outside of /site/components <https://github.com/craftercms/craftercms/issues/8627>`__
+* `Fixed issue with indexing components outside of /site/components <https://github.com/craftersoftware/craftercms/issues/8627>`__
 
-* `Fixed issue with modeling tool for content type name <https://github.com/craftercms/craftercms/issues/8574>`__
+* `Fixed issue with modeling tool for content type name <https://github.com/craftersoftware/craftercms/issues/8574>`__
 
-* `Fixed issue with remote_repository table columns width <https://github.com/craftercms/craftercms/issues/8565>`__
+* `Fixed issue with remote_repository table columns width <https://github.com/craftersoftware/craftercms/issues/8565>`__
 
-* `Fixed issue with JavaScript that contains JSON with escaped quotes and double quotes <https://github.com/craftercms/craftercms/issues/8546>`__
+* `Fixed issue with JavaScript that contains JSON with escaped quotes and double quotes <https://github.com/craftersoftware/craftercms/issues/8546>`__
 
-* `Fixed issue with the publisher when it tries to publish a blob file in S3 that doesn't exist <https://github.com/craftercms/craftercms/issues/8367>`__
+* `Fixed issue with the publisher when it tries to publish a blob file in S3 that doesn't exist <https://github.com/craftersoftware/craftercms/issues/8367>`__
 
 * Fixed issue with misconfigured blob store error message
 

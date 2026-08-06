@@ -26,10 +26,18 @@ Configuration
 .. image:: /_static/images/form-controls/form-control-repeating-group.webp
     :width: 30%
     :alt: Form Control Repeating Group
-    :align: left
+    :align: center
+
+|
 
 .. list-table::
+   :align: left
+   :header-rows: 1
 
+   * - Name
+     - Description
+   * - **Repeat Group Basics**
+     -
    * - Title
      - Control title to show the author on the input form
    * - Name / Variable Name

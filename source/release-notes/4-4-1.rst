@@ -19,8 +19,8 @@ This release includes fixes for issues with the release version 4.4.0
 Bug Fixes
 ^^^^^^^^^
 * `Fixed issue with template names getting lowercased when opening the template editor from the content type or an
-  item's options menu <https://github.com/craftercms/craftercms/issues/8027>`__
-* `Fixed issue with Preview failing to reload to reflect changes after editing content <https://github.com/craftercms/craftercms/issues/8223>`__
+  item's options menu <https://github.com/craftersoftware/craftercms/issues/8027>`__
+* `Fixed issue with Preview failing to reload to reflect changes after editing content <https://github.com/craftersoftware/craftercms/issues/8223>`__
 
 ^^^^^^^^^^^^^^^^^^
 Dependency Updates

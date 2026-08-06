@@ -13,7 +13,7 @@ Image Uploaded from Desktop Data Source
 Data source to upload images from desktop.
 
 .. figure:: /_static/images/form-sources/form-source-image-desktop.webp
-    :width: 20%
+    :width: 30%
     :alt: Source Control Image From Desktop
 
 |
@@ -23,12 +23,25 @@ Configuration
 -------------
 
 .. image:: /_static/images/form-sources/form-source-image-desktop-conf.webp
+    :align: center
     :width: 40%
-    :alt: Form Control Input 1
+    :alt: Form Source Image From Desktop Configuration
+
+|
+
+.. list-table::
     :align: left
+    :header-rows: 1
 
-.. include:: /includes/form-sources/form-source-field-basics.rst
-
-+------------------------+------------------------------------------------------------------------------+
-|| Properties            || - Repository Path: Path where to store the new image uploaded from desktop. |
-+------------------------+------------------------------------------------------------------------------+
+    * - Name
+      - Description
+    * - **Data Source Basics**
+      -
+    * - Title
+      - Data source title to show on the form
+    * - Name
+      - Name of variable to store the final result in
+    * - **Properties**
+      -
+    * - Repository Path
+      - Path where to store the new image uploaded from desktop.

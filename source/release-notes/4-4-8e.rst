@@ -16,7 +16,7 @@ Released *January 12, 2026* |br|
 ^^^^^^^^^
 Bug Fixes
 ^^^^^^^^^
-* `Fixed issue with repeat group validation <https://github.com/craftercms/craftercms/issues/8498>`__
+* `Fixed issue with repeat group validation <https://github.com/craftersoftware/craftercms/issues/8498>`__
 
 For information on upgrading 3.1.x sites, see :ref:`here <compatibility-with-3.1.x>`
 

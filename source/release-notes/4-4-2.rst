@@ -18,25 +18,25 @@ This release includes fixes for issues with the release version 4.4.1
 ^^^^^^^^^^^
 New Feature
 ^^^^^^^^^^^
-* `New worker thread supervisor mechanism in Deployer <https://github.com/craftercms/craftercms/issues/8153>`__ |br|
+* `New worker thread supervisor mechanism in Deployer <https://github.com/craftersoftware/craftercms/issues/8153>`__ |br|
   See :ref:`deployer-deployment-supervisor` for more information
 
 ^^^^^^^^^^^^
 Enhancements
 ^^^^^^^^^^^^
-* `Users are now able to navigate to child items in view mode <https://github.com/craftercms/craftercms/issues/8052>`__
+* `Users are now able to navigate to child items in view mode <https://github.com/craftersoftware/craftercms/issues/8052>`__
 
 ^^^^^^^^^
 Bug Fixes
 ^^^^^^^^^
 * RTE issues
 
-  - `Fixed issue with the page becoming unresponsive when editing a component with multiple RTEs <https://github.com/craftercms/craftercms/issues/7954>`__
-  - `Fixed issue with flashing menu and poor performance for pages with multiple RTEs <https://github.com/craftercms/craftercms/issues/8233>`__
-  - `Fixed issue with users able to save form containing an empty mandatory RTE field <https://github.com/craftercms/craftercms/issues/7852>`__
+  - `Fixed issue with the page becoming unresponsive when editing a component with multiple RTEs <https://github.com/craftersoftware/craftercms/issues/7954>`__
+  - `Fixed issue with flashing menu and poor performance for pages with multiple RTEs <https://github.com/craftersoftware/craftercms/issues/8233>`__
+  - `Fixed issue with users able to save form containing an empty mandatory RTE field <https://github.com/craftersoftware/craftercms/issues/7852>`__
 
-* `Fixed issue with determination of {parentPath[0]} failing after two parent levels of embedded components <https://github.com/craftercms/craftercms/issues/8055>`__
-* `Fixed issue with preview when the page is locked with a null value for the lock owner <https://github.com/craftercms/craftercms/issues/8211>`__
+* `Fixed issue with determination of {parentPath[0]} failing after two parent levels of embedded components <https://github.com/craftersoftware/craftercms/issues/8055>`__
+* `Fixed issue with preview when the page is locked with a null value for the lock owner <https://github.com/craftersoftware/craftercms/issues/8211>`__
 
 ^^^^^^^^^^^^^^^^^^
 Dependency Updates

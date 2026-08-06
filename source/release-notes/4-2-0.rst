@@ -33,15 +33,15 @@ New Features
   Please see :ref:`rte-configuration-tinymce-plugin-template-example` for more information
 
 * YAML, JSON and CSV files are now editable via the "Edit" option in Preview |br|
-  See `here <https://github.com/craftercms/craftercms/issues/6980>`__ for more information
+  See `here <https://github.com/craftersoftware/craftercms/issues/6980>`__ for more information
 
 * Image placeholder generation util is now integrated into XB |br|
   When generating items on XB, fields without default values use ``placehold.it`` for images.
-  See `here <https://github.com/craftercms/craftercms/issues/6668>`__ for more information
+  See `here <https://github.com/craftersoftware/craftercms/issues/6668>`__ for more information
 
 * Broken dependencies are now recorded in the DB and with every content written, if the item being written is referenced
   as a broken dependency, the reference will be fixed. |br|
-  See `here <https://github.com/craftercms/craftercms/issues/6228>`__ for more information
+  See `here <https://github.com/craftersoftware/craftercms/issues/6228>`__ for more information
 
 * New configuration property for Deployer HTTP requests response timeout |br|
   See :ref:`studio-deployer-http-request-timeout` for more information
@@ -57,24 +57,24 @@ Enhancements
     ``~DASHBOARD~`` is now removed from the list of allowed permissions. The upgrade manager will remove it from your
     project during your install upgrade.
 
-* `Improved item duplication in XB <https://github.com/craftercms/craftercms/issues/7169>`__
-* `Added support for multiple browser tabs for the same project/site <https://github.com/craftercms/craftercms/issues/6206>`__
-* `Set the default sort order of Studio UI search to alphabetical when no keyword is supplied <https://github.com/craftercms/craftercms/issues/5995>`__
+* `Improved item duplication in XB <https://github.com/craftersoftware/craftercms/issues/7169>`__
+* `Added support for multiple browser tabs for the same project/site <https://github.com/craftersoftware/craftercms/issues/6206>`__
+* `Set the default sort order of Studio UI search to alphabetical when no keyword is supplied <https://github.com/craftersoftware/craftercms/issues/5995>`__
 * Bulk Publishing enhancements
 
-  * `Added an option to include soft dependencies when bulk publishing <https://github.com/craftercms/craftercms/issues/6191>`__
+  * `Added an option to include soft dependencies when bulk publishing <https://github.com/craftersoftware/craftercms/issues/6191>`__
     This new option is set to false by default.
-  * `Studio now does a \"Publish All\" request when \"Publish By Path='/'\" request is received <https://github.com/craftercms/craftercms/issues/5950>`__
+  * `Studio now does a \"Publish All\" request when \"Publish By Path='/'\" request is received <https://github.com/craftersoftware/craftercms/issues/5950>`__
 
 
 * Improved XB ease-of-use and resilience for JS apps programmatically registering elements for XB |br|
-  See `here <https://github.com/craftercms/craftercms/issues/6983>`__ for more information
+  See `here <https://github.com/craftersoftware/craftercms/issues/6983>`__ for more information
 
   For more information on registering elements for XB, see :ref:`xb-lazy-loaded-content`.
 
 * Improved ``SiteItemService``. The object returned by ``SiteItemService`` is now a copy of the item.
 
-* `Added a single item per line view to search and browse item selection dialogs <https://github.com/craftercms/craftercms/issues/6517>`__
+* `Added a single item per line view to search and browse item selection dialogs <https://github.com/craftersoftware/craftercms/issues/6517>`__
 
 * Added parameter for setting CloudFormation capabilities |br|
   See :ref:`studio-cloudformation-capabilities` for more information
@@ -152,15 +152,15 @@ Studio UI
 ^^^^^^^^^
 Bug Fixes
 ^^^^^^^^^
-* `Fixed issue when editing an item from a node selector  <https://github.com/craftercms/craftercms/issues/7469>`__
-* `Fixed issue with duplicating a site in serverless mode <https://github.com/craftercms/craftercms/issues/7392>`__
-* `Fixed issue with an XB error when duplicating an item in a repeat group <https://github.com/craftercms/craftercms/issues/7151>`__
-* `Fixed issue with TinyMCE not saving HTML code properly <https://github.com/craftercms/craftercms/issues/7079>`__ |br|
+* `Fixed issue when editing an item from a node selector  <https://github.com/craftersoftware/craftercms/issues/7469>`__
+* `Fixed issue with duplicating a site in serverless mode <https://github.com/craftersoftware/craftercms/issues/7392>`__
+* `Fixed issue with an XB error when duplicating an item in a repeat group <https://github.com/craftersoftware/craftercms/issues/7151>`__
+* `Fixed issue with TinyMCE not saving HTML code properly <https://github.com/craftersoftware/craftercms/issues/7079>`__ |br|
   See :ref:`working in the RTE with code samples <author-rte-code-samples>` for more information on editing code samples in the RTE.
-* `Fixed issue with mixed case role names not being recognized by the permission evaluation system <https://github.com/craftercms/craftercms/issues/7001>`__
-* `Fixed issue with \"File Upload From Desktop\" datasource throwing an error when the dialog is opened and closed <https://github.com/craftercms/craftercms/issues/6697>`__
-* `Fixed issues with dependency calculations \"getDependentItems\" <https://github.com/craftercms/craftercms/issues/6189>`__
-* `Fixed issue with rootless Docker images build not working <https://github.com/craftercms/craftercms/issues/7291>`__
+* `Fixed issue with mixed case role names not being recognized by the permission evaluation system <https://github.com/craftersoftware/craftercms/issues/7001>`__
+* `Fixed issue with \"File Upload From Desktop\" datasource throwing an error when the dialog is opened and closed <https://github.com/craftersoftware/craftercms/issues/6697>`__
+* `Fixed issues with dependency calculations \"getDependentItems\" <https://github.com/craftersoftware/craftercms/issues/6189>`__
+* `Fixed issue with rootless Docker images build not working <https://github.com/craftersoftware/craftercms/issues/7291>`__
 
 ^^^^^^^^^^^^^^^^^^
 Dependency Updates

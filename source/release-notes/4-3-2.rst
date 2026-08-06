@@ -16,7 +16,7 @@ Released *May 20, 2025*
 ^^^^^^^^^^^^
 Enhancements
 ^^^^^^^^^^^^
-* `Improved Docker images <https://github.com/craftercms/craftercms/issues/7913>`__
+* `Improved Docker images <https://github.com/craftersoftware/craftercms/issues/7913>`__
 
 * Requests with the preview token query string argument (QSA) now has the preview Engine set the site ID and preview
   token as cookies in the URL. This allows subsequent requests to automatically reuse the token and site context
@@ -26,7 +26,7 @@ Enhancements
 ^^^^^^^^^
 Bug Fixes
 ^^^^^^^^^
-* `Fixed issue with docker compose deployments <https://github.com/craftercms/craftercms/issues/7939>`__
+* `Fixed issue with docker compose deployments <https://github.com/craftersoftware/craftercms/issues/7939>`__
 
 ^^^^^^^^^^^^^^^^^^
 Dependency Updates

@@ -132,7 +132,7 @@ page. Some examples of real-life use of inheritance:
           the information architecture with lower levels overriding upper levels.
 
 What we discussed thus far is a single inheritance strategy implementation, ``inherit-levels``, the code
-to which is available here: `InheritLevelsMergeStrategy.java <https://github.com/craftercms/core/blob/master/src/main/java/org/craftercms/core/xml/mergers/impl/strategies/InheritLevelsMergeStrategy.java>`_. There are more inheritance strategies implemented out of the box with CrafterCMS and you can build your own to suit your needs.
+to which is available here: `InheritLevelsMergeStrategy.java <https://github.com/craftersoftware/craftercms/blob/support/4.x/core/src/main/java/org/craftercms/core/xml/mergers/impl/strategies/InheritLevelsMergeStrategy.java>`_. There are more inheritance strategies implemented out of the box with CrafterCMS and you can build your own to suit your needs.
 
 -------------------------
 Out of the Box Strategies

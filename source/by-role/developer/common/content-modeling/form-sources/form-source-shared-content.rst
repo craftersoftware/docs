@@ -23,19 +23,35 @@ Configuration
 -------------
 
 .. image:: /_static/images/form-sources/form-source-shared-content-conf.webp
+    :align: center
     :width: 40%
     :alt: Form Shared Content Fields
-    :align: left
 
 |
 
-.. include:: /includes/form-sources/form-source-field-basics.rst
+.. list-table::
+    :align: left
+    :header-rows: 1
 
-+------------------------+-----------------------------------------------------------------------+
-|| Properties            || - Enable Create New: Allows user to create a new item                |
-||                       || - Enable Browse Existing: Allows user to browse existing items       |
-||                       || - Enable Search Existing: Allows user to search for existing items   |
-||                       || - Repository Path: Path where to store new content created.          |
-||                       || - Browse Path: Path where to browse the datasource items.            |
-||                       || - Default Type: Default type of datasource items.                    |
-+------------------------+-----------------------------------------------------------------------+
+    * - Name
+      - Description
+    * - **Data Source Basics**
+      -
+    * - Title
+      - Data source title to show on the form
+    * - Name
+      - Name of variable to store the final result in
+    * - **Properties**
+      -
+    * - Enable Create New
+      - Allows user to create a new item
+    * - Enable Browse Existing
+      - Allows user to browse existing items
+    * - Enable Search Existing
+      - Allows user to search for existing items
+    * - Repository Path
+      - Path where to store new content created.
+    * - Browse Path
+      - Path where to browse the datasource items.
+    * - Default Type
+      - Default type of datasource items.

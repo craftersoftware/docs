@@ -18,7 +18,7 @@ This release includes fixes for issues with the release version 4.2.0
 ^^^^^^^^^^^^
 Enhancements
 ^^^^^^^^^^^^
-* `Deployer processors improvements <https://github.com/craftercms/craftercms/issues/7617>`__
+* `Deployer processors improvements <https://github.com/craftersoftware/craftercms/issues/7617>`__
 
   - Added new options to ``gitPullProcessor``
 
@@ -37,10 +37,9 @@ Enhancements
 ^^^^^^^^^
 Bug Fixes
 ^^^^^^^^^
-* `Fixed issue with permission evaluation of uppercase role names <https://github.com/craftercms/craftercms/issues/7001>`__
-* `Fixed issue with deleting and recreating an item with the same name and page URL <https://github.com/craftercms/craftercms/issues/7608>`__
-* `Fixed issue with existing component drag and drop not working when XB is enabled <https://github.com/craftercms/craftercms/issues/7656>`__
-* `Fixed issue with AWS SSO authentication <https://github.com/craftercms/craftercms/issues/7663>`__
+* `Fixed issue with deleting and recreating an item with the same name and page URL <https://github.com/craftersoftware/craftercms/issues/7608>`__
+* `Fixed issue with existing component drag and drop not working when XB is enabled <https://github.com/craftersoftware/craftercms/issues/7656>`__
+* `Fixed issue with AWS SSO authentication <https://github.com/craftersoftware/craftercms/issues/7663>`__
 * Fixed issue with externally managed users still a part of a group that has been removed from the external authority
 
 ^^^^^^^^^^^^^^^^^^

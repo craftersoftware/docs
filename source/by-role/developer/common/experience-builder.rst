@@ -1453,7 +1453,7 @@ this component only once and it should be a parent of all the XB-enabled compone
      - XB's defaults
      - You may change XB-specific theming through this argument
    * - ``globalStyleOverrides``
-     - `GuestGlobalStylesProps['styles'] <https://github.com/craftercms/studio-ui/blob/develop/ui/guest/src/react/GuestGlobalStyles.tsx>`__
+     - `GuestGlobalStylesProps['styles'] <https://github.com/craftersoftware/craftercms/blob/support/4.x/studio-ui/ui/guest/src/react/GuestGlobalStyles.tsx>`__
      - null
      - Specify style overrides for various XB global styles.
    * - ``scrollElement``
@@ -1738,7 +1738,7 @@ you should then carry on to initialize XB or bypass it's initialization and assu
 in "production", where authoring tools are completely absent.
 
 ``fetchIsAuthoring`` internally uses the ``crafterConf`` object from the ``@craftercms/classes`` package.
-See `SDK docs <https://github.com/craftercms/js-sdk/tree/develop/packages/classes#crafterconf>`__ for more information.
+See `SDK docs <https://github.com/craftersoftware/craftercms/tree/support/4.x/js-sdk/packages/classes#crafterconf>`__ for more information.
 
 .. code-block:: js
 
@@ -1791,7 +1791,7 @@ You should first set all the attributes on your markup and afterwards, invoke `i
      - Default
      - Description
    * - ``config``
-     - `ICEConfig <https://github.com/craftercms/studio-ui/blob/33b003c49fdde3ea00e1d95ca02d9f1e6869b301/ui/guest/src/index.tsx#L40>`_
+     - `ICEConfig <https://github.com/craftersoftware/craftercms/blob/support/4.x/studio-ui/ui/guest/src/index.tsx#L40>`_
      - (Required)
      - You must supply at a minimum the ``model`` and ``isAuthoring``. The ``fieldId`` must be
        supplied when the artifact being rendered is a field. The ``index`` must be specified when

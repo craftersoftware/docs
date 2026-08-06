@@ -924,7 +924,7 @@ Here's a sample urlrewrite.xml file (click on the triangle on the left to expand
    <details>
    <summary><a>Sample "urlrewrite.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-urlrewrite.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-urlrewrite.xml
    :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/engine/urlrewrite.xml*
    :language: xml
    :linenos:
@@ -1063,7 +1063,7 @@ Here's a sample Proxy Configuration file (click on the triangle on the left to e
    <details>
    <summary><a>Sample "proxy-config.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-proxy-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-proxy-config.xml
     :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/engine/asset-processing/proxy-config.xml*
     :language: xml
     :linenos:
@@ -3887,7 +3887,7 @@ The Groovy sandbox is enabled by default and can be disabled by changing the pro
 Using a Custom Blacklist
 """"""""""""""""""""""""
 Crafter Engine includes a default blacklist that you can find
-`here <https://github.com/craftercms/engine/blob/support/4.x/src/main/resources/crafter/engine/groovy/blacklist>`__. Make sure you review the branch/tag you're using.
+`here <https://github.com/craftersoftware/craftercms/blob/support/4.x/engine/src/main/resources/crafter/engine/groovy/blacklist>`__. Make sure you review the branch/tag you're using.
 
 To use a custom blacklist follow these steps:
 
@@ -3937,7 +3937,7 @@ Using a Custom Whitelist
     :version: 4.5.0
 
 Crafter Engine includes a default whitelist that you can find
-`here <https://github.com/craftercms/engine/blob/support/4.x/src/main/resources/crafter/engine/groovy/whitelist>`__. Make sure you review the branch/tag you're using.
+`here <https://github.com/craftersoftware/craftercms/blob/support/4.x/engine/src/main/resources/crafter/engine/groovy/whitelist>`__. Make sure you review the branch/tag you're using.
 
 To use a custom whitelist follow these steps:
 
@@ -4155,4 +4155,4 @@ To view the Crafter Engine REST APIs:
 -----------
 Source Code
 -----------
-Crafter Engine's source code is managed in GitHub: https://github.com/craftercms/engine
+Crafter Engine's source code is managed in GitHub: https://github.com/craftersoftware/craftercms/tree/support/4.x/engine

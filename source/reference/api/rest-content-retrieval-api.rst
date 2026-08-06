@@ -232,7 +232,7 @@ Step 2: Execute the Service
 Get the Names of Sites Running in Crafter Engine
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In this example we create a simple RESTful service that returns the list of sites running in Crafter Engine.
-You can find the API for the Context Manager `HERE <https://github.com/craftercms/engine/blob/develop/src/main/java/org/craftercms/engine/service/context/SiteContextManager.java>`_
+You can find the API for the Context Manager `HERE <https://github.com/craftersoftware/craftercms/blob/support/4.x/engine/src/main/java/org/craftercms/engine/service/context/SiteContextManager.java>`_
 
 """""""""""""
 Prerequisites

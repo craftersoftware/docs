@@ -19,15 +19,28 @@ Data source to select files from S3 repository.
 -------------
 Configuration
 -------------
-.. image:: /_static/images/form-sources/form-source-webdav-conf.webp
+.. image:: /_static/images/form-sources/form-source-basics-conf.webp
+    :align: center
     :width: 40%
     :alt: Source Control S3 Repository Configuration
+
+|
+
+.. list-table::
     :align: left
+    :header-rows: 1
 
-
-.. include:: /includes/form-sources/form-source-field-basics.rst
-
-+------------------------+--------------------------------------------------------------------------+
-|| Properties            || - Repository Path: Path where to browse the S3 repository.              |
-||                       || - Profile ID: S3 profile id to be used setup in aws.xml                 |
-+------------------------+--------------------------------------------------------------------------+
+    * - Name
+      - Description
+    * - **Data Source Basics**
+      -
+    * - Title
+      - Data source title to show on the form
+    * - Name
+      - Name of variable to store the final result in
+    * - **Properties**
+      -
+    * - Repository Path
+      - Path where to browse the S3 repository.
+    * - Profile Id
+      - S3 profile id configured in aws.xml

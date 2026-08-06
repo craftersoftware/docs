@@ -243,7 +243,7 @@ Here's a sample Blob Stores Configuration file (click on the triangle on the lef
    <details>
    <summary><a>Sample "blob-stores-config.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-blob-stores-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-blob-stores-config.xml
    :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/studio/blob-stores-config.xml*
    :language: xml
    :linenos:
@@ -665,7 +665,7 @@ Here's a sample Project Policy Configuration file (click on the triangle on the 
    <details>
    <summary><a>Sample project policy configuration</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-site-policy-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-site-policy-config.xml
     :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/studio/site-policy-config.xml*
     :language: xml
     :linenos:
@@ -834,7 +834,7 @@ Here's a sample Project Configuration file (click on the triangle on the left to
    <details>
    <summary><a>Sample Project Configuration</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-site-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-site-config.xml
      :language: xml
      :linenos:
 
@@ -1144,7 +1144,7 @@ Here's a sample User Interface Configuration file (click on the triangle on the 
    <details>
    <summary><a>Sample "ui.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-ui.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-ui.xml
       :language: xml
       :linenos:
 
@@ -2005,7 +2005,7 @@ In order to hook into the callback (``paste_preprocess`` and ``paste_postprocess
 
    |
 
-2) Create an :ref:`external plugin <adding-external-plugins>` by following the structure of the example plugin `here <https://github.com/craftercms/studio-ui/blob/develop/static-assets/js/tinymce-plugins/craftercms_paste_extension/craftercms_tinymce_hooks.sample.js>`__. To modify the pasted content, add your code under ``paste_preprocess()`` or ``paste_postprocess()`` depending on your needs.
+2) Create an :ref:`external plugin <adding-external-plugins>` by following the structure of the example plugin `here <https://github.com/craftersoftware/craftercms/blob/support/4.x/studio-ui/static-assets/js/tinymce-plugins/craftercms_paste_extension/craftercms_tinymce_hooks.sample.js>`__. To modify the pasted content, add your code under ``paste_preprocess()`` or ``paste_postprocess()`` depending on your needs.
 
 3) Add the plugin created in the previous step as an external plugin under the ``craftercms_tinymce_hooks`` tag.
 
@@ -2517,7 +2517,7 @@ Let's now take a look at the data source we setup and bound to the RTE in action
 ~~~~~~~~~~~~~~~~~
 Extending TinyMCE
 ~~~~~~~~~~~~~~~~~
-CrafterCMS  provides a general tool for extending TinyMCE via the ``craftercms_tinymce_hooks``.  It currently allows for hooking into the following (as shown by the example `here <https://github.com/craftercms/studio-ui/blob/master/static-assets/js/tinymce-plugins/craftercms_paste_extension/craftercms_tinymce_hooks.sample.js>`__):
+CrafterCMS  provides a general tool for extending TinyMCE via the ``craftercms_tinymce_hooks``.  It currently allows for hooking into the following (as shown by the example `here <https://github.com/craftersoftware/craftercms/blob/support/4.x/studio-ui/static-assets/js/tinymce-plugins/craftercms_paste_extension/craftercms_tinymce_hooks.sample.js>`__):
 
 - ``paste_preprocess`` callback
 - ``paste_postprocess`` callback
@@ -3574,7 +3574,7 @@ Here is a sample Content Type Editor Config configuration file (click on the tri
    <details>
    <summary><a>Sample Content Type Editor Config configuration file</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-site-config-tools.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-site-config-tools.xml
    :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/studio/administration/site-config-tools.xml*
    :language: xml
    :linenos:
@@ -3646,7 +3646,7 @@ Here's a sample Dependency Resolver Configuration file (click on the triangle on
    <details>
    <summary><a>Sample dependency resolver configuration</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-resolver-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-resolver-config.xml
    :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/studio/dependency/resolver-config.xml*
    :language: xml
    :linenos:
@@ -3711,7 +3711,7 @@ Here's a sample ``config-list.xml`` file (click on the triangle on the left to e
    <details>
    <summary><a>Sample "config-list.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-config-list.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-config-list.xml
    :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/studio/administration/config-list.xml*
    :language: xml
    :linenos:
@@ -3783,7 +3783,7 @@ Here's a sample Asset Processing Configuration file (click on the triangle on th
    <details>
    <summary><a>Sample "asset-processing-config.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-asset-processing-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-asset-processing-config.xml
    :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/studio/asset-processing/asset-processing-config.xml*
    :language: xml
    :linenos:
@@ -3823,7 +3823,7 @@ Here's a sample AWS Profiles Configuration file (click on the triangle on the le
    <details>
    <summary><a>Sample "aws.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-aws.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-aws.xml
    :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/studio/aws/aws.xml*
    :language: xml
    :linenos:
@@ -3872,10 +3872,67 @@ Here's a sample Box Profiles Configuration file (click on the triangle on the le
    <details>
    <summary><a>Sample "box.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.1.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-box.xml
-   :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/studio/box/box.xml*
-   :language: xml
-   :linenos:
+.. code-block:: xml
+    :linenos:
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!--
+      ~ Copyright (C) 2007-2022 Crafter Software Corporation. All Rights Reserved.
+      ~
+      ~ This program is free software: you can redistribute it and/or modify
+      ~ it under the terms of the GNU General Public License version 3 as published by
+      ~ the Free Software Foundation.
+      ~
+      ~ This program is distributed in the hope that it will be useful,
+      ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+      ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      ~ GNU General Public License for more details.
+      ~
+      ~ You should have received a copy of the GNU General Public License
+      ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+      -->
+
+    <!--
+        Box profiles configuration file. This files configures 0 or more
+        profiles with the information required by the Box API.
+
+        For every profile you need to specify:
+        <profile>
+            <id/>
+            <clientId/>
+            <clientSecret/>
+            <enterpriseId/>
+            <publicKeyId/>
+            <privateKeyPath/>
+            <privateKeyPassword/>
+            <uploadFolder/>
+        </profile>
+
+        id:	a unique id for this profile, this will be referenced in the
+            control defined in the content type
+        clientId: Box client id
+        clientSecret: Box client secret
+        enterpriseId: Box enterprise id
+        publicKeyId: Box public key id
+        privateKeyPath: Full path for the private key file
+        privateKeyPassword: Password used to decrypt the private key
+        uploadFolder: Name of the folder where files will be uploaded
+
+    -->
+    <box>
+        <box>
+            <profile>
+                <id>box-default</id>
+                <clientId>...</clientId>
+                <clientSecret>...</clientSecret>
+                <enterpriseId>...</enterpriseId>
+                <publicKeyId>...</publicKeyId>
+                <privateKeyPath>...</privateKeyPath>
+                <privateKeyPassword>...</privateKeyPassword>
+                <uploadFolder>videos</uploadFolder>
+            </profile>
+        </box>
+    </box>
 
 .. raw:: html
 
@@ -3930,7 +3987,7 @@ Here's a sample WebDAV Profiles Configuration file (click on the triangle on the
    <details>
    <summary><a>Sample WebDAV profiles configuration</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-webdav.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-webdav.xml
    :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/studio/webdav/webdav.xml*
    :language: xml
    :linenos:
@@ -4074,7 +4131,7 @@ Here's the default global role mappings configuration (click on the triangle on 
    <details>
    <summary><a>Sample "global-role-mappings-config.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/global-role-mappings-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/global-role-mappings-config.xml
        :language: xml
        :caption: *CRAFTER_HOME/data/repos/global/configuration/global-role-mappings-config.xml*
        :linenos:
@@ -4115,7 +4172,7 @@ Here's the default global permissions configuration (click on the triangle on th
    <details>
    <summary><a>Sample "global-permission-mappings-config.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/global-permission-mappings-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/global-permission-mappings-config.xml
        :language: xml
        :caption: *CRAFTER_HOME/data/repos/global/configuration/global-permission-mappings-config.xml*
        :linenos:
@@ -4150,7 +4207,7 @@ open the file ``global-menu-config.xml``. Remember to restart Crafter so your ch
    <details>
    <summary><a>Sample "global-menu-config.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/global-menu-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/global-menu-config.xml
    :caption: *CRAFTER_HOME/data/repos/global/configuration/global-menu-config.xml*
    :language: xml
    :linenos:
@@ -4651,7 +4708,7 @@ Here's a sample Role Mappings Configuration file (click on the triangle on the l
    <details>
    <summary><a>Sample role mappings configuration</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-role-mappings-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-role-mappings-config.xml
    :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/studio/role-mappings-config.xml*
    :language: xml
    :linenos:
@@ -4754,7 +4811,7 @@ Here's a sample Permission Mappings Configuration file (click on the triangle on
    <details>
    <summary><a>Sample "permission-mappings-config.xml"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-permission-mappings-config.xml
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/configuration/samples/sample-permission-mappings-config.xml
        :language: xml
        :linenos:
 
@@ -5222,7 +5279,7 @@ The Groovy sandbox is enabled by default and can be disabled by changing the pro
 Using a Custom Blacklist
 ~~~~~~~~~~~~~~~~~~~~~~~~
 Crafter Studio includes a default blacklist that you can find
-`here <https://github.com/craftercms/studio/blob/support/4.x/src/main/resources/crafter/studio/groovy/blacklist>`__.
+`here <https://github.com/craftersoftware/craftercms/blob/support/4.x/studio/src/main/resources/crafter/studio/groovy/blacklist>`__.
 Make sure you review the branch/tag you're using.
 
 To use a custom blacklist follow these steps:
@@ -5268,7 +5325,7 @@ Using a Custom Whitelist
     :label: Since
     :version: 4.5.0
 
-Crafter Studio includes a default whitelist that you can find `here <https://github.com/craftercms/studio/blob/support/4.x/src/main/resources/crafter/studio/groovy/whitelist>`__.
+Crafter Studio includes a default whitelist that you can find `here <https://github.com/craftersoftware/craftercms/blob/support/4.x/studio/src/main/resources/crafter/studio/groovy/whitelist>`__.
 Make sure you review the branch/tag you're using.
 
 To use a custom whitelist follow these steps:
@@ -6678,4 +6735,4 @@ To view the Crafter Studio REST APIs:
 -----------
 Source Code
 -----------
-Crafter Studio's source code is managed in GitHub: https://github.com/craftercms/studio
+Crafter Studio's source code is managed in GitHub: https://github.com/craftersoftware/craftercms/tree/support/4.x/studio

@@ -23,13 +23,25 @@ Configuration
 -------------
 
 .. image:: /_static/images/form-sources/form-source-embedded-content-conf.webp
+    :align: center
     :width: 40%
     :alt: Form Source Embedded Content Fields
+
+|
+
+.. list-table::
     :align: left
+    :header-rows: 1
 
-.. include:: /includes/form-sources/form-source-field-basics.rst
-
-+------------------------+-----------------------------------------------------------------------+
-|| Properties            || - Content Type: the content type to use by default when creating the |
-||                       ||   content                                                            |
-+------------------------+-----------------------------------------------------------------------+
+    * - Name
+      - Description
+    * - **Data Source Basics**
+      -
+    * - Title
+      - Data source title to show on the form
+    * - Name
+      - Name of variable to store the final result in
+    * - **Properties**
+      -
+    * - Content Type
+      - the content type to use by default when creating the content

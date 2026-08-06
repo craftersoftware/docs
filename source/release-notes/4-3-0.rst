@@ -16,9 +16,9 @@ Released *February 21, 2025*
 ^^^^^^^^^^^^
 Enhancements
 ^^^^^^^^^^^^
-* `Added support for site selection via headers in Preview <https://github.com/craftercms/craftercms/issues/7676>`__ |br|
+* `Added support for site selection via headers in Preview <https://github.com/craftersoftware/craftercms/issues/7676>`__ |br|
 
-* `Improved extension compatibility versioning <https://github.com/craftercms/craftercms/issues/7689>`__ |br|
+* `Improved extension compatibility versioning <https://github.com/craftersoftware/craftercms/issues/7689>`__ |br|
   The ``crafterCmsVersions`` field in your :ref:`plugin <plugin-descriptor-file>` or :ref:`blueprint <blueprint-descriptor-file>`
   descriptor file now uses the short version, using the major and minor numbers, e.g. ``4.3``.
 
@@ -26,33 +26,33 @@ Enhancements
   compatibility. Remember to maintain the same version format used (either the short version or the full version) and
   not mix them in a plugin version in your descriptor file.
 
-* `Added support for allowing unauthorized OPTIONS requests to preview <https://github.com/craftercms/craftercms/issues/7699>`__ |br|
+* `Added support for allowing unauthorized OPTIONS requests to preview <https://github.com/craftersoftware/craftercms/issues/7699>`__ |br|
   When :ref:`CORS <engine-cors>` is enabled and the CORS request is preflight, preview token validation is skipped.
 
-* `Improved messaging for folder renames and folder cuts <https://github.com/craftercms/craftercms/issues/7767>`__ |br|
+* `Improved messaging for folder renames and folder cuts <https://github.com/craftersoftware/craftercms/issues/7767>`__ |br|
   A message will now be displayed when renaming a folder or cutting a folder to inform users that the action may break
   references to items in the folder being renamed/cut.
 
 * Publishing improvements |br|
 
-  - `The Publish on Demand  widget now uses permissions to determine feature availability <https://github.com/craftercms/craftercms/issues/7768>`__ |br|
+  - `The Publish on Demand  widget now uses permissions to determine feature availability <https://github.com/craftersoftware/craftercms/issues/7768>`__ |br|
     The permissions ``publish`` and ``publish_by_commits`` are now used to determine feature availability in the Publish
     on Demand widget. Users with the ``publish`` permission gets the ``Publish All`` and ``Publish by Path`` features and
     users with the ``publish_by_commits`` gets the ``Publish by Commit Id`` feature in the widget.
 
-  - `Improved flow for On Demand Publishing <https://github.com/craftercms/craftercms/issues/7769>`__ |br|
+  - `Improved flow for On Demand Publishing <https://github.com/craftersoftware/craftercms/issues/7769>`__ |br|
     When performing a ``Publish All``, the user will now be prompted to confirm the action.
 
 ^^^^^^^^^
 Bug Fixes
 ^^^^^^^^^
-* `Fixed issue with item_unlock permission <https://github.com/craftercms/craftercms/issues/7694>`__
+* `Fixed issue with item_unlock permission <https://github.com/craftersoftware/craftercms/issues/7694>`__
 
-* `Fixed issue with parent folder dependency on publish <https://github.com/craftercms/craftercms/issues/7709>`__
+* `Fixed issue with parent folder dependency on publish <https://github.com/craftersoftware/craftercms/issues/7709>`__
 
-* `CrafterCMS's proxy now supports setting multiple cookies <https://github.com/craftercms/craftercms/issues/7723>`__
+* `CrafterCMS's proxy now supports setting multiple cookies <https://github.com/craftersoftware/craftercms/issues/7723>`__
 
-* `Fixed issue with move operations on items and folders <https://github.com/craftercms/craftercms/issues/7729>`__
+* `Fixed issue with move operations on items and folders <https://github.com/craftersoftware/craftercms/issues/7729>`__
 
 * Syncing is now changed such that users are synced based on IdP only for externally managed groups, but local group
   membership is unchanged.
@@ -66,6 +66,6 @@ For information on upgrading 3.1.x sites, see :ref:`here <compatibility-with-3.1
 ^^^^^^^^^^^^^
 Miscellaneous
 ^^^^^^^^^^^^^
-* `Removed Box in CrafterCMS <https://github.com/craftercms/craftercms/issues/7728>`__ |br|
+* `Removed Box in CrafterCMS <https://github.com/craftersoftware/craftercms/issues/7728>`__ |br|
 
 |hr|

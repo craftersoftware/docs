@@ -23,18 +23,32 @@ Configuration
 -------------
 
 .. image:: /_static/images/form-sources/form-source-kvp-conf.webp
+    :align: center
     :width: 40%
     :alt: Form Static Key Value Pairs
+
+|
+
+.. list-table::
     :align: left
+    :header-rows: 1
 
-
-.. include:: /includes/form-sources/form-source-field-basics.rst
-
-+------------------------+---------------------------------------------------------------------------+
-|| Properties            || - Data Type: Key Value pairs type (String, Integer, Float, Date, HTML).  |
-||                       || - Options: Key Value pairs to be added on the datasource.                |
-||                       || - Show keys:                                                             |
-+------------------------+---------------------------------------------------------------------------+
+    * - Name
+      - Description
+    * - **Data Source Basics**
+      -
+    * - Title
+      - Data source title to show on the form
+    * - Name
+      - Name of variable to store the final result in
+    * - **Properties**
+      -
+    * - Data Type
+      - Key Value pairs type (String, Integer, Float, Date, HTML).
+    * - Options
+      - Key Value pairs to be added on the datasource.
+    * - Show keys
+      - Enable or disable showing the keys
 
 --------------
 Adding Options
@@ -44,9 +58,9 @@ When creating a static Key Value Pairs data source you can add the options by cl
 datasource configuration. That will display a dialog with the necessary features to manage the data.
 
 .. image:: /_static/images/form-sources/form-source-kvp-options.webp
+    :align: center
     :width: 50%
     :alt: Form Static Key Value Pairs Options
-    :align: center
 
 |
 

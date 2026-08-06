@@ -23,19 +23,39 @@ Configuration
 -------------
 
 .. image:: /_static/images/form-sources/form-source-components-conf.webp
+    :align: center
     :width: 40%
     :alt: Form Source Components Fields
+
+|
+
+.. list-table::
     :align: left
+    :header-rows: 1
 
-.. include:: /includes/form-sources/form-source-field-basics.rst
-
-+------------------------+-----------------------------------------------------------------------+
-|| Properties            || - Allow Shared: Allows user to browse shared components              |
-||                       || - Allow Embedded: Allows user to browse embedded components          |
-||                       || - Enable Browse: Allows user to browse existing items                |
-||                       || - Enable Search: Allows user to search for existing items            |
-||                       || - Base Repository Path: Path where to store new content created.     |
-||                       || - Base Browse Path: Path where to browse the datasource items.       |
-||                       || - Content Types: Components that can be accepted                     |
-||                       || - Tags: Tags                                                         |
-+------------------------+-----------------------------------------------------------------------+
+    * - Name
+      - Description
+    * - **Data Source Basics**
+      -
+    * - Title
+      - Data source title to show on the form
+    * - Name
+      - Name of variable to store the final result in
+    * - **Properties**
+      -
+    * - Allow Shared
+      - Allows user to browse shared components
+    * - Allow Embedded
+      - Allows user to browse embedded components
+    * - Enable Browse
+      - Allows user to browse existing items
+    * - Enable Search
+      - Allows user to search for existing items
+    * - Base Repository Path
+      - Path where to store new content created.
+    * - Base Browse Path
+      - Path where to browse the datasource items.
+    * - Content Types
+      - Components that can be accepted
+    * - Tags
+      - String identifiers

@@ -27,50 +27,82 @@ Configuration
 .. image:: /_static/images/form-controls/form-control-rte-properties.webp
     :width: 40%
     :alt: RTE
-    :align: left
+    :align: center
 
-.. include:: /includes/form-controls/form-control-field-basics.rst
+.. list-table::
+   :align: left
+   :header-rows: 1
 
-+------------------------+-----------------------------------------------------------------------+
-|| Description/Purpose   || Rich Text Area field.                                                |
-+------------------------+-----------------------------------------------------------------------+
-|| Properties            || * Width: Width of the Rich Text Area.                                |
-||                       || * Height: Height of the Rich Text Area.                              |
-||                       || * Force Root Block p Tag.                                            |
-||                       || * Force p tags New Lines: Adds a p tag on every new line.            |
-||                       || * Force br New Lines: Adds br for each new line.                     |
-||                       || * Supported Channels.                                                |
-||                       || * RTE Configuration: Configuration to be loaded on the rte.          |
-||                       || * Image Manager.                                                     |
-||                       || * Video Manager.                                                     |
-||                       || * File Manager.                                                      |
-+------------------------+-----------------------------------------------------------------------+
-|| Constraints           || * Required: Make field required to fill out.                         |
-+------------------------+-----------------------------------------------------------------------+
-|| Related Data Sources  || Image Manager                                                        |
-||                       || * |imgUploadFromDesktop|                                             |
-||                       || * |imgFromRepo|                                                      |
-||                       || * |imgFromWebDAV|                                                    |
-||                       || * |imgUploadToWebDAV|                                                |
-||                       || * |imgFromS3|                                                        |
-||                       || * |imgUploadToS3|                                                    |
-||                       || Video Manager                                                        |
-||                       || * |vidUploadFromDesktop|                                             |
-||                       || * |vidFromRepo|                                                      |
-||                       || * |vidFromWebDAV|                                                    |
-||                       || * |vidUploadToWebDAV|                                                |
-||                       || * |vidFromS3|                                                        |
-||                       || * |vidUploadToS3|                                                    |
-||                       || File Manager                                                         |
-||                       || * |fileUploadFromDesktop|                                            |
-||                       || * |fileFromRepo|                                                     |
-||                       || * |fileFromWebDAV|                                                   |
-||                       || * |fileUploadToWebDAV|                                               |
-||                       || * |fileFromS3|                                                       |
-||                       || * |fileUploadToS3|                                                   |
-||                       || * |sharedContent|                                                    |
-||                       || * |embeddedContent|                                                  |
-+------------------------+-----------------------------------------------------------------------+
+   * - Name
+     - Description
+   * - **Field Basics**
+     -
+   * - Title
+     - Control title to show the author on the input form
+   * - Name / Variable Name
+     - Name of variable to store the final result in. This is used by the View layer or the Controllers to gain access to the data during runtime
+   * - ICE Group
+     - In-Context Edit Group: During ICE editing in Preview mode, this control will be part of this group for editing which means when the author click on the Pencil Tool, they will get all the controls in the same group associated with the specific Pencil Tool
+   * - Description
+     - Form Control description
+   * - Help
+     - Help to show authors on the input form associated with this control
+   * - **Properties**
+     -
+   * - Width
+     - Width of the Rich Text Area.
+   * - Height
+     - Height of the Rich Text Area.
+   * - Force Root Block p Tag
+     -
+   * - Force p tags New Lines
+     - Adds a p tag on every new line.
+   * - Force br New Lines
+     - Adds br for each new line.
+   * - Supported Channels
+     -
+   * - RTE Configuration
+     - Configuration to be loaded on the rte.
+   * - Image Manager
+     -
+   * - Video Manager
+     -
+   * - File Manager
+     -
+   * - **Constraints**
+     -
+   * - Required
+     - Make field required to fill out.
+   * - **Related Data Sources**
+     - Image Manager
+
+       * |imgUploadFromDesktop|
+       * |imgFromRepo|
+       * |imgFromWebDAV|
+       * |imgUploadToWebDAV|
+       * |imgFromS3|
+       * |imgUploadToS3|
+
+       Video Manager
+
+       * |vidUploadFromDesktop|
+       * |vidFromRepo|
+       * |vidFromWebDAV|
+       * |vidUploadToWebDAV|
+       * |vidFromS3|
+       * |vidUploadToS3|
+
+       File Manager
+
+       * |fileUploadFromDesktop|
+       * |fileFromRepo|
+       * |fileFromWebDAV|
+       * |fileUploadToWebDAV|
+       * |fileFromS3|
+       * |fileUploadToS3|
+       * |sharedContent|
+       * |embeddedContent|
+
 
 .. |imgUploadFromDesktop| replace:: :ref:`Image Uploaded from Desktop <form-source-image-desktop>`
 .. |imgFromRepo| replace:: :ref:`Image from Repository <form-source-image-repo>`

@@ -16,13 +16,13 @@ Released *September 4, 2025*
 ^^^^^^^^^^^^
 New Features
 ^^^^^^^^^^^^
-* `New Crafter Studio full disk monitoring <https://github.com/craftercms/craftercms/issues/8272>`__ |br|
+* `New Crafter Studio full disk monitoring <https://github.com/craftersoftware/craftercms/issues/8272>`__ |br|
   Crafter Studio now watches disk utilization for the data directory and sends configurable notifications when the
   threshold is reached. For more information on configuring the notifications and thresholds, see :ref:`studio-disk-monitoring` .
 
   To get the disk usage statistics, use the `getDiskUsage <../_static/api/studio.html#tag/monitoring/operation/getDiskUsage>`__ API.
 
-* `Smart Git in Git HTTPS server is now supported <https://github.com/craftercms/craftercms/issues/8268>`__ |br|
+* `Smart Git in Git HTTPS server is now supported <https://github.com/craftersoftware/craftercms/issues/8268>`__ |br|
 
 ^^^^^^^^^^^^
 Enhancements
@@ -30,7 +30,7 @@ Enhancements
 * Added new Studio git config properties |br|
   See :ref:`git-configuration` for more information on configuring the Git options "gc.prunePackExpire" and "gc.autoPackLimit".
 
-* `Item Selector now shows view options for file types with preview support <https://github.com/craftercms/craftercms/issues/8308>`__ |br|
+* `Item Selector now shows view options for file types with preview support <https://github.com/craftersoftware/craftercms/issues/8308>`__ |br|
 
 """""""""
 Studio UI

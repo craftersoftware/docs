@@ -1122,7 +1122,7 @@ To save additional elements from your form control into the XML content, call ``
 
 |
 
-See `here <https://github.com/craftercms/studio-ui/tree/develop/static-assets/components/cstudio-forms/controls/date-time.js#L865>`__ for an example of calling ``registerDynamicField`` in the date-time form control code.
+See `here <https://github.com/craftersoftware/craftercms/blob/support/4.x/studio-ui/static-assets/components/cstudio-forms/controls/date-time.js#L881>`__ for an example of calling ``registerDynamicField`` in the date-time form control code.
 
 .. _configure-descriptor-file-for-autowiring:
 

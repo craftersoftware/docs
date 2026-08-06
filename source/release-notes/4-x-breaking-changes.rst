@@ -136,7 +136,7 @@ to use the new profile names. These are usually configured in the ``crafter-sete
 Breaking Changes in CrafterCMS 4.3.0
 ------------------------------------
 - CrafterCMS 4.3.0 has removed Box support. |br|
-  See https://github.com/craftercms/craftercms/issues/7728 for more information.
+  See https://github.com/craftersoftware/craftercms/issues/7728 for more information.
 
 - The following APIs are removed from CrafterCMS 4.3.0:
 

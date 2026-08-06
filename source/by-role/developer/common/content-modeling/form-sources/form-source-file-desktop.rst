@@ -23,14 +23,25 @@ Configuration
 -------------
 
 .. image:: /_static/images/form-sources/form-source-file-desktop-conf.webp
+    :align: center
     :width: 40%
     :alt: Source Control File From Desktop
-    :align: left
 
 |
 
-.. include:: /includes/form-sources/form-source-field-basics.rst
+.. list-table::
+    :align: left
+    :header-rows: 1
 
-+------------------------+-----------------------------------------------------------------------------+
-|| Properties            || - Repository Path: Path where to store the new file uploaded from desktop. |
-+------------------------+-----------------------------------------------------------------------------+
+    * - Name
+      - Description
+    * - **Data Source Basics**
+      -
+    * - Title
+      - Data source title to show on the form
+    * - Name
+      - Name of variable to store the final result in
+    * - **Properties**
+      -
+    * - Repository Path
+      - Path where to store the new file uploaded from desktop.

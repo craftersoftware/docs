@@ -715,4 +715,4 @@ To view the Crafter Profile REST APIs:
 -----------
 Source Code
 -----------
-Crafter Profile's source code is managed in GitHub: https://github.com/craftercms/profile
+Crafter Profile's source code is managed in GitHub: https://github.com/craftersoftware/craftercms/tree/support/4.x/profile

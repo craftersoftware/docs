@@ -786,4 +786,4 @@ To view the Crafter Social REST APIs:
 Source Code
 -----------
 
-Crafter Social's source code is managed in GitHub: https://github.com/craftercms/social
+Crafter Social's source code is managed in GitHub: https://github.com/craftersoftware/craftercms/tree/support/4.x/social
