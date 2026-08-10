@@ -326,6 +326,8 @@ Here are some things to note in the descriptor file:
   using images with approximately a ``4:3`` aspect ratio (width to height), such as an image sized at 1200x800
 
 
+.. _plugin-descriptor-auto-wiring:
+
 """""""""""
 Auto-wiring
 """""""""""
@@ -996,24 +998,11 @@ Guides
 
 Below are more authoring examples of creating plugins:
 
-.. TODO:
-   Many of the guides below are very much the same article with the only distinction that the widget
-   of the example is placed in a different portion of the UI. We should get rid of all but one. In that
-   one, illustrate the process (same for all) and simply add sections for how to position in the different
-   available places in the UI.
-
 .. toctree::
    :maxdepth: 1
    :titlesonly:
 
-   resources/plugin-sidebar-example
-   resources/plugin-experience-builder-example
-   resources/plugin-toolbar-example
-   resources/plugin-dashboard-example
-   resources/plugin-projecttools-example
-   resources/plugin-navmenu-example
-   resources/form-control-plugins
-   resources/form-data-source-plugins
+   resources/plugin-ui-example
    resources/full-screen-plugin-example
 
 

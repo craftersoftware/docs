@@ -30,30 +30,57 @@ Configuration
 .. image:: /_static/images/form-controls/form-control-item-selector.webp
     :width: 30%
     :alt: Form Control Item Selector Properties
-    :align: left
+    :align: center
 
-.. include:: /includes/form-controls/form-control-field-basics.rst
+|
 
-+------------------------+-----------------------------------------------------------------------+
-|| Properties            || * Min Size: Minimum amount of items selected.                        |
-||                       || * Max Size: Maximum amount of items selected.                        |
-||                       || * Item Manager: Source where the items will be selected/created.     |
-||                       || * Read Only: Make field read-only (can't be changed by the author).  |
-||                       || * Disable Flattening for Search.                                     |
-||                       || * Use single value filename.                                         |
-||                       || * Use _mvs postfix.                                                  |
-+------------------------+-----------------------------------------------------------------------+
-|| Constraints           || * Allow Duplicate: Allows adding the same item more than once.       |
-+------------------------+-----------------------------------------------------------------------+
-|| Related Data Sources  || * |sharedContent|                                                    |
-||                       || * |embeddedContent|                                                  |
-||                       || * |fileUploadFromDesktop|                                            |
-||                       || * |fileFromRepo|                                                     |
-||                       || * |fileFromWebDAV|                                                   |
-||                       || * |fileUploadToWebDAV|                                               |
-||                       || * |fileFromS3|                                                       |
-||                       || * |fileUploadToS3|                                                   |
-+------------------------+-----------------------------------------------------------------------+
+.. list-table::
+   :align: left
+   :header-rows: 1
+
+   * - Name
+     - Description
+   * - **Field Basics**
+     -
+   * - Title
+     - Control title to show the author on the input form
+   * - Name / Variable Name
+     - Name of variable to store the final result in. This is used by the View layer or the Controllers to gain access to the data during runtime
+   * - ICE Group
+     - In-Context Edit Group: During ICE editing in Preview mode, this control will be part of this group for editing which means when the author click on the Pencil Tool, they will get all the controls in the same group associated with the specific Pencil Tool
+   * - Description
+     - Form Control description
+   * - Help
+     - Help to show authors on the input form associated with this control
+   * - **Properties**
+     -
+   * - Min Size
+     - Minimum amount of items selected.
+   * - Max Size
+     - Maximum amount of items selected.
+   * - Item Manager
+     - Source where the items will be selected/created.
+   * - Read Only
+     - Make field read-only (can't be changed by the author).
+   * - Disable Flattening for Search
+     -
+   * - Use single value filename
+     -
+   * - Use _mvs postfix
+     -
+   * - **Constraints**
+     -
+   * - Allow Duplicate
+     - Allows adding the same item more than once.
+   * - **Related Data Sources**
+     - * |sharedContent|
+       * |embeddedContent|
+       * |fileUploadFromDesktop|
+       * |fileFromRepo|
+       * |fileFromWebDAV|
+       * |fileUploadToWebDAV|
+       * |fileFromS3|
+       * |fileUploadToS3|
 
 .. |fileUploadFromDesktop| replace:: :ref:`File Uploaded From Desktop <form-source-file-desktop>`
 .. |fileFromRepo| replace:: :ref:`File from Repository <form-source-file-browse>`

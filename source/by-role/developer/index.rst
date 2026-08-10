@@ -19,7 +19,7 @@ Developers need to be comfortable with Content Modeling (how to represent conten
 for your application to retrieve said content), and how to access content items from your application/project.
 
 .. note::
-    For local development, you'll need to install CrafterCMS locally and that's best done via the local bundle. Instructions on how to do that are in :ref:`install-craftercms-via-binary-bundles`. Other options include running CrafterCMS in :ref:`Docker <local-dev-with-docker>` or installing CrafterCMS `from source <https://github.com/craftercms/craftercms>`_.
+    For local development, you'll need to install CrafterCMS locally and that's best done via the local bundle. Instructions on how to do that are in :ref:`install-craftercms-via-binary-bundles`. Other options include running CrafterCMS in :ref:`Docker <local-dev-with-docker>` or installing CrafterCMS `from source <https://github.com/craftersoftware/craftercms>`_.
 
 
 CrafterCMS supports both headless and templated projects (templated projects are the traditional web sites with a view layer).
@@ -135,8 +135,8 @@ or similar SPAs, Android and iOS applications, etc.
 Headless Examples
 ^^^^^^^^^^^^^^^^^
 - `Video Center Blueprint <https://github.com/craftercms/video-center-blueprint>`_
-- `Headless Store Blueprint <https://github.com/craftercms/studio/tree/develop/src/main/webapp/repo-bootstrap/global/blueprints/2000_headless_store>`_
-- `Headless Blog Blueprint <https://github.com/craftercms/studio/tree/develop/src/main/webapp/repo-bootstrap/global/blueprints/5000_headless_blog>`_
+- `Headless Store Blueprint <https://github.com/craftersoftware/craftercms/tree/support/4.x/studio/src/main/webapp/repo-bootstrap/global/blueprints/2000_headless_store>`_
+- `Headless Blog Blueprint <https://github.com/craftersoftware/craftercms/tree/support/4.x/studio/src/main/webapp/repo-bootstrap/global/blueprints/5000_headless_blog>`_
 
 ---------
 Templated
@@ -161,7 +161,7 @@ The article, :ref:`templating`, provides more details on CrafterCMS provided too
 ^^^^^^^^^^^^^^^^^^
 Templated Examples
 ^^^^^^^^^^^^^^^^^^
-- `Editorial Blueprint <https://github.com/craftercms/studio/tree/develop/src/main/webapp/repo-bootstrap/global/blueprints/1000_website_editorial>`_
+- `Editorial Blueprint <https://github.com/craftersoftware/craftercms/tree/support/4.x/studio/src/main/webapp/repo-bootstrap/global/blueprints/1000_website_editorial>`_
 - `commerceTools Blueprint <https://github.com/craftercms/commercetools-blueprint>`_
 - `Wordify Blueprint <https://github.com/craftercms/wordify-blueprint>`_
 

@@ -15,9 +15,9 @@ Roadmap
 
 The detailed roadmap is maintained in our issue planning and tracking system. We have three stages:
 
-* Next Release: The next release we're working on https://github.com/craftercms/craftercms/milestone/102
-* Near-term: The subsequent few releases we're working on https://github.com/craftercms/craftercms/milestone/99
-* Roadmap: The longer term roadmap https://github.com/craftercms/craftercms/milestone/103
+* Next Release: The next release we're working on https://github.com/craftersoftware/craftercms/milestone/102
+* Near-term: The subsequent few releases we're working on https://github.com/craftersoftware/craftercms/milestone/99
+* Roadmap: The longer term roadmap https://github.com/craftersoftware/craftercms/milestone/103
 
 At a high level, we're pursuing the objectives listed below in order:
 

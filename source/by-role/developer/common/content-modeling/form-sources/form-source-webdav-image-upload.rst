@@ -22,15 +22,28 @@ Data source to upload images to WebDav repository.
 Configuration
 -------------
 
-.. image:: /_static/images/form-sources/form-source-webdav-conf.webp
+.. image:: /_static/images/form-sources/form-source-basics-conf.webp
+    :align: center
     :width: 40%
     :alt: Source Control File Upload WebDAV
+
+|
+
+.. list-table::
     :align: left
+    :header-rows: 1
 
-.. include:: /includes/form-sources/form-source-field-basics.rst
-
-+------------------------+-----------------------------------------------------------------------------+
-|| Properties            || - Repository Path: WebDAV repository path where to store the new           |
-||                       ||                    uploaded image                                          |
-||                       || - Profile ID: WebDAV profile id to be used setup in webdav.xml             |
-+------------------------+-----------------------------------------------------------------------------+
+    * - Name
+      - Description
+    * - **Data Source Basics**
+      -
+    * - Title
+      - Data source title to show on the form
+    * - Name
+      - Name of variable to store the final result in
+    * - **Properties**
+      -
+    * - Repository Path
+      - WebDAV repository path where to store the new uploaded image
+    * - Profile Id
+      - WebDAV profile id configured in webdav.xml

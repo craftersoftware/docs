@@ -643,7 +643,7 @@ More Information
 ----------------
 CrafterCMS provides some out-of-the-box blueprints that shows examples of templated projects:
 
-- `Editorial Blueprint <https://github.com/craftercms/studio/tree/develop/src/main/webapp/repo-bootstrap/global/blueprints/1000_website_editorial>`_
+- `Editorial Blueprint <https://github.com/craftersoftware/craftercms/tree/support/4.x/studio/src/main/webapp/repo-bootstrap/global/blueprints/1000_website_editorial>`_
 - `commerceTools Blueprint <https://github.com/craftercms/commercetools-blueprint>`_
 - `Wordify Blueprint <https://github.com/craftercms/wordify-blueprint>`_
 

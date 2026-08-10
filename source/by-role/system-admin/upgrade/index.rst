@@ -221,7 +221,7 @@ with a large content base, some DB operations can timeout and throw an error lik
 
 |
 
-To prevent the error, the environment variable `MARIADB_SOCKET_TIMEOUT <https://github.com/craftercms/craftercms/blob/develop/resources/env/authoring/bin/crafter-setenv.sh#L100>`__ in the ``{Crafter-CMS-install-directory}/bin/crafter-setenv.sh`` file of the CrafterCMS install you're running the upgrade script from may need to be increased depending on the size of the existing sites.
+To prevent the error, the environment variable `MARIADB_SOCKET_TIMEOUT <https://github.com/craftersoftware/craftercms/blob/support/4.x/craftercms/resources/env/authoring/bin/crafter-setenv.sh#L100>`__ in the ``{Crafter-CMS-install-directory}/bin/crafter-setenv.sh`` file of the CrafterCMS install you're running the upgrade script from may need to be increased depending on the size of the existing sites.
 
 Here's an example of setting the timeout to 10 hours:
 

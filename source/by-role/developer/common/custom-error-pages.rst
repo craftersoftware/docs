@@ -84,7 +84,7 @@ the ``404`` custom error page by clicking on ``404.ftl`` then clicking on ``Edit
    <details>
    <summary><a>Sample "404.ftl"</a></summary>
 
-.. rli:: https://raw.githubusercontent.com/craftercms/studio/support/4.x/src/main/webapp/repo-bootstrap/global/blueprints/1000_website_editorial/templates/web/errors/404.ftl
+.. rli:: https://raw.githubusercontent.com/craftersoftware/craftercms/support/4.x/studio/src/main/webapp/repo-bootstrap/global/blueprints/1000_website_editorial/templates/web/errors/404.ftl
    :caption: *CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/templates/web/errors/404.ftl*
    :linenos:
 

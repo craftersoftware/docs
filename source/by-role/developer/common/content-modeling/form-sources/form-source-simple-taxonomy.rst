@@ -23,16 +23,30 @@ Configuration
 -------------
 
 .. image:: /_static/images/form-sources/form-source-simple-taxonomy-conf.webp
+    :align: center
     :width: 40%
     :alt: Form Control Data Source Simple Taxonomy Configuration
+
+|
+
+.. list-table::
     :align: left
+    :header-rows: 1
 
-.. include:: /includes/form-sources/form-source-field-basics.rst
-
-+------------------------+--------------------------------------------------------------------------+
-|| Properties            || - Data Type: Key Value pairs type (String, Integer, Float, Date, HTML). |
-||                       || - Component Path: Path where to browse the datasource items.            |
-+------------------------+--------------------------------------------------------------------------+
+    * - Name
+      - Description
+    * - **Data Source Basics**
+      -
+    * - Title
+      - Data source title to show on the form
+    * - Name
+      - Name of variable to store the final result in
+    * - **Properties**
+      -
+    * - Data Type
+      - Key Value pairs type (String, Integer, Float, Date, HTML).
+    * - Component Path
+      - Path where to browse the datasource items.
 
 ----------------------------------------
 Creating an XML file for the data source
@@ -42,9 +56,9 @@ The Simple Taxonomy Data Source uses xml files to get the components that are go
 create your own component to use as data source by following the instructions on :ref:`creating a component<content-type-component>` and just skip creating the view and controller part of the content type if needed.
 
 .. image:: /_static/images/form-sources/form-source-simple-taxonomy-example.webp
+    :align: center
     :width: 65%
     :alt: Form Control Data Source Simple Taxonomy Example
-    :align: center
 
 |
 

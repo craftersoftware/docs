@@ -545,7 +545,7 @@ and add your desired MIME type to the list under ``target.search.indexing.binary
 
 If you're unsure about the MIME type of a file, you can check it using a tool like ``file --mime-type`` on Unix-based
 systems. You can also review the following listing of all possible supported mimetypes here:
-https://github.com/craftercms/deployer/blob/develop/src/main/resources/META-INF/mime.types
+https://github.com/craftersoftware/craftercms/blob/support/4.x/deployer/src/main/resources/META-INF/mime.types
 
 For a list of common MIME types, see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types.
 
@@ -1046,7 +1046,7 @@ The Groovy sandbox is enabled by default and can be disabled by changing the pro
 Using a Custom Blacklist
 """"""""""""""""""""""""
 Crafter Deployer includes a default blacklist that you can find
-`here <https://github.com/craftercms/deployer/blob/support/4.x/src/main/resources/groovy/blacklist>`__. Make sure you review the branch/tag you're using.
+`here <https://github.com/craftersoftware/craftercms/blob/support/4.x/deployer/src/main/resources/groovy/blacklist>`__. Make sure you review the branch/tag you're using.
 
 To use a custom blacklist follow these steps:
 
@@ -1097,7 +1097,7 @@ Using a Custom Whitelist
     :label: Since
     :version: 4.5.0
 
-Crafter Deployer includes a default whitelist that you can find `here <https://github.com/craftercms/deployer/blob/support/4.x/src/main/resources/groovy/whitelist>`__. Make sure you review the branch/tag you're using.
+Crafter Deployer includes a default whitelist that you can find `here <https://github.com/craftersoftware/craftercms/blob/support/4.x/deployer/src/main/resources/groovy/whitelist>`__. Make sure you review the branch/tag you're using.
 
 To use a custom whitelist follow these steps:
 
@@ -3434,4 +3434,4 @@ To view the Crafter Deployer REST APIs:
 -----------
 Source Code
 -----------
-Crafter Deployer's source code is managed in GitHub: https://github.com/craftercms/deployer
+Crafter Deployer's source code is managed in GitHub: https://github.com/craftersoftware/craftercms/tree/support/4.x/deployer

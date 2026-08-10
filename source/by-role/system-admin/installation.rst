@@ -445,7 +445,7 @@ and snapshots of versions in development. The CrafterCMS Docker images may be pu
 version, e.g. ``craftercms/authoring_tomcat:4.1.5``, the latest release, e.g. ``craftercms/authoring_tomcat:latest``
 or the tag for a snapshot of a version in development, e.g. ``craftercms/authoring_tomcat:4.1.6-SNAPSHOT``
 
-As mentioned, CrafterCMS is open source and you can always build Docker images from source code `here <https://github.com/craftercms/craftercms>`__
+As mentioned, CrafterCMS is open source and you can always build Docker images from source code `here <https://github.com/craftersoftware/craftercms>`__
 
 |hr|
 
@@ -1508,4 +1508,4 @@ For more information on setting up your project for delivery, see :ref:`setup-pr
 Build from Source
 ^^^^^^^^^^^^^^^^^
 
-CrafterCMS is open source and you can always build and run it from source code `here <https://github.com/craftercms/craftercms>`__
+CrafterCMS is open source and you can always build and run it from source code `here <https://github.com/craftersoftware/craftercms>`__
