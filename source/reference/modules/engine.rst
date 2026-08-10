@@ -4075,6 +4075,27 @@ Enabling the security filter in Preview Mode requires the configuration encrypti
 between Studio and Engine) and admins will need to update the default configurations for the encryption key and salt in
 :ref:`Studio <studio-cipher-configuration>` and in :ref:`Engine <engine-configuration-properties-encryption>`.
 
+.. note::
+    To check if Engine is running in preview mode, use the ``modePreview`` variable available in
+    Groovy scripts and FreeMarker templates.
+
+    **FreeMarker**
+
+    .. code-block:: html
+        :force:
+
+        <#if modePreview>
+          <!-- Preview-only markup or logic -->
+        </#if>
+
+    **Groovy**
+
+    .. code-block:: groovy
+
+        if (modePreview) {
+            // Preview-only logic
+        }
+
 .. _engine-preview-cookie:
 
 """""""""""""""
