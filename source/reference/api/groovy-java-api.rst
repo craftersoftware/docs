@@ -143,6 +143,17 @@ You can find the interface for this service at :javadoc_base_url:`Site Item Serv
 
     return result
 
+~~~~~~~~~~~~~~~~~~
+Check Preview Mode
+~~~~~~~~~~~~~~~~~~
+The following code example checks if Engine is running in preview mode:
+
+.. code-block:: groovy
+
+    if (modePreview) {
+        // Preview-only logic
+    }
+
 ^^^^^^^^^^^^^^^
 Other Variables
 ^^^^^^^^^^^^^^^
