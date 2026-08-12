@@ -27,11 +27,14 @@ Breaking Changes in CrafterCMS 5.0.0
   - /api/1/services/api/1/content/change-content-type.json
   - /api/1/services/api/1/content/get-content-type.json : use /api/2/configuration/content_types/{siteId} (GET, with contentTypeId query param) instead
   - /api/1/services/api/1/content/get-content-types.json : use /api/2/configuration/content_types/{siteId} (GET, for all types)
-  - /api/2/configuration/content_types/{siteId}/allowed_types (GET the ids of content types allowed for a path) instead
-  - /api/2/configuration/content-type/usage : use /api/2/configuration/content_types/{siteId}/usage instead
-  - /api/2/configuration/content-type/preview_image : use /api/2/configuration/content_types/{siteId}/preview_image instead
-  - /api/2/configuration/content-type/form_controller : use /api/2/configuration/content_types/{siteId}/form_controller instead
-  - /api/2/configuration/content-type/delete : use /api/2/configuration/content_types/{siteId} (DELETE) instead
+  - /api/1/services/api/1/content/get-next-item-order.json : use /api/2/content/{siteId}/order
+  - /api/1/services/api/1/content/get-item-orders.json
+  - /api/1/services/api/1/content/reorder-items.json : use /api/2/content/{siteId}/order/reorder
+  - /api/2/configuration/content_types/{siteId}/allowed_types (GET the ids of content types allowed for a path)
+  - /api/2/configuration/content-type/usage : use /api/2/configuration/content_types/{siteId}/usage
+  - /api/2/configuration/content-type/preview_image : use /api/2/configuration/content_types/{siteId}/preview_image
+  - /api/2/configuration/content-type/form_controller : use /api/2/configuration/content_types/{siteId}/form_controller
+  - /api/2/configuration/content-type/delete : use /api/2/configuration/content_types/{siteId} (DELETE)
   - /api/1/services/api/1/content/get-item-versions.json
   - /api/1/services/api/1/content/write-content.json
   - /api/1/services/api/1/publish/commits.json

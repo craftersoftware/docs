@@ -51,6 +51,8 @@ New Features
     - :base_url:`Revert content <_static/api/studio.html#tag/content/operation/contentRevert>`: POST /api/2/content/{siteId}/revert
     - :base_url:`Create folder <_static/api/studio.html#tag/content/operation/contentCreateFolder>`: POST /api/2/content/{siteId}/folder
     - :base_url:`Upload file <_static/api/studio.html#tag/content/operation/contentUpload>`: PUT /api/2/content/{siteId}
+    - :base_url:`Get the existing items order for a given parent path <_static/api/studio.html#tag/content/operation/getItemsOrder>`: PUT /api/2/content/{siteId}/order
+    - :base_url:`Calculates the order value so the item is placed at the selected location <_static/api/studio.html#tag/content/operation/reorderItem>`: PUT /api/2/content/{siteId}/order/reorder
 
   - contentTypes
 
