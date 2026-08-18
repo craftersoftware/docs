@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.2
+:last-updated: 5.0.0
 
 .. meta::
    :description: Step-by-step guide to adding a new language to Crafter Studio UI including translation files, API updates, FreeMarker templates, and React locale bundles.
@@ -14,9 +14,9 @@ Crafter Studio has been translated into a number of languages. To reach more use
 
 **Here are the steps to add a new language in Crafter Studio:**
 
-#. Add the new language to the ``get-available-languages`` API
-#. In Studio UI, add your new locale files to ui/app/src/translations. You may start by copying ``es.json`` and translating it into your target language.
+#. Add the new language to the ``getAvailableLanguages`` API
 #. Open the file ``ui/app/src/utils/i18n.ts`` and add the locale code to ``createIntlInstance`` conditional statement, and add the switch statement case to ``fetchLocale``.
+#. In Studio UI, add your new locale files to ui/app/src/translations. You may start by copying ``es.json`` and translating it into your target language.
 #. Add the translation file/s for legacy forms and content type editor to ``studio-ui/static-assets/components/cstudio-common/resources/**/base.js``
 #. Update templates to add the new language imports into the runtime (i.e. via script[src] elements)
 #. Build, deploy and test your changes
@@ -30,62 +30,45 @@ Before we begin, we need to pick the two letter language code for the new langua
 Let's begin adding the language ``Japanese`` to Crafter Studio:
 
 ----------------------------------------------------------
-1. Add the new language to the get-available-languages API
+1. Add the new language to the available_languages API
 ----------------------------------------------------------
-* To add the new language to the ``get-available-languages`` API (*/studio/api/1/services/api/1/server/get-available-languages.json*), in your ``studio`` code, navigate to ``studio/src/main/webapp/default-site/scripts/rest/api/1/server`` and open the ``get-available-languages.get.groovy`` file
-* Add the new language to the file:
+* To add the new language to the :base_url:`getAvailableLanguages <_static/api/studio.html#tag/system/operation/getAvailableLanguages>`, in your Studio configuration override file, ``studio-config-override.yaml``, add the new language:
 
-  .. code-block:: groovy
-     :emphasize-lines: 14-16
+  .. code-block:: yaml
+     :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml*
+     :emphasize-lines: 10-11
      :linenos:
 
-     def result = []
-    	result[0] = [:]
-    	result[0].id = "en"
-    	result[0].label = "English"
-    	result[1] = [:]
-    	result[1].id = "es"
-    	result[1].label = "español"
-    	result[2] = [:]
-    	result[2].id = "ko"
-    	result[2].label = "한국어"
-    	result[3] = [:]
-    	result[3].id = "de"
-    	result[3].label = "Deutsch"
-        result[4] = [:]
-        result[4].id = "ja"
-        result[4].label = "日本語"
-     return result
+     studio.configuration.availableLanguages:
+         - id: en
+           label: English
+         - id: es
+           label: Español
+         - id: ko
+           label: 한국어
+         - id: de
+           label: Deutsch
+         - id: ja
+           label: 日本語
+
 
 ---------------------------------------------------------
 2. Add the New Language to the React Translations Manager
 ---------------------------------------------------------
-Open the file ``ui/app/src/utils/i18n.ts`` and add the locale code to the ``createIntlInstance`` conditional statement, and add the switch statement case to ``fetchLocale``.
+In your ``studio-ui`` code, open the file ``ui/app/src/utils/i18n.ts`` and add the locale code to the ``createIntlInstance`` conditional statement, and add the new language ``ja`` to the ``ImportsLookup``.
 
 .. code-block:: ts
-    :emphasize-lines: 1,13-15,23,28
+    :caption: *studio-ui/ui/app/src/utils/i18n.ts*
+    :emphasize-lines: 1,5,10,15
 
-    async function fetchLocale(locale: string): Promise<LookupTable<string>> {
-      let translations;
-      switch (locale) {
-        case 'de':
-          translations = await import('../translations/de.json');
-          break;
-        case 'es':
-          translations = await import('../translations/es.json');
-          break;
-        case 'ko':
-          translations = await import('../translations/ko.json');
-          break;
-        case 'ja':
-          translations = await import('../translations/ja.json');
-          break;
-        default:
-          translations = Promise.resolve({});
-          break;
-      }
-      return translations;
-    }
+    const importsLookup: ImportsLookup = {
+	    de: () => import('../translations/de.json'),
+	    es: () => import('../translations/es.json'),
+	    ko: () => import('../translations/ko.json'),
+	    ja: () => import('../translations/ja.json')
+    };
+
+    ...
 
     async function createIntlInstance(localeCode: string): Promise<IntlShape> {
       localeCode = localeCode.replace('kr', 'ko');
@@ -97,25 +80,26 @@ Open the file ``ui/app/src/utils/i18n.ts`` and add the locale code to the ``crea
         let fetchedTranslations = await fetchLocale(localeCode as BundledLocaleCodes);
         ...
 
---------------------------------------------------------
-3. Add Your New Locale File/s to ui/app/src/translations
---------------------------------------------------------
+------------------------------------------------------------------
+3. Add Your New Locale File/s to studio-ui/ui/app/src/translations
+------------------------------------------------------------------
 In your ``studio-ui`` code, add the new locale files to ``ui/app/src/translations``. You may start by copying ``es.json`` and translating it into your target language.
 
 .. code-block:: json
     :force:
-    :caption: *ui/app/src/translations/ja.json*
+    :caption: *studio-ui/ui/app/src/translations/ja.json*
 
     {
-      "+E4CL4": "プロジェクト全体が公開されました",
-      "/A7dEh": "最後の投稿はエラーで完了しました、詳細についてはログを参照してください。",
-      ...
-      "about.versionNumber": "バージョン番号",
-      "aboutView.attribution": "CrafterCMS 他の人のおかげでそれは可能です <a>オープンソースソフトウェアプロジェクト</a>.",
-      "accountManagement.changeHelperText": "パスワードが正常に更新されると、再度ログインするように求められます.",
-      "accountManagement.changeLanguage": "言語の変更",
-      "accountManagement.changePassword": "パスワードを変更する",
-      ...
+        "+E4CL4": "プロジェクト全体が公開されました",
+        "+fYahR": "サポートタイプ",
+        "+vOP15": "コンテンツの名称変更",
+        ...
+        "about.versionNumber": "バージョン番号",
+        "aboutView.attribution": "CrafterCMS 他の人のおかげでそれは可能です <a>オープンソースソフトウェアプロジェクト</a>.",
+        "accountManagement.changeHelperText": "パスワードが正常に更新されると、再度ログインするように求められます.",
+        "accountManagement.changeLanguage": "言語の変更",
+        "accountManagement.changePassword": "パスワードを変更する",
+        ...
     }
 
 --------------------------------------------------------------------
@@ -143,7 +127,7 @@ In your ``studio-ui`` code, add the new locale files to ``ui/app/src/translation
       <script src="/studio/static-assets/components/cstudio-common/resources/de/base.js"></script>
       <script src="/studio/static-assets/components/cstudio-common/resources/ja/base.js"></script>
 
-.. code-block:: html
+  .. code-block:: html
       :force:
       :linenos:
       :emphasize-lines: 5
@@ -167,18 +151,20 @@ In your ``studio-ui`` code, add the new locale files to ``ui/app/src/translation
        :caption: *studio-ui/static-assets/components/cstudio-common/resources/ja/base.js*
        :linenos:
 
-       CStudioAuthoring.Messages.registerBundle("siteDashboard", "ja", {
-       dashboardTitle: "ダッシュボード",
+       CStudioAuthoring.Messages.registerBundle('siteDashboard', 'ja', {
+       dashboardTitle: 'ダッシュボード',
 
-       dashboardCollapseAll: "すべて折りたたむ",
+       dashboardCollapseAll: 'すべて折りたたむ',
        ...
 
-Remember to change the language code in the all the ``registerBundle`` calls in the ``base.js`` file
+  Remember to change the language code in all the ``registerBundle`` calls in the ``base.js`` file
 
   .. code-block:: js
 
-     CStudioAuthoring.Messages.registerBundle("dialogs", "ja", {
-
+      CStudioAuthoring.Messages.registerBundle('siteDashboard', 'ja', {
+      ...
+      CStudioAuthoring.Messages.registerBundle('contextnav', 'ja', {
+      ...
 
 --------------------------------------
 6. Build, deploy and test your changes
