@@ -32,25 +32,26 @@ Let's begin adding the language ``Japanese`` to Crafter Studio:
 --------------------------------------------------------
 1. Add the new language to the getAvailableLanguages API
 --------------------------------------------------------
-* To add the new language to the :base_url:`getAvailableLanguages <_static/api/studio.html#tag/system/operation/getAvailableLanguages>`, in your Studio configuration override file, ``studio-config-override.yaml``, add the new language:
+To add the new language to the :base_url:`getAvailableLanguages <_static/api/studio.html#tag/system/operation/getAvailableLanguages>`, in your Studio configuration override file, ``studio-config-override.yaml``, add the new language:
 
-  .. code-block:: yaml
-     :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml*
-     :emphasize-lines: 10-11
-     :linenos:
+.. code-block:: yaml
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml*
+    :emphasize-lines: 10-11
+    :linenos:
 
-     studio.configuration.availableLanguages:
-         - id: en
-           label: English
-         - id: es
-           label: Español
-         - id: ko
-           label: 한국어
-         - id: de
-           label: Deutsch
-         - id: ja
-           label: 日本語
+    studio.configuration.availableLanguages:
+        - id: en
+          label: English
+        - id: es
+          label: Español
+        - id: ko
+          label: 한국어
+        - id: de
+          label: Deutsch
+        - id: ja
+          label: 日本語
 
+If you are running a cluster and would like your new language configuration to replicate across your cluster, use the global override under *CRAFTER_HOME/data/repos/global/configuration*.
 
 ---------------------------------------------------------
 2. Add the New Language to the React Translations Manager
