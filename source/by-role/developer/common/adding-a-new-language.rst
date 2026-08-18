@@ -29,9 +29,9 @@ Before we begin, we need to pick the two letter language code for the new langua
 
 Let's begin adding the language ``Japanese`` to Crafter Studio:
 
-----------------------------------------------------------
-1. Add the new language to the available_languages API
-----------------------------------------------------------
+--------------------------------------------------------
+1. Add the new language to the getAvailableLanguages API
+--------------------------------------------------------
 * To add the new language to the :base_url:`getAvailableLanguages <_static/api/studio.html#tag/system/operation/getAvailableLanguages>`, in your Studio configuration override file, ``studio-config-override.yaml``, add the new language:
 
   .. code-block:: yaml
