@@ -1,5 +1,5 @@
+:last-updated: 5.0.0
 :is-up-to-date: True
-:last-updated: 4.5.1
 
 .. meta::
     :description lang=en:

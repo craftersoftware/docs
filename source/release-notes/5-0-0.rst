@@ -1,0 +1,363 @@
+.. index:: CrafterCMS 5.0.0 Release Notes
+
+----------------
+CrafterCMS 5.0.0
+----------------
+
+Released *TBD*
+
+.. important::
+
+    Please see :ref:`Breaking changes <breaking-changes-5-x>` for breaking changes and other
+    things to consider before upgrading
+
+    For instructions on how to update your CrafterCMS install, please see :ref:`upgrading-craftercms`
+
+^^^^^^^^^^^^
+New Features
+^^^^^^^^^^^^
+* **New publishing system**
+
+  - New publishing permissions:
+
+    - publish_approve: approve a publish package
+    - publish_cancel: cancel a publish package
+    - publish_get_queue: get the publishing queue
+    - publish_reject: reject a publish package awaiting approval
+    - publish_request: submit a publish package for approval and/or publishing
+
+    See :ref:`permission-mappings` for more information on the new and existing permissions.
+
+* **New v2 Studio APIs**
+
+  - Groups
+
+    - :base_url:`Get group by name <_static/api/studio.html#tag/groups/operation/getGroupByName>`: GET /api/2/groups/by_name/{name}
+
+  - Repository
+
+    - :base_url:`Get the git log for a site repository <_static/api/studio.html#tag/repository/operation/getRepositoryLog>`: GET /api/2/repository/log
+
+  - Sites
+
+    - :base_url:`Create a site <_static/api/studio.html#tag/sites/operation/createSite>`: POST /api/2/sites
+
+  - Content
+
+    - :base_url:`Upload file <_static/api/studio.html#tag/content/operation/contentUpload>`: PUT /api/2/content/{siteId}
+    - :base_url:`Write content <_static/api/studio.html#tag/content/operation/contentWrite>`: POST /api/2/content/{siteId}
+    - :base_url:`Move content <_static/api/studio.html#tag/content/operation/contentMove>`: POST /api/2/content/{siteId}/move
+    - :base_url:`Move and update content <_static/api/studio.html#tag/content/operation/contentMoveAndUpdate>`: POST /api/2/content/{siteId}/move_and_update
+    - :base_url:`Revert content <_static/api/studio.html#tag/content/operation/contentRevert>`: POST /api/2/content/{siteId}/revert
+    - :base_url:`Create folder <_static/api/studio.html#tag/content/operation/contentCreateFolder>`: POST /api/2/content/{siteId}/folder
+    - :base_url:`Upload file <_static/api/studio.html#tag/content/operation/contentUpload>`: PUT /api/2/content/{siteId}
+    - :base_url:`Get the existing items order for a given parent path <_static/api/studio.html#tag/content/operation/getItemsOrder>`: PUT /api/2/content/{siteId}/order
+    - :base_url:`Calculates the order value so the item is placed at the selected location <_static/api/studio.html#tag/content/operation/reorderItem>`: PUT /api/2/content/{siteId}/order/reorder
+
+  - contentTypes
+
+    - :base_url:`Get all usage of a given content-type <_static/api/studio.html#tag/contentTypes/operation/getContentTypeUsage>`: GET /api/2/configuration/content_types/{siteId}/usage
+    - :base_url:`Get content type configuration file for a given content type <_static/api/studio.html#tag/contentTypes/operation/getContentTypeConfiguration>`: GET /api/2/configuration/content_types/{siteId}
+    - :base_url:`Delete files related to a given content-type <_static/api/studio.html#tag/contentTypes/operation/deleteContentType>`: DELETE /api/2/configuration/content_types/{siteId}
+    - :base_url:`Get allowed content types for a given site at a given path <_static/api/studio.html#tag/contentTypes/operation/getAllowedContentTypes>`: GET /api/2/configuration/content_types/{siteId}/allowed_types
+    - :base_url:`Get preview image of a given content type <_static/api/studio.html#tag/contentTypes/operation/getContentTypePreviewImage>`: GET /api/2/configuration/content_types/{siteId}/preview_image
+    - :base_url:`Get the form controller (if it exists) script of a given content type <_static/api/studio.html#tag/contentTypes/operation/getContentTypeFormController>`: GET /api/2/configuration/content_types/{siteId}/form_controller
+
+  - Dependency
+
+    - :base_url:`Get list of dependent items for given content path <_static/api/studio.html#tag/dependency/operation/getDependentItems>`: GET /api/2/dependency/{siteId}/dependent_items
+
+  - Publish
+
+    - :base_url:`Calculate the publish package given an item set <_static/api/studio.html#tag/publishing/operation/calculatePublishPackage>`: POST /api/2/publish/{siteId}/calculate
+    - :base_url:`Publishes the given content to the target (staging or live) <_static/api/studio.html#tag/publishing/operation/publish>`: POST /api/2/publish/{siteId}/package
+    - :base_url:`Get the list of packages in the publishing queue <_static/api/studio.html#tag/publishing/operation/GetPublishPackages>`: GET /api/2/publish/{siteId}/packages
+    - :base_url:`Get package details <_static/api/studio.html#tag/publishing/operation/getPublishPackage>`: GET /api/2/publish/{siteId}/package/{packageId}
+    - :base_url:`Get publish package items <_static/api/studio.html#tag/publishing/operation/getPublishPackageItems>`: GET /api/2/publish/{siteId}/package/{packageId}/items
+    - :base_url:`Recalculate a complete publish package user-requested items <_static/api/studio.html#tag/publishing/operation/recalculatePublishPackage>`: POST /api/2/publish/{siteId}/package/{packageId}/recalculate
+    - :base_url:`Get publishing status for site <_static/api/studio.html#tag/publishing/operation/getPublishingStatus>`: GET /api/2/publish/{siteId}/status
+    - :base_url:`Enable/disable publishing for a site <_static/api/studio.html#tag/publishing/operation/enablePublishing>`: POST /api/2/publish/{siteId}/enable
+
+  - System
+
+    - :base_url:`Get available languages <_static/api/studio.html#tag/system/operation/getAvailableLanguages>`: GET /api/2/system/available_languages
+
+  - Workflow
+
+    - :base_url:`Get workflow affected packages <_static/api/studio.html#tag/workflow/operation/getWorkflowAffectedPackages>`: GET /api/2/workflow/{site}/affected_packages
+    - :base_url:`Approve request publish submission <_static/api/studio.html#tag/workflow/operation/workflowApprove>`: POST /api/2/workflow/{site}/approve
+    - :base_url:`Reject publish package <_static/api/studio.html#tag/workflow/operation/workflowReject>`: POST /api/2/workflow/{site}/reject
+    - :base_url:`Cancel publish packages <_static/api/studio.html#tag/workflow/operation/cancelPublishPackages>`: POST /api/2/workflow/{site}/cancel
+
+* **New content type controller script** |br|
+
+  - The new content type controller script now uses a new ``lifecycleContent`` object that provides access to the content
+    being written. See :ref:`server-side-form-controllers` for more information on content type controller scripts.
+
+  - New :ref:`content processor configuration properties <content-processors-configuration>` for configuring access to the
+    ``applicationContext`` variable and adding to the list of available beans in the content type controller scripts.
+
+    Note that the ``applicationContext`` variable is now disabled by default and can be enabled by setting the property
+    ``studio.contentProcessor.contentLifecycle.includeApplicationContext`` to ``true`` as described :ref:`here <content-processors-configuration>`
+
+^^^^^^^^^^^^
+Enhancements
+^^^^^^^^^^^^
+* `Git CLI is now always enabled in Studio <https://github.com/craftercms/craftercms/issues/7704>`__ |br|
+  The Git CLI enabled config has been removed from the Studio configuration file.
+  Crafter Studio now requires Git 2.20.1 and later installed.
+
+* `Improved Studio cluster sync failure notifications and monitoring <https://github.com/craftercms/craftercms/issues/7618>`__ |br|
+
+* `Improved Git clean up task <https://github.com/craftercms/craftercms/issues/7534>`__ |br|
+
+* `Groovy classes are now accessible to Content Type controllers <https://github.com/craftercms/craftercms/issues/6546>`__ |br|
+
+* `Improved notification message models <https://github.com/craftercms/craftercms/issues/7557>`__ |br|
+
+  - The following new variables are now used in the ``notification-config.xml`` notification configuration file:
+
+    - ``publishPackage``: PublishPackage object
+
+      .. raw:: html
+
+          <details>
+          <summary><a>PublishPackage object</a></summary>
+
+      .. code-block:: java
+
+          long id;
+          long siteId;
+          Site site;
+          String target;
+          Instant schedule;
+          ApprovalState approvalState;
+          long packageState;
+          int liveError;
+          int stagingError;
+          long submitterId;
+          String submitterComment;
+          Instant submittedOn;
+          Long reviewerId;
+          String reviewerComment;
+          Instant reviewedOn;
+          Instant publishedOn;
+          PackageType packageType;
+          String commitId;
+          String publishedStagingCommitId;
+          String publishedLiveCommitId;
+
+      .. raw:: html
+
+          </details>
+
+    - ``reviewer``: the reviewer user |br|
+      The ``reviewer`` user replaces the ``approver`` and ``userThatRejects`` users in your notification configuration files
+
+  - The maximum number of items to include in the workflow notification messages can now be configured via the property
+    ``studio.workflow.notification.maxItemCount``.
+
+  See the :ref:`notifications-configuration` for more information.
+
+* To get the content of an item, please use the :base_url:`Get item <_static/api/engine.html#tag/content/operation/getItem>` API. |br|
+  `The deprecated Engine REST API Get Descriptor /api/1/site/content_store/descriptor is now removed <https://github.com/craftercms/craftercms/issues/8294>`__.
+
+"""""""""
+Studio UI
+"""""""""
+- [utils/resource] Removed ``createFakeResource``, ``createResource`` and ``createResourceBundle`` utils.
+- [utils/content]:
+
+  - Removed ``parseLegacyItemToBaseItem``, ``parseLegacyItemToSandBoxItem`` and ``parseLegacyItemToDetailedItem``.
+    Replaced by ``parseLegacyItemToContentItem``.
+  -  Moved ``PathNavigator/utils.ts`` ``isVideo``, ``isAudio`` and ``isPdfDocument`` functions to ``utils/content.ts``.
+- [components]
+
+  - Removed ``pages``/``QuickCreateMenu`` component.
+  - Removed ``SuspenseWithEmptyState`` and ``WithEmptyState`` components.
+  - Removed ``resource`` prop from StoreProvider
+  - Removed ``styles`` prop from ``ErrorState``, ``ApiResponseErrorState``, ``BlueprintForm``, ``LoadingState``, ``ConfirmDialog``, ``AlertDialog``, ``LauncherSection``, ``AceEditor``, ``ItemDisplay``, ``PasswordRequirementsDisplay``, ``PublishDialogForm``, ``ItemStateIcon``, ``ResizeableDrawer``, ``GlobalAppToolbar``, ``ViewToolbar``, ``PublishingStatusAvatar``, ``ItemPublishingTargetIcon`` and ``EmptyState``. Replaced by ``sxs`` prop.
+  - Removed ``sectionStyles`` and ``tileStyles`` props from ``LauncherGlobalNav``. Replaced with ``sectionSxs`` and ``tileSxs``.
+  - Added ``sxs`` prop to ``CrafterCMSLogo``, ``SiteSwitcherSelect``, ``ConfirmDialog``, ``ContextMenu``, ``BlueprintForm``, ``ErrorState``, ``GlobalAppToolbar``, ``ItemActionsMenu``, ``ItemDisplay``, ``ItemMegaMenuUI``, ``ItemPublishingTargetIcon``, ``ItemStateIcon``, ``LauncherSectionUI``, ``LauncherSiteCard``, ``LauncherTile``, ``LoadingState``, ``LoginForm``, ``LogoAndMenuBundleButton``, ``PagesSearchAhead``, ``PasswordRequirementsDisplay``, ``PathNavigator``, ``PathNavigatorBreadcrumbs``, ``PathNavigatorHeader``, ``PathNavigatorList``, ``PathNavigatorUI``, ``PathNavigatorTree``, ``PathNavigatorTreeItem``, ``PathNavigatorTreeUI``, ``PublishDialogForm``, ``PublishingStatusAvatar``, ``PublishingStatusTile``, ``ResizeableDrawer``, ``SearchBar``, ``SingleItemSelector``, ``SiteTools``, ``ToolPanel``, ``ViewToolbar`` and ``CrafterCMSIcon``.
+  - Added ``sx`` prop to ``FilterDropdown``, ``PathNavigatorHeader``, ``SiteTools``, ``SiteSearchFilters`` and ``PublishingStatusAvatar``.
+  - Removed ``RejectDialog`` component. Now handled by ``PublishingPackageReviewDialog``.
+  - Removed ``emailOnApprove`` option from ``PublishDialog`` form.
+  - Removed ``PublishDialog/styles.ts`` file.
+  - ``PackageDetailsDialog``: Updated ``packageId`` prop to be of type ``number``.
+  - ``PublishOnDemandForm``: Removed ``bulkPublishCommentRequired`` and ``publishByCommitCommentRequired`` props.
+  - ``PublishingQueue/FilterDropdown``: Removed ``filterStates`` prop.
+  - ``PublishingQueue/PublishingPackage``: Removed ``id``, ``schedule``, ``approver``, ``state``, ``environment``, ``comment``, ``filesPerPackage`` and ``setFilesPerPackage`` properties. Added ``pkg`` property of type ``PublishPackage``.
+  - ``PackageDetailsDialog``: Update packageId prop to be of type number.
+  - Removed ``WorkflowCancellationDialog``. Replaced by ``ViewPackagesDialog``.
+  - Removed ``UnlockPublisherDialog`` component.
+  - ``PackageItems``: Component no longer shows the publishing target icon for items.
+  - [ChangeContentTypeDialog] ``rootPath``, ``compact``, ``selectedContentType`` props removed. Prop ``initialCompact`` added.
+  - [ContentTypesFilter] Completely redone. Props are now same as @mui/material/SelectProps
+  - [NewContentCard] Removed
+  - [ContentTypesGrid] Removed
+  - [ContentTypesLoader] Removed
+  - [NewContentDialog] Props ``rootPath``, ``compact`` removed. Prop ``initialCompact`` added.
+
+    - Prop ``onContentTypeSelected`` changed its signature from sending an object with ``authoringBase``, ``path``, ``isNewContent``, ``contentTypeId``, ``onSaveSuccess`` to ``{ path: string; contentType: ContentType }``
+  - [CompareVersions] Removed.
+  - [EnhancedDialog] Removed unused ``id`` prop.
+  - [CompareVersionsDialog] Added ``subtitle``, ``selectionContent``, and ``fields`` properties.
+  - [ViewVersionDialog] Added ``onClose`` property.
+  - [ViewVersionDialogContainer] Added ``contentTypesBranch``, ``showXml`` and ``data`` properties.
+  - [DeleteDialog] Removed ``childItems`` and ``dependentItems`` props. Dependencies are not in redux state anymore.
+  - [RenameAssetDialog] Removed ``dependantItems`` and ``fetchingDependantItems`` props. Dependencies are not in redux state anymore.
+  - [PublishingStatusTile] Removed ``enabled`` and ``status`` properties. Replaced with ``publishingStatus`` (type ``PublishingStatus``).
+  - [PublishDialog]
+    - Added ``buildPathTrees`` util that builds a tree structure from a list of paths, grouping them by root directories.
+  - [PublishDialogForm]
+    - Removed ``state``, ``published``, ``publishingTargetsStatus``, ``onPublishingChannelsFailRetry``, ``submissionCommentRequired``, ``publishingChannels`` and ``onChange`` props. Added ``onSubmit``, ``formState``, ``onInputChange``, ``onDateTimePickerChange``, ``showRequestApproval``, ``isPromote``, and ``onFetchedPublishedTargets`` props.
+    - Updated ``PublishFormProps`` type to ``PublishDialogFormProps`` interface.
+  - [PublishingStatusButtonUI] Removed ``numberOfItems``, ``totalItems`` and ``status`` properties. Added ``published`` and ``currentTask`` properties.
+  - Added dialogs: ``CancelPackageDialog``, ``BulkCancelPackageDialog``, ``PublishPackageReviewDialog``, ``PublishingPackageResubmitDialog``, ``ViewPackagesDialog``.
+  - [RenameAssetDialog] Removed ``path`` and ``value`` properties. Replaced with ``item`` property.
+  - [ItemDisplay] Updated ``item`` prop to be of type ``LightItem | ContentItem``.
+  - ``PathNavigator/PathNavigatorTree``: Updated ``label`` prop to be of type ``TranslationOrText``.
+  - ``PathNavigatorTreeUI/PathNavigatorUI/PathNavigatorTreeHeader``: Updated ``title`` prop to be of type ``string | ReactNode``.
+  - Removed ``LegacyComponentsPanel`` component.
+  - [EditGroupDialogUI] Updated ``onFetchMoreUsers`` prop return type to ``Promise``.
+  - [PackageItemsList] Updated ``loadNextPage`` prop return type to ``Promise``.
+  - [TransferListColumn] Updated ``onFetchMore`` prop return type to ``Promise``.
+
+- [hooks]
+  - Removed ``useLogicResource`` hook.
+  - Removed ``useSelectorResource`` hook.
+  - Removed ``useQuickCreateListResource`` hook.
+  - Removed ``useSystemVersionResource`` hook.
+  - Removed ``useResolveWhenNoNullResource`` hook.
+  - Renamed ``useDetailedItem`` to ``useContentItem``.
+  - Removed ``useDetailedItems`` hook. Use ``useFetchContentItems`` instead.
+  - Renamed ``useFetchSandboxItems`` to ``useFetchContentItems``.
+  - Upgrade to the latest version to date of the following libraries:
+
+    - @mui/icons-material
+    - @mui/lab
+    - @mui/material
+    - @mui/x-data-grid
+    - @mui/x-date-pickers
+    - @mui/x-tree-view
+    - Uppy
+    - GraphiQL
+    - react-window
+
+  - Moved ``getPersonFullName`` to ``utils/object``
+  - FE2 TODO: image=>image-picker, text=>input, etc services/contentType typeMap removed
+  - Removed ``WidgetDialogContextType``, ``WidgetDialogContext``, ``useWidgetDialogContext``. Use ``useEnhancedDialogContext`` instead.
+  - [services]
+
+    - ``publishing/fetchPackages`` filters param updated to be a Partial of ``target``, ``states``, ``approvalStates``, ``submitter``, ``reviewer``, ``isScheduled``, ``sort``, ``offset`` and ``limit``. ``environment`` is now ``target`` and ``path`` was removed from filters param.
+    - ``publishing/fetchPackage``: packageId is now of type ``number``.
+    - Updated ``workflow/approve``: Now it receives ``packageId`` as a parameter.
+    - Updated ``workflow/reject``: Now it receives ``packageId`` as a parameter instead of ``items``.
+    - Removed ``workflow/publish`` and ``workflow/requestPublish``, replaced by ``publishing/publish``.
+    - Removed ``publishing/cancelPackage`` service, replaced by ``workflow/cancel``.
+    - Removed ``publishing/start`` and ``publishing/stop`` services, replaced by ``publishing/enable``.
+    - Removed ``publishing/bulkGoLive``, ``publishing/publishByCommits`` and ``publishing/publishAll`` services, replaced by ``publishing/publish``.
+    - Removed ``content/fetchWorkflowAffectedItems`` service. Now workflow affected validation is checked against packages using ``workflow/fetchAffectedPackages``.
+    - Removed ``publishing/clearLock`` service.
+    - Removed ``cmis`` services.
+    - Removed ``content/uploadToCMIS`` service.
+    - Removed ``models/CMIS`` service.
+    - Renamed ``content/fetchDetailedItem`` to ``fetchContentItem``.
+    - Renamed ``content/fetchItemsByPath`` to ``fetchContentItems``.
+    - Removed ``content/fetchSandboxItem``. Replaced by ``fetchContentItem``.
+    - Removed ``content/fetchDetailedItems``. Replaced by ``fetchContentItems``.
+    - Removed ``content/changeContentType``.
+    - Updated ``dashboard/fetchPublishingHistoryPackageItems`` ``packageId`` parameter to be of type ``number``.
+    - Updated ``dependencies/fetchDependencies`` ``items`` parameter to be of type ``string[]``, renamed variable to ``paths``
+    - Updated ``publishing/fetchPackage`` ``packageId`` parameter to be of type ``number``, and added the parameter ``data``.
+    - Updated ``publishing/fetchPackages`` ``filters`` parameter to be required, and removed the filters object props ``environment`` and ``path``. Added filters object props ``target``, ``approvalStates``, ``submitter``, ``reviewer``, ``isScheduled`` and ``sort``.
+    - Removed ``sites/fetchLegacySite``. Replaced by ``sites/fetchSite``.
+    - PublishingItem interface changes:
+
+      - ``approver`` is now ``reviewer``, of type ``Person``.
+      - ``comment`` is removed, and now there's ``reviewerComment`` and ``submitterComment``.
+      - ``environment`` is now ``target``.
+      - ``items`` is now of type ``PublishingItem[]``.
+      - ``state`` is now ``approvalState``.
+      - Added ``title``, ``submittedOn``, ``reviewedOn``, ``packageState``, ``reviewer``, ``liveError``, ``stagingError``, ``publishedOn``, ``packageType``, ``commitId``, ``publishedStagingCommitId`` and ``publishedLiveCommitId`` props.
+    - ``PublishFormData`` interface change: Added ``title`` prop.
+    - ``ExpiredItem`` interface change: changed ``sandboxItem`` prop to ``contentItem``.
+    - Removed ``SandboxItem`` and ``DetailedItem`` interfaces, replaced by ``ContentItem``.
+    - ``DeleteDialogBaseProps`` and ``FetchDeleteDependenciesResponse`` interfaces: Update ``childItems`` and ``dependentItems`` to be of type ``LightItem[]``.
+    - ``CalculatedPackageResponse`` interface: Update ``hardDependencies``, ``softDependencies`` and ``items`` to be of type ``LightItem[]``.
+    - ``approvePublish`` and ``rejectPublish`` are no longer item actions in BaseItem's ``availableActionsMap`` property.
+    - [SiteDashboard/utils] Renamed ``getValidatedSelectionState`` to ``getItemsValidatedSelectionState``.
+    - [state]
+
+      - ``actions/content``:
+        - Renamed ``fetchDetailedItem`` action to ``fetchContentItem``. Action string changed from FETCH_DETAILED_ITEM to FETCH_CONTENT_ITEM.
+        - Renamed ``reloadDetailedItem`` action to ``reloadContentItem``. Action string changed from RELOAD_DETAILED_ITEM to RELOAD_CONTENT_ITEM.
+        - Renamed ``fetchDetailedItemComplete`` action to ``fetchContentItemComplete``. Action string changed from FETCH_DETAILED_ITEM_COMPLETE to FETCH_CONTENT_ITEM_COMPLETE.
+        - Renamed ``fetchSandboxItems`` to ``fetchContentItems``. Action string changed from FETCH_SANDBOX_ITEMS to FETCH_CONTENT_ITEMS.
+        - Renamed ``fetchSandboxItemsComplete`` to ``fetchContentItemsComplete``. Action string changed from FETCH_SANDBOX_ITEMS_COMPLETE to FETCH_CONTENT_ITEMS_COMPLETE.
+        - Removed ``fetchSandboxItem`` action. Replaced by ``fetchContentItem``.
+        - Removed ``fetchDetailedItemComplete`` action. Replaced by ``fetchContentItemComplete``.
+        - Removed ``fetchDetailedItems`` action. Replaced by ``fetchContentItems``.
+        - Removed ``fetchDetailedItemsComplete`` action. Replaced by ``fetchContentItemsComplete``.
+        - Removed ``completeDetailedItem`` action.
+      - ``actions/dialogs``:
+
+        - Updated ``historyDialogUpdate`` action type to ``UPDATE_HISTORY_DIALOG``.
+        - Removed ``fetchDeleteDependencies``, ``fetchDeleteDependenciesComplete``, ``fetchDeleteDependenciesFailed`` actions.
+        - Updated ``newContentCreationComplete`` action payload to be ``{ item: LegacyItem; redirectUrl: string }``.
+        - Updated ``updateEditDialogConfig`` action type to ``UPDATE_EDIT_DIALOG``.
+        - Updated ``fetchRenameAssetDependants`` action payload to be ``{ path: string; dialogId: string }``.
+        - Updated ``updateSingleFileUploadDialog`` action payload to be ``Partial<CreateFileStateProps>``
+        - Created ``updateLauncher`` action.
+      - ``actions/system``:
+
+        - Updated `showEditItemSuccessNotification` action payload to be `{ action: CommonSaveOptions; }`.
+        - Removed ``workflowEvent``. Replaced by ``workflowEventSubmit``, ``workflowEventDirectPublish``, ``workflowEventApprove``, ``workflowEventReject``, ``workflowEventCancel``.
+      - ``actions/preview``:
+
+        - ``requestWorkflowCancellationDialog``: Removed ``path``, replaced by ``item``.
+    - [models/Publishing]
+
+      - ``Package``: Updated id to be of type ``number``.
+      - ``CurrentFilters``: Removed ``environment``, ``path``, ``state`` and ``page`` properties. Added ``target``, ``states``, ``approvalStates``, ``submitter``, ``reviewer``, ``isScheduled``, ``sort`` and ``offset`` properties.
+      - ``PublishingStatusCodes``: Removed ``processing``, ``queued``, ``error`` and ``readyWithErrors``.
+      - ``PublishingStatus``:
+
+        - Removed ``status``, ``lockOwner``, ``lockTTL``, ``publishingTarget``, ``submissionId``, ``numberOfItems``, and ``totalItems``. Added ``currentTask`` property.
+        - Updated ``state`` property to be of type ``'READY' | 'IN_PROGRESS' | 'COMPLETED'``.
+      - ``PublishFormData``: Added ``title`` property.
+      - ``PublishingTarget``: updated ``name`` property to be of type ``'live' | 'staging'``.
+      - ``PublishingParams``: Removed ``optionalDependencies`` and ``sendEmailNotifications`` properties. Added ``paths``, ``commitIds``, ``requestApproval``, ``publishAll`` and ``title`` properties.
+    - [models/Site]
+
+      - Removed ``LegacySite`` model. Use ``BackendSite`` model instead.
+    - [common-api.js]
+
+      - Removed ``CStudioAuthoring.Operations.uploadCMISAsset`` and ``CStudioAuthoring.Operations.openCMISUploadDialog``.
+    - Removed LegacyVersionDialog and the entire associated ``/studio/diff`` route
+    - [ItemDisplay/utils]
+
+      - Updated ``getItemPublishingTargetText`` to return a string. It now receives ``formatMessage`` as a parameter.
+      - Updated ``getItemStateText`` to return a string. It now receives ``formatMessage`` as a parameter.
+    - Removed ``react-swipeable-views`` packages and replaced it with a new forwardRef ``PluginMediaCarousel`` component.
+
+^^^^^^^^^
+Bug Fixes
+^^^^^^^^^
+* `Fixed issue with dependency extraction failing in Javascript on escaped quotes <https://github.com/craftercms/craftercms/issues/7773>`__ |br|
+
+^^^^^^^^^^^^^^^^^^
+Dependency Updates
+^^^^^^^^^^^^^^^^^^
+* Noteworthy dependency updates:
+
+  - OpenSearch to version 3.3
+  - Groovy to version 5
+  - MariaDB to version 11.8
+  - MariaDB4j to version 3.3
+
+For a complete list of community tickets, please visit: `GitHub 5.0.0 <https://github.com/orgs/craftercms/projects/17/views/1>`_
+
+|hr|
+
+

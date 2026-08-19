@@ -28,11 +28,6 @@ From 4.0 to 4.1
 ---------------
 Upgrading to CrafterCMS 4.1 from 4.0 is a simple process. The upgrade script will handle most of the changes for you.
 
----------------
-From 3.1 to 4.1
----------------
-Upgrading to CrafterCMS 4.1 from 3.1 is a bit more involved. Please follow the steps in the guide to upgrade your project/site.
-
 
 .. _upgrade-search:
 
@@ -47,8 +42,6 @@ Most of the upgrade to OpenSearch is transparent to the developer. CrafterCMS au
 The indexes may need to be regenerated, and the upgrade script will handle this for you.
 
 When upgrading from 4.0.x (running ES 7) the indices are not compatible at all, so the content needs to be reprocessed and indices rebuilt completely, which is handled by the post-upgrade script, as mentioned above.
-
-When upgrading from 3.1.x (running ES 6), we'll use the ``upgrade-search.sh`` script, which tells the search engine to re-index internally to the new format.
 
 See :ref:`upgrading-search` for more information on upgrading your search from Elasticsearch to OpenSearch along with some manual updates that may be required in some instances.
 

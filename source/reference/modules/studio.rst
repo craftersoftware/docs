@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.0
+:last-updated: 5.0.0
 
 .. highlight:: xml
 
@@ -3393,10 +3393,14 @@ Add the following lines with the regex for the item you wish not to be published
 
 .. code-block:: yaml
     :caption: *studio-config-override.yaml*
+    :emphasize-lines: 6
 
-    # Publishing blacklist configuration, items matching regexes on this list will never be published
-    studio.configuration.publishing.blacklist.regex: >-
-        .*/\.keep
+    # Paths matching git pathspecs on this list will never be published.
+    # For information on git pathspec, see https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefpathspecapathspec
+    # .keep files are always ignored
+    # e.g.:
+    # studio.configuration.publishing.blacklist.pathspecs: "*.png"
+    studio.configuration.publishing.blacklist.pathspecs: ""
 
 |
 
@@ -3413,13 +3417,13 @@ Let's take a look at an example.
 
 Create a site using the website editorial blueprint, then create the folder ``mytempimages`` under ``/static-assets/images``.
 
-Say, you do not want files under ``/static-assets/images/mytempimages`` to be published when a user performs a bulk publish or *Approve & Publish* of multiple items from the dashboard. We'll add to the ``studio.configuration.publishing.blacklist.regex`` the regex for items under ``/static-assets/images/mytempimages``
+Say, you do not want files under ``/static-assets/images/mytempimages`` to be published when a user performs a bulk publish or *Approve & Publish* of multiple items from the dashboard. We'll add to the ``studio.configuration.publishing.blacklist.pathspecs`` the pathspecs for items under ``/static-assets/images/mytempimages``
 
 .. code-block:: yaml
     :caption: *studio-config-override.yaml*
 
     # Publishing blacklist configuration, items matching regexes on this list will never be published
-    studio.configuration.publishing.blacklist.regex: >-
+    studio.configuration.publishing.blacklist.pathspecs: >-
         .*/\.keep,\/static-assets\/images\/mytempimages\/.*
 
 |

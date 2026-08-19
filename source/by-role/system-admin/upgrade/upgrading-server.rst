@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.2.0
+:last-updated: 5.0.0
 
 .. index:: Upgrade CrafterCMS, Upgrade
 
@@ -19,9 +19,9 @@ CrafterCMS provides a couple of scripts for upgrading your installation.
 * :ref:`Running the upgrade script (upgrade-target) from a new binary archive <upgrade-using-new-binary-archive>`
 * :ref:`Running the upgrade script (start-upgrade) from your current installation <upgrade-using-current-install>`
 
-The upgrade script allows you to do an upgrade, where your bin directory is upgraded, keeping only Tomcat's shared folder, Tomcat's conf folder, the search config, the Deployer config folder, and the crafter-setenv scripts.
+The upgrade script allows you to do an upgrade, where your ``bin`` directory is upgraded, keeping only Tomcat's ``shared`` folder, Tomcat's ``conf`` folder, the search config, the Deployer ``config`` folder, and the ``crafter-setenv`` scripts.
 
-When performing an upgrade, CrafterCMS is shut down, then the script asks if the user wants to backup the ``data`` folder. It will then ask if the user wants to backup the ``bin`` folder, then perform the upgrade. After  running  the upgrade script (either *upgrade-target*  or *start-upgrade*), run the ``post-upgrade`` script. Finally, you can :ref:`start your CrafterCMS  <start-crafter-after-upgrade>` install again.
+When performing an upgrade, CrafterCMS is shut down, then the script asks if the user wants to backup the ``data`` folder. It will then ask if the user wants to backup the ``bin`` folder, then perform the upgrade. After running the upgrade script (either *upgrade-target*  or *start-upgrade*), run the ``post-upgrade`` script. Finally, you can :ref:`start your CrafterCMS <start-crafter-after-upgrade>` install again.
 
 Depending on how recent the version you are upgrading from, there may be files that do not exist in the new release and the script will give the user the option to delete or keep the files.
 
@@ -59,8 +59,6 @@ For config files that are different in the new release, the script gives you the
 
 |
 
-   .. note::
-      When upgrading to CrafterCMS version 4 from a 3.1.x version, remember to increase the timeout set in the environment variable ``MARIADB_SOCKET_TIMEOUT`` in the ``{Crafter-CMS-install-directory}/bin/crafter-setenv.sh`` file of the CrafterCMS install you're running the upgrade script from to a high enough value to avoid running into a :ref:`db-upgrades-timeout`
 
 ----------------
 Before Upgrading
@@ -69,7 +67,7 @@ Before starting your upgrade:
 
 #. **Review the** :ref:`release notes <release-notes>` **for the version you are upgrading to**. It contains specific information on the changes that have been made and how it may affect you when upgrading to that specific version.
 
-   Remember to read all other release notes in between the version you currently have and the version you are upgrading to as it contains information on the changes that have occurred and steps you might have to take when upgrading to a specific version. Remember to also check :ref:`breaking changes <breaking-changes-4-x>` as it may require changes on your installation or system for the version you are upgrading to to work.
+   Remember to read all other release notes in between the version you currently have and the version you are upgrading to as it contains information on the changes that have occurred and steps you might have to take when upgrading to a specific version. Remember to also check :ref:`breaking changes <breaking-changes-5-x>` as it may require changes on your installation or system for the version you are upgrading to to work.
 
 #. **Backup CrafterCMS** just in case something goes wrong with the upgrade.
 
@@ -87,7 +85,7 @@ Upgrade by running the upgrade script from a new binary archive
 ---------------------------------------------------------------
 Download the CrafterCMS version you'd like to upgrade to, and extract the files.
 
-To upgrade your CrafterCMS, we will use the ``upgrade-target`` script. The upgrade script  is located in ``{Crafter-CMS-install-directory}/bin/upgrade`` of your newly downloaded binary archive. Here's the description for the script we are going to use:
+To upgrade your CrafterCMS, we will use the ``upgrade-target.sh`` script. The upgrade script  is located in ``{Crafter-CMS-install-directory}/bin/upgrade`` of your newly downloaded binary archive. Here's the description for the script we are going to use:
 
     .. code-block:: bash
 
@@ -108,7 +106,7 @@ Here are the steps for upgrading your CrafterCMS install version from a new bina
 
 #. Download the CrafterCMS binary archive version you'd like to upgrade to
 #. Extract the binary archive from the previous step and go into the ``bin/upgrade`` folder
-#. Run the ``upgrade-target`` script
+#. Run the ``upgrade-target.sh`` script
 #. Change to the target folder and run the ``post-upgrade.sh`` script
 
 Here's an example of running the upgrade script ``upgrade-target`` from  a new binary archive:
@@ -130,16 +128,16 @@ Here's an example of running the ``post-upgrade.sh`` script:
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Example upgrading using the upgrade script from a new binary archive
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Let's take a look at an example of upgrading a CrafterCMS version 4.1.0 install (located in ``/Users/myuser/crafter-4.1.0``) to version 4.1.1 using the upgrade script from 4.1.1
+Let's take a look at an example of upgrading a CrafterCMS version 4.4.4 install (located in ``/Users/myuser/crafter-4-4-4``) to version 5.0.0 using the upgrade script from 5.0.0
 
-After downloading and extracting CrafterCMS version 4.0.0 to ``/Users/myuser/crafter-4.1.1``, we are now ready to start upgrading by running the ``upgrade-target`` script from the 4.1.1 binary archive.
+After downloading and extracting CrafterCMS version 5.0.0 to ``/Users/myuser/crafter-5.0.0``, we are now ready to start upgrading by running the ``upgrade-target`` script from the 5.0.0 binary archive.
 
     .. code-block:: bash
         :force:
-        :emphasize-lines: 2,25-26,39-49
+        :emphasize-lines: 2,25-26,28,40-49,57,59
 
-        ➜  cd crafter-4.1.1/bin/upgrade
-        ➜  upgrade git:(develop) ./upgrade-target.sh /User/myuser/crafter-4.1.0
+        ➜  cd crafter-5.0.0/bin/upgrade
+        ➜  ./upgrade-target.sh /Users/myuser/crafter-4-4-4
         ========================================================================
         Shutting down Crafter
         ========================================================================
@@ -165,7 +163,7 @@ After downloading and extracting CrafterCMS version 4.0.0 to ``/Users/myuser/cra
         > Backup the data folder before upgrade? [(Y)es/(N)o]: n
         > Backup the bin folder before upgrade? [(Y)es/(N)o]: n
         ========================================================================
-        Upgrading Crafter 4.1.0 -> 4.1.1
+        Upgrading Crafter 4.4.4 -> 5.0.0
         ========================================================================
         Synching files from /Users/myuser/crafter-4.1.0/bin to /Users/myuser/crafter-4.1.1/bin...
         [-] Deleting file cli/repo/org/craftercms/cli/4.1.0/cli-4.1.0.jar that doesn't exist in the new release
@@ -196,55 +194,49 @@ After downloading and extracting CrafterCMS version 4.0.0 to ``/Users/myuser/cra
         ========================================================================
         Upgrade completed
         ========================================================================
-        !!! Please read the release notes and make any necessary manual changes, then run the post upgrade script: /Users/myuser/crafter-4.1.0/bin/upgrade/post-upgrade.sh !!!
+        !!! Please read the release notes and make any necessary manual changes, then run the post upgrade script: /Users/myuser/crafter-4-4-4/bin/upgrade/post-upgrade.sh !!!
 
     |
 
-After the ``upgrade-target`` script is finished running, the next step is to run the ``post-upgrade`` script from our target install ``/Users/myuser/crafter-4.1.0/bin/upgrade``
+After the ``upgrade-target`` script is finished running, the next step is to run the ``post-upgrade`` script from our target install ``/Users/myuser/crafter-4.4.4/bin/upgrade``
 
    .. code-block:: bash
       :force:
       :caption: *Example output when running the post-upgrade script*
-      :emphasize-lines: 2,11
+      :emphasize-lines: 2,21
 
-      ➜ cd /Users/myuser/crafter-4.1.0/bin/upgrade
+      ➜ cd /Users/myuser/crafter-4.4.4/bin/upgrade
       ➜ ./post-upgrade.sh
       =======================================================================
-      Post-upgrade 4.1.0 -> 4.1.1
+      Post-upgrade 4.4.4 -> 5.0.0
       ========================================================================
-      Found hooks match for version >=3.1.17
+      Found hooks match for version >=4.1.0
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      Starting up Crafter
+      Make published repo bare for all sites
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      Preflight check.
-      .
-      .
-      .
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      Re-creating Search indexes for sites
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      WARNING: This will delete the current Search site indexes and recreate them.
-      This is necessary because of a major Search upgrade. Don't proceed
-      if you can't have any search downtime.
-      > Proceed? [(Y)es/(N)o]:
 
-      Re-index succesfully triggered for 'my-editorial-authoring'
-      Re-index succesfully triggered for 'my-editorial-preview'
+      Processing repository for site: ed
+      No published repository found at /Users/myuser/crafter-4.4.4/data/repos/sites/ed/published, skipping...
+
+      Processing repository for site: hello
+      published repository for site hello is now bare
+
+      All published repositories are now bare
       ========================================================================
       Post-upgrade completed
       ========================================================================
-      Crafter has already been started, you can use the system again
+      !!! Crafter has not been started, please run /Users/myuser/crafter-4.4.4/bin/startup.sh to start it !!!
 
    |
 
-If Crafter is not started, you may :ref:`start CrafterCMS <start-crafter-after-upgrade>` now
+You may :ref:`start CrafterCMS <start-crafter-after-upgrade>` now.
 
 .. _upgrade-using-current-install:
 
 ---------------------------------------------------------------
 Upgrade by running the upgrade script from your current install
 ---------------------------------------------------------------
-CrafterCMS version 3.1.x, excluding version 3.1.0,  contain the upgrade scripts required to upgrade your install. Here's the description for the script we are going to use:
+CrafterCMS contain the upgrade scripts required to upgrade your install. Here's the description for the script we are going to use:
 
     .. code-block:: bash
 
@@ -264,7 +256,7 @@ CrafterCMS version 3.1.x, excluding version 3.1.0,  contain the upgrade scripts 
 where:
    ``[options]`` is optional.
 
-The ``start-upgrade`` script downloads the CrafterCMS version that you specify that you would like to upgrade to, then creates a script ``upgrade`` in ``{Crafter-CMS-install-directory}/temp/upgrade`` that performs the upgrade.
+The ``start-upgrade.sh`` script downloads the CrafterCMS version or uses the CrafterCMS archive that you specify that you would like to upgrade to, then creates a script ``upgrade`` in ``{Crafter-CMS-install-directory}/temp/upgrade`` that performs the upgrade.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Steps for upgrading using the upgrade script from your current install
@@ -272,12 +264,12 @@ Steps for upgrading using the upgrade script from your current install
 To upgrade your current CrafterCMS install:
 
 #. Go to your ``bin/upgrade`` folder
-#. Run the ``start-upgrade`` script. The ``start-upgrade`` script downloads the CrafterCMS binary archive version you would like to upgrade to. This will create a script ``upgrade.sh`` in ``{Crafter-CMS-install-directory}/temp/upgrade``.
+#. Run the ``start-upgrade.sh`` script. The ``start-upgrade.sh`` script downloads the CrafterCMS binary archive version you would like to upgrade to. This will create a script ``upgrade.sh`` in ``{Crafter-CMS-install-directory}/temp/upgrade``.
 #. Go to ``{Crafter-CMS-install-directory}/temp/upgrade`` and run the ``upgrade.sh`` script
 #. Go to ``{Crafter-CMS-install-directory}/bin/upgrade`` and run the ``post-upgrade.sh`` script
 
       .. note::
-         CrafterCMS 4.0.0 requires Java JDK 11. When upgrading to CrafterCMS version 4.0.0 from a 3.1.x version, remember to switch your JAVA_HOME environment variable to point to Java JDK 11 before running the ``post-upgrade`` script
+         When upgrading your CrafterCMS version, remember to check the release notes in case the version you are upgrading to uses a different Java JDK version than your current install. Remember to switch your JAVA_HOME environment variable to point to the new Java JDK version required before running the ``post-upgrade.sh`` script
 
 #. Delete the``{Crafter-CMS-install-directory}/temp/upgrade`` once your upgrade has been completed successfully
 
@@ -285,7 +277,7 @@ Here's an example to perform an upgrade of your current install to a certain ver
 
     .. code-block:: bash
 
-        $ ./start-upgrade.sh -v 4.0.0
+        $ ./start-upgrade.sh -v 5.0.0
         $ cd ../../temp/upgrade
         $ ./upgrade.sh
 
@@ -315,20 +307,20 @@ Here's an example to perform an upgrade of your current install using the path w
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Example running the upgrade script from your current install
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Let's take a look at an example of upgrading a CrafterCMS version 4.1.0 install (located in ``/Users/myuser/crafter``) to version 4.1.1 using the upgrade script in 4.1.0
+Let's take a look at an example of upgrading a CrafterCMS version 4.4.4 install (located in ``/Users/myuser/crafter``) to version 5.0.0 using the upgrade script in 4.4.4
 
-We'll perform an upgrade of 4.1.0 (current install) to 4.1.1
+We'll perform an upgrade of 4.4.4 (current install) to 5.0.0:
 
    .. code-block:: bash
       :emphasize-lines: 1,18
       :caption: *Example output running the start-upgrade script*
 
-      ➜  ./start-upgrade.sh -v 4.1.1
+      ➜  ./start-upgrade.sh -v 5.0.0
       ============================================================
       Downloading Bundle
       ============================================================
-      Downloading bundle @ https://downloads.craftercms.org/4.1.1/crafter-cms-authoring-4.1.1-darwin-x86_64.tar.gz...
-      Downloading md5sum @ https://downloads.craftercms.org/4.1.1/crafter-cms-authoring-4.1.1-darwin-x86_64.tar.gz.md5...
+      Downloading bundle @ https://downloads.craftercms.org/5.0.0/crafter-cms-authoring-5.0.0-darwin-x86_64.tar.gz...
+      Downloading md5sum @ https://downloads.craftercms.org/5.0.0/crafter-cms-authoring-5.0.0-darwin-x86_64.tar.gz.md5...
       Doing checksum...
       ============================================================
       Extracting Bundle
@@ -344,10 +336,11 @@ We'll perform an upgrade of 4.1.0 (current install) to 4.1.1
 
    |
 
-The next step is to run the ``upgrade`` script under the ``temp/upgrade`` folder
+The next step is to run the ``upgrade.sh`` script under the ``temp/upgrade`` folder
 
    .. code-block:: bash
-      :emphasize-lines: 2,22-23,34-44
+      :force:
+      :emphasize-lines: 2,25-26,28,37-45,50,52-54
       :caption: *Example running the upgrade script from the temp directory*
 
       ➜ cd ../../temp/upgrade
@@ -355,6 +348,9 @@ The next step is to run the ``upgrade`` script under the ``temp/upgrade`` folder
       ========================================================================
       Shutting down Crafter
       ========================================================================
+      Preflight check.
+      Operating system is Mac, must use Docker to run OpenSearch.
+      Running in this mode is for development purposes only.
 
        ██████╗ ██████╗   █████╗  ███████╗ ████████╗ ███████╗ ██████╗   ██████╗ ███╗   ███╗ ███████╗
       ██╔════╝ ██╔══██╗ ██╔══██╗ ██╔════╝ ╚══██╔══╝ ██╔════╝ ██╔══██╗ ██╔════╝ ████╗ ████║ ██╔════╝
@@ -364,35 +360,33 @@ The next step is to run the ``upgrade`` script under the ``temp/upgrade`` folder
        ╚═════╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝         ╚═╝    ╚══════╝ ╚═╝  ╚═╝  ╚═════╝ ╚═╝     ╚═╝ ╚══════╝
 
       ------------------------------------------------------------------------
-      Stopping Tomcat
+      Stop Tomcat
       ------------------------------------------------------------------------
-      Tomcat already shutdown or pid /Users/myuser/crafter/temp/upgrade/crafter/bin/apache-tomcat/tomcat.pid file not found
+      Tomcat already shutdown
       ------------------------------------------------------------------------
-      Stopping Deployer
+      Stop Deployer
       ------------------------------------------------------------------------
-      Crafter Deployer already shutdown or pid /Users/myuser/crafter/temp/upgrade/crafter/bin/crafter-deployer/crafter-deployer.pid file not found
-      > Backup the data folder before upgrade? [(Y)es/(N)o]:
-      > Backup the bin folder before upgrade? [(Y)es/(N)o]:
+      Deployer already shutdown
+      > Backup the data folder before upgrade? [(Y)es/(N)o]: n
+      > Backup the bin folder before upgrade? [(Y)es/(N)o]: n
       ========================================================================
-      Upgrading Crafter 4.1.0 -> 4.1.1
+      Upgrading Crafter 4.4.4 -> 5.0.0
       ========================================================================
       Synching files from /Users/myuser/crafter/temp/upgrade/crafter/bin to /Users/myuser/crafter/bin...
-      [-] Deleting file opensearch/bin/opensearch.pid that doesn't exist in the new release
-      [-] Deleting file dbms/share/user_map.conf that doesn't exist in the new release
-      [-] Deleting file dbms/share/ukrainian/errmsg.sys that doesn't exist in the new release
+      [-] Deleting file opensearch/plugins/opensearch-security-analytics/plugin-security.policy that doesn't exist in the new release
+      [-] Deleting file opensearch/plugins/opensearch-security-analytics/plugin-descriptor.properties that doesn't exist in the new release
       .
       .
       .
-      ----------------------------------------------------------------------------------------------------
-      Config file [apache-tomcat/conf/catalina.properties] is different in the new release. Please choose:
-        - (D)iff file versions to see what changed
-        - (E)dit the original file (with $EDITOR)
-        - (K)eep the original file
-        - (O)verwrite the file with the new version
-        - (M)atching config files for regex [apache-tomcat/conf/.+] should always be overwritten
-        - (A)lways overwrite config files and don't ask again
-        - (Q)uit the upgrade script (this will stop the upgrade at this point)
-      ----------------------------------------------------------------------------------------------------
+      ------------------------------------------------------------------------------------------
+      Config file [crafter-deployer/logging.xml] is different in the new release. Please choose:
+       - (D)iff file versions to see what changed
+       - (E)dit the original file (with $EDITOR)
+       - (K)eep the original file
+       - (O)verwrite the file with the new version
+       - (A)lways overwrite config files and don't ask again
+       - (Q)uit the upgrade script (this will stop the upgrade at this point)
+      ------------------------------------------------------------------------------------------
       > Enter your choice:
       .
       .
@@ -406,7 +400,7 @@ The next step is to run the ``upgrade`` script under the ``temp/upgrade`` folder
 
    |
 
-Finally we'll  run the ``post-upgrade`` script. Remember to switch your JAVA_HOME environment variable to point to Java JDK 17 before running the ``post-upgrade`` script if you're upgrading from a release earlier than 4.1.0.
+Finally we'll  run the ``post-upgrade.sh`` script. Remember to check the release notes in case the version you are upgrading to uses a different Java JDK version than your current install and if so, remember to switch your JAVA_HOME environment variable to point to the new Java JDK version before running the ``post-upgrade.sh`` script.
 
    .. code-block:: bash
       :emphasize-lines: 2,11
@@ -414,47 +408,28 @@ Finally we'll  run the ``post-upgrade`` script. Remember to switch your JAVA_HOM
       ➜ cd ../../bin/upgrade
       ➜ ./post-upgrade.sh
       ========================================================================
-      Post-upgrade 4.1.0 -> 4.1.1
+      Post-upgrade 4.4.4 -> 5.0.0
       ========================================================================
-      Found hooks match for version >=3.1.17
+      Found hooks match for version >=4.1.0
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      Starting up Crafter
+      Make published repo bare for all sites
       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      Preflight check.
-      Operating system is Mac, must use Docker to run OpenSearch.
-      Running in this mode is for development purposes only.
 
-       ██████╗ ██████╗   █████╗  ███████╗ ████████╗ ███████╗ ██████╗   ██████╗ ███╗   ███╗ ███████╗
-      ██╔════╝ ██╔══██╗ ██╔══██╗ ██╔════╝ ╚══██╔══╝ ██╔════╝ ██╔══██╗ ██╔════╝ ████╗ ████║ ██╔════╝
-      ██║      ██████╔╝ ███████║ █████╗      ██║    █████╗   ██████╔╝ ██║      ██╔████╔██║ ███████╗
-      ██║      ██╔══██╗ ██╔══██║ ██╔══╝      ██║    ██╔══╝   ██╔══██╗ ██║      ██║╚██╔╝██║ ╚════██║
-      ╚██████╗ ██║  ██║ ██║  ██║ ██║         ██║    ███████╗ ██║  ██║ ╚██████╗ ██║ ╚═╝ ██║ ███████║
-       ╚═════╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝         ╚═╝    ╚══════╝ ╚═╝  ╚═╝  ╚═════╝ ╚═╝     ╚═╝ ╚══════╝
+      Processing repository for site: ed
+      No published repository found at /Users/myuser/crafter/data/repos/sites/ed/published, skipping...
 
-      ------------------------------------------------------------------------
-      Start Deployer
-      ------------------------------------------------------------------------
-      .
-      .
-      .
-      Please make sure Crafter has started successfully before continuing
-      > Continue? [(Y)es/(N)o]: y
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      Re-creating Search indexes for sites
-      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      WARNING: This will delete the current Search site indexes and recreate them.
-      This is necessary because of a major Search upgrade. Don't proceed
-      if you can't have any search downtime.
-      > Proceed? [(Y)es/(N)o]: y
+      Processing repository for site: hello
+      published repository for site hello is now bare
 
+      All published repositories are now bare
       ========================================================================
       Post-upgrade completed
       ========================================================================
-      Crafter has already been started, you can use the system again
+      !!! Crafter has not been started, please run /Users/myuser/crafter/bin/startup.sh to start it !!!
 
    |
 
-If CrafterCMS is not started, you may :ref:`start CrafterCMS <start-crafter-after-upgrade>` noow
+You may :ref:`start CrafterCMS <start-crafter-after-upgrade>` now.
 
 .. _start-crafter-after-upgrade:
 
@@ -467,6 +442,10 @@ After performing the upgrade steps listed above (either by running the upgrade s
 
       ➜ ./startup.sh
 
+     Preflight check.
+      Operating system is Mac, must use Docker to run OpenSearch.
+      Running in this mode is for development purposes only.
+
        ██████╗ ██████╗   █████╗  ███████╗ ████████╗ ███████╗ ██████╗   ██████╗ ███╗   ███╗ ███████╗
       ██╔════╝ ██╔══██╗ ██╔══██╗ ██╔════╝ ╚══██╔══╝ ██╔════╝ ██╔══██╗ ██╔════╝ ████╗ ████║ ██╔════╝
       ██║      ██████╔╝ ███████║ █████╗      ██║    █████╗   ██████╔╝ ██║      ██╔████╔██║ ███████╗
@@ -475,36 +454,46 @@ After performing the upgrade steps listed above (either by running the upgrade s
        ╚═════╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝ ╚═╝         ╚═╝    ╚══════╝ ╚═╝  ╚═╝  ╚═════╝ ╚═╝     ╚═╝ ╚══════╝
 
       ------------------------------------------------------------------------
-      Starting Deployer
+      Check if upgrade is needed for embedded database /Users/myuser/crafter/data/db
+      ------------------------------------------------------------------------
+      DB version 11.4.3-MariaDB is up to date with new DB engine version 11.4.3
+      MariaDB upgrade is not REQUIRED
+      ------------------------------------------------------------------------
+      Start Deployer
       ------------------------------------------------------------------------
       ------------------------------------------------------------------------
-      Starting OpenSearch
+      Start OpenSearch
       ------------------------------------------------------------------------
       ------------------------------------------------------------------------
-      Starting Tomcat
+      Start Tomcat
       ------------------------------------------------------------------------
       Using CATALINA_BASE:   /Users/myuser/crafter/bin/apache-tomcat
       Using CATALINA_HOME:   /Users/myuser/crafter/bin/apache-tomcat
       Using CATALINA_TMPDIR: /Users/myuser/crafter/temp/tomcat
-      Using JRE_HOME:        /Users/myuser/.jenv/versions/11
+      Using JRE_HOME:        /Users/myuser/.jenv/versions/21
       Using CLASSPATH:       /Users/myuser/crafter/bin/apache-tomcat/bin/bootstrap.jar:/Users/myuser/crafter/bin/apache-tomcat/bin/tomcat-juli.jar
+      Using CATALINA_OPTS:   -server -Xss1024K -Xms1G -Xmx4G -Dlog4j2.formatMsgNoLookups=true -Dtomcat.host=localhost -Dtomcat.http.port=8080   -Dtomcat.https.port=8443 -Dtomcat.ajp.port=8009   -Dtomcat.debug.port=8000 -Dcrafter.home=/Users/myuser/crafter   -Dcrafter.bin.dir=/Users/myuser/crafter/bin -Dcrafter.data.dir=/Users/myuser/crafter/data -Dcrafter.logs.dir=/Users/myuser/crafter/logs   -Dcatalina.logs=/Users/myuser/crafter/logs/tomcat -Dapplication.logs=/Users/myuser/crafter/logs/tomcat -Djava.net.preferIPv4Stack=true 	-Dgrape.root=/Users/myuser/crafter/bin
       Using CATALINA_PID:    /Users/myuser/crafter/bin/apache-tomcat/tomcat.pid
       Tomcat started.
-
       Log files live here: "/Users/myuser/crafter/logs".
-      To follow the main tomcat log, you can "tail -f /Users/myuser/crafter/logs/tomcat/catalina.out"
+      To follow the main tomcat log, you can run:
+      tail -F /Users/myuser/crafter/logs/tomcat/catalina.out
+      Happy Crafting
 
    |
 
-Once you start up CrafterCMS, in the logs, notice the lines mentioning ``Checking upgrades for the...`` like below:
+Once you start up CrafterCMS, in the logs, notice the lines mentioning ``Check for upgrades ...`` like below:
 
    .. code-block:: text
 
-      [INFO] 2020-10-05T13:53:23,033 [localhost-startStop-1] [upgrade.DefaultUpgradeManagerImpl] | Checking upgrades for the blueprints
+      [INFO] 2025-10-31T09:01:23,307 [main] [upgrade.StudioUpgradeManagerImpl] | Check for upgrades to the blueprints
       ...
-      [INFO] 2020-10-05T13:53:25,509 [localhost-startStop-1] [upgrade.DefaultUpgradeManagerImpl] | Checking upgrades for the database and configuration
-      [INFO] 2020-10-05T13:53:25,665 [localhost-startStop-1] [upgrade.DefaultUpgradeManagerImpl] | Checking upgrades for site mysite
-      [INFO] 2020-10-05T13:53:25,719 [localhost-startStop-1] [upgrade.DefaultUpgradeManagerImpl] | Checking upgrades for configuration in site mysite
+      [INFO] 2025-10-31T09:01:24,048 [main] [upgrade.StudioUpgradeManagerImpl] | Check for upgrades to the database and configuration
+      ...
+      [INFO] 2025-10-31T09:01:24,917 [main] [upgrade.StudioUpgradeManagerImpl] | Starting upgrade of all targets
+      [INFO] 2025-10-31T09:01:24,919 [main] [upgrade.StudioUpgradeManagerImpl] | Starting upgrade for target 'hello'
+      ...
+      [INFO] 2025-10-31T09:01:25,070 [main] [upgrade.StudioUpgradeManagerImpl] | Check for upgrades to configuration in site 'hello'
       ...
 
    |

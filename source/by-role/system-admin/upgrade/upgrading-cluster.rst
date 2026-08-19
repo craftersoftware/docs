@@ -32,13 +32,6 @@ upgraded node.  Here are the steps for  upgrading a node:
        ./bin/crafter.sh backup
 
 #. Download the CrafterCMS version you'd like to upgrade to, and extract the files on one of the nodes
-#. If you are upgrading from Studio version 3.1.x, run the ``upgrade-search.sh`` script from the new bundle,
-   otherwise skip this step
-
-   .. code-block:: bash
-       :caption: *Run the upgrade-search script*
-
-       ./upgrade-search.sh /path/of/install/to/be/upgraded --stay-alive
 
 #. Run the ``upgrade-target.sh`` script from the new bundle
 
@@ -138,21 +131,6 @@ After upgrading a node, we can now add the rest of the node/s to the cluster.
 Here are the steps for adding a new node to the cluster:
 
 #. Stop the Studio cluster (the primary server)
-#. If you are upgrading from Studio version 3.1.x, make a copy of the ``data/db`` folder from the Primary server,
-   then, on the server that will be a new Replica, extract the new bundle, then paste the data/db from previous step,
-   otherwise, skip this step.
-
-   .. code-block:: bash
-       :caption: *Make a copy of the data/db folder in Primary server*
-
-       cd crafter/data
-       tar -czvf dbData.tar.gz db/
-
-   .. code-block:: bash
-      :caption: *In the Replica server, paste the data/db folder copied from the Primary server*
-
-      cd crafter/data
-      tar -xvf dbData.tar.gz
 
 #. In the Replica server, review the following configuration files to start Studio in cluster mode as described
    :ref:`here <setup-a-two-node-cluster-with-studio>`:

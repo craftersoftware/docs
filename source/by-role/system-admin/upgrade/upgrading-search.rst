@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.2.0
+:last-updated: 5.0.0
 
 .. meta::
    :description: Guide to upgrading CrafterCMS search from Elasticsearch to OpenSearch, including the upgrade-search.sh script and reindexing steps.
@@ -21,126 +21,11 @@ The steps for upgrading to OpenSearch follows almost exactly the same steps as l
 
 |hr|
 
---------------------------------------
-Upgrading 3.1.x -> 4.2.0 (from ES 6.x)
---------------------------------------
-To upgrade your 3.1.x installation, we'll be running the upgrade scripts from a new binary archive.
-We'll use the ``upgrade-search.sh`` script, which will update the data in place.
-This script tells the search engine to re-index internally to the new format and should only be run on CrafterCMS 3.1.x installs.
-Please backup your data directory before running the script.
-
-Here is the ``upgrade-search`` script params:
-
-.. code-block:: text
-
-     -h,--help                                  Show usage information
-        --port <port>                           Elasticsearch port to use for
-                                                upgrade ES temporary instance
-        --status-retries <max status retries>   How many times to try to get a
-                                                yellow status from the ES
-                                                cluster (waiting 10s between
-                                                retries)
-        --status-timeout <seconds>              Timeout in seconds for the
-                                                status check of the ES cluster
-        --stay-alive                            Set to true to keep the
-                                                process alive after reindexing
-                                                is complete. This allows to
-                                                query the ES server and
-                                                review.
-    e.g:
-
-    # Run in a different port
-    ./upgrade-search.sh --port 9206 /path/of/install/to/be/upgraded --stay-aliveUpgrading 3.1.x -> 4.1.0 (from ES 6.x)
-
-Here are the steps to  upgrade your CrafterCMS  3.1.x install:
-
-#. Download the CrafterCMS version you'd like to upgrade to, and extract the files.
-#. Configure the root directory of the new bundle to use Java version 17 (This is required to run the ``upgrade-search.sh`` 
-   script since ES 7 won't run with Java 21)
-#. Run the ``upgrade-search.sh`` script from your newly extracted files.
-
-   .. code-block:: bash
-       :caption: *Run the upgrade-search script*
-       :emphasize-lines: 1
-
-       ./bin/upgrade/upgrade-search.sh /path/of/install/to/be/upgraded --stay-alive
-       ========================================================================
-       Search upgrade started
-       ========================================================================
-       ...
-       End process. Stop Elasticsearch
-       Move indexes from 'data/indexes-es' to 'indexes'
-       ========================================================================
-       Search upgrade completed
-       ========================================================================
-
-#. Configure the root directory back to Java version 21
-#. Upgrade using the ``upgrade-target.sh`` script. We'll need to upgrade the target without backing up the bin folder.
-   This is because the MariaDB version is now 11 for 4.2.0, and we cannot start the old MariaDB from the new bundle.
-   Please manually back it up before running the ``upgrade-target.sh`` script. Remember to enter ``No`` when prompted
-   by the script ``Backup the bin folder before upgrade? [(Y)es/(N)o]:``
-
-   .. code-block:: bash
-       :caption: *Run the upgrade-target script*
-       :emphasize-lines: 1,3
-
-       ./bin/upgrade/upgrade-target.sh /path/of/install/to/be/upgraded
-       ...
-       > Backup the bin folder before upgrade? [(Y)es/(N)o]:n
-       ...
-       ========================================================================
-       Upgrade completed
-       ========================================================================
-       !!! Please read the release notes and make any necessary manual changes, then run the post upgrade script: /path/of/install/to/be/upgraded/bin/upgrade/post-upgrade.sh !!!
-
-#. Run the ``post-upgrade.sh`` script from the install that's being upgraded. This will start CrafterCMS and ask for
-   a signal to continue, then recreate search indexes. Remember to read the release notes or any relevant upgrade
-   articles and make any necessary manual changes before running the `post-upgrade.sh` script. You'll need to configure
-   the installation root directory to use Java version 21 before running the script.
-
-   .. code-block:: bash
-       :caption: *Run the post-upgrade script*
-       :emphasize-lines: 2,7-8
-
-       cd /path/of/install/to/be/upgraded/bin/upgrade/
-       ./post-upgrade.sh
-       ========================================================================
-       Post-upgrade 3.1.30 -> 4.2.0
-       ========================================================================
-       ...
-       Please make sure Crafter has started successfully before continuing
-       > Continue? [(Y)es/(N)o]: y
-       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-       Re-creating Search indexes for sites
-       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-       WARNING: This will delete the current Search site indexes and recreate them.
-       This is necessary because of a major Search upgrade. Don't proceed
-       if you can't have any search downtime.
-       > Proceed? [(Y)es/(N)o]: y
-       ...
-       ========================================================================
-       Post-upgrade completed
-       ========================================================================
-       Crafter has already been started, you can use the system again
-
-   The script will prompt you to check that CrafterCMS has started successfully before proceeding as noted above.
-   To do this, monitor the tomcat logs and check for the line like below to make sure CrafterCMS has started
-   (this could take a while because of the upgrade manager (UM) updates):
-
-   .. code-block:: text
-
-       27-Jun-2024 08:14:11.119 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in [127790] milliseconds
-
-   Once the post-upgrade script is done, all indices should be now available in OpenSearch and CrafterCMS is now ready for use.
-
-|hr|
-
----------------------------------------
-Upgrading 4.0.x -> 4.2.0 (from ES 7.15)
----------------------------------------
+------------------------------
+Upgrading 4.0.x (from ES 7.15)
+------------------------------
 When upgrading from 4.0.x (running ES 7) the indices are not compatible at all, so the content needs to be reprocessed
 and indices rebuilt completely. The rebuilding of the indices is handled by the ``post-upgrade.sh`` script.
-Remember that the ``upgrade-search.sh`` script should NOT be run when upgrading your CrafterCMS 4.0.x install.
 
 To upgrade your 4.0.x installation, we'll be running the upgrade scripts from a new binary archive.
 Here are the steps:
@@ -175,12 +60,11 @@ Here are the steps:
 
 |hr|
 
-------------------------
-Upgrading 4.1.x -> 4.2.0
-------------------------
-There are no extra steps required for upgrading your 4.1.x install to 4.2.0, simply follow the instructions
-:ref:`here <upgrading-craftercms-on-a-server>`. Remember that the ``upgrade-search.sh`` script should NOT be run when
-upgrading your CrafterCMS 4.1.x install.
+---------------
+Upgrading 4.1.x
+---------------
+There are no extra steps required for upgrading your 4.1.x install, simply follow the instructions
+:ref:`here <upgrading-craftercms-on-a-server>`.
 
 |hr|
 

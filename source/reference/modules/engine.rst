@@ -2890,9 +2890,6 @@ It is also possible to change the prefix and names for the headers:
 
 |
 
-.. note::
-    For CrafterCMS versions prior to 3.1.14, the prefix for the headers is ``MELLON_`` and can't be changed via project configuration
-
 
 The default value of the token is ``my_secure_token``. Remember to replace the default value by setting
 ``security.headers.token`` to secure your installation. In the example below, the token is now set to
@@ -3445,8 +3442,7 @@ authentication provider used, but you can always obtain an instance of |CustomUs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Migrating from Crafter Profile
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Prior to version ``3.1.5`` Crafter Profile was the only security provider available, all projects created in previous
-versions will continue to work without any changes, however if you need to migrate to a different provider like SAML2
+If you are using Crafter Profile as the security provider and need to migrate to a different provider like SAML2
 you will need to replace all uses of the ``profile`` and ``authentication`` variables, both have been replaced with
 ``authToken``.
 
@@ -3671,8 +3667,6 @@ next steps to create one:
     Crafter Profile tenant, when a new user needs to be created. So the configuration above will cause the Security
     Provider to create a user with firstName, lastName and displayName attributes.
 
-    .. note::
-        For CrafterCMS versions prior to 3.1.14, the prefix for the headers is ``MELLON_`` instead of ``CRAFTER_`` and can't be changed via project configuration.
 
     ~~~~~~~~~~~~~~~~~~
     Add Facebook Login
@@ -3903,9 +3897,6 @@ To use a custom blacklist follow these steps:
 
        # The location of the blacklist to use for all sites (this will have no effect if the sandbox is disabled)
        crafter.engine.groovy.sandbox.blacklist.path=classpath:crafter/engine/extension/groovy/blacklist
-
-   .. note::
-       In CrafterCMS v3.1.14 and prior, the name of the property is ``crafter.engine.groovy.sandbox.blacklist``
 
 #. Restart CrafterCMS
 
