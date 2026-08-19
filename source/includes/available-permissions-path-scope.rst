@@ -23,14 +23,14 @@ The path level permissions are defined in the file ``permission-mappings-config.
         May also be required when using the API that :base_url:`Publishes the given content to the target (staging or live) <_static/api/studio.html#tag/publishing/operation/publish>`.
 
     * - publish_request
-      - User is permitted to publish content to the target (staging or live) from the the :ref:`UI <publishing-and-status>` or via
+      - User is permitted to publish content to the target (staging or live) from the :ref:`UI <publishing-and-status>` or via
         the API that :base_url:`Publishes the given content to the target (staging or live) <_static/api/studio.html#tag/publishing/operation/publish>` |br|
         Also required by the API :base_url:`Get available publishing targets for site <_static/api/studio.html#tag/publishing/operation/getAvailablePublishingTargets>`
         Users need both `publish_approve` and `publish_request` to be able to publish immediately without approval.
 
     * - publish_reject
       - User is permitted to reject a publish package waiting for approval from the :ref:`UI <publishing-and-status>` or via
-        the API :base_url:`Approve request publish submission <_static/api/studio.html#tag/workflow/operation/workflowReject>`
+        the API :base_url:`Reject request publish submission <_static/api/studio.html#tag/workflow/operation/workflowReject>`
 
     * - content_copy
       - User is permitted to copy content from the UI :ref:`Sidebar <sidebar>` or the :ref:`Toolbar <toolbar>` options |br|
