@@ -51,7 +51,7 @@ The project level permissions are defined in the file ``permission-mappings-conf
 
     * - publish_get_queue
       - User is permitted to get the list of packages in the publishing queue from the :ref:`UI <publishing-and-status>`
-        or via the API :base_url:`Publishing packages <_static/api/studio.html#tag/publishing/operation/GetPublishPackages>` |br|
+        or via the API :base_url:`Get publish packages <_static/api/studio.html#tag/publishing/operation/GetPublishPackages>` |br|
         Also required by the following APIs:
 
         - :base_url:`Get package details <_static/api/studio.html#tag/publishing/operation/getPublishPackage>`

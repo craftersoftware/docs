@@ -121,29 +121,8 @@ The system level (global) permissions are defined in the file ``global-permissio
         - :base_url:`Update access token <_static/api/studio.html#tag/security/operation/updateAccessToken>`
         - :base_url:`Delete access token <_static/api/studio.html#tag/security/operation/deleteAccessToken>`
 
-    * - create_cluster |enterpriseOnly|
-      - User is allowed to create a cluster |br|
-        Required when using the following APIs:
-
-        - :base_url:`Get the local Studio instance cluster mode <_static/api/studio.html#tag/cluster/operation/getClusterMode>`
-        - :base_url:`Get all the members of the cluster <_static/api/studio.html#tag/cluster/operation/getClusterMembers>`
-
     * - read_cluster |enterpriseOnly|
       - User is allowed to list the cluster members and the cluster mode (PRIMARY vs REPLICA) |br|
-        Required when using the following APIs:
-
-        - :base_url:`Get the local Studio instance cluster mode <_static/api/studio.html#tag/cluster/operation/getClusterMode>`
-        - :base_url:`Get all the members of the cluster <_static/api/studio.html#tag/cluster/operation/getClusterMembers>`
-
-    * - update_cluster |enterpriseOnly|
-      - User is allowed to list the cluster members and the cluster mode (PRIMARY vs REPLICA) |br|
-        Required when using the following APIs:
-
-        - :base_url:`Get the local Studio instance cluster mode <_static/api/studio.html#tag/cluster/operation/getClusterMode>`
-        - :base_url:`Get all the members of the cluster <_static/api/studio.html#tag/cluster/operation/getClusterMembers>`
-
-    * - delete_cluster |enterpriseOnly|
-      - User is allowed to delete cluster members |br|
         Required when using the following APIs:
 
         - :base_url:`Get the local Studio instance cluster mode <_static/api/studio.html#tag/cluster/operation/getClusterMode>`
