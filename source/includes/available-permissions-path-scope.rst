@@ -17,20 +17,18 @@ The path level permissions are defined in the file ``permission-mappings-config.
         Required for using the :ref:`Git project tool <project-tools-git>` to get the difference between ``ours`` and
         ``theirs`` for a conflicted file in the UI or via the API :base_url:`Diff conflicted file <_static/api/studio.html#tag/repository/operation/diffConflictedFile>`
 
-    * - publish_approve
-      - User is permitted to approve submitted content for publishing from the :ref:`UI <publishing-and-status>` or via
-        the API :base_url:`Approve request publish submission <_static/api/studio.html#tag/workflow/operation/workflowApprove>` |br|
-        May also be required when using the API that :base_url:`Publishes the given content to the target (staging or live) <_static/api/studio.html#tag/publishing/operation/publish>`.
+    * - publish_review
+      - User is permitted to approve or reject submitted content for publishing from the :ref:`UI <publishing-and-status>`
+        or via the APIs :base_url:`Approve request publish submission <_static/api/studio.html#tag/workflow/operation/workflowApprove>`
+        and :base_url:`Reject request publish submission <_static/api/studio.html#tag/workflow/operation/workflowReject>` |br|
+        Also required when using the API that :base_url:`Publishes the given content to the target (staging or live) <_static/api/studio.html#tag/publishing/operation/publish>`
+        if ``requestApproval`` is false.
 
     * - publish_request
       - User is permitted to publish content to the target (staging or live) from the :ref:`UI <publishing-and-status>` or via
         the API that :base_url:`Publishes the given content to the target (staging or live) <_static/api/studio.html#tag/publishing/operation/publish>` |br|
         Also required by the API :base_url:`Get available publishing targets for site <_static/api/studio.html#tag/publishing/operation/getAvailablePublishingTargets>`
-        Users need both `publish_approve` and `publish_request` to be able to publish immediately without approval.
-
-    * - publish_reject
-      - User is permitted to reject a publish package waiting for approval from the :ref:`UI <publishing-and-status>` or via
-        the API :base_url:`Reject request publish submission <_static/api/studio.html#tag/workflow/operation/workflowReject>`
+        Users need both ``publish_review`` and ``publish_request`` to be able to publish immediately without approval.
 
     * - content_copy
       - User is permitted to copy content from the UI :ref:`Sidebar <sidebar>` or the :ref:`Toolbar <toolbar>` options |br|
