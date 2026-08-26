@@ -29,7 +29,7 @@ author = u'CrafterCMS'
 # The short X.Y version.
 version = u'current'
 # The full version, including alpha/beta/rc tags.
-release = u'4.5.1'
+release = u'4.5.2'
 
 
 # -- General configuration ---------------------------------------------------
