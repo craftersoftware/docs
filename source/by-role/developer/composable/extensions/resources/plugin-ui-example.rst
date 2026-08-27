@@ -47,7 +47,7 @@ Here's a list of the plugin examples described in this article:
      - A tile in the Navigation Menu (Launcher)
    * - :ref:`Translations <plugin-translations-example>`
      - ``library``
-     - A tile in the Navigation Menu (Launcher)
+     - Overriding the translations for the example placeholder text in the `Activity` widget in the Dashboard
    * - :ref:`Form Engine Control <building-plugins-controls>`
      - ``control``
      - A control in the Content Type Editor
@@ -877,7 +877,7 @@ filter of the *Activity* widget in the Dashboard.
 
 .. image:: /_static/images/developer/plugins/project-plugins/example-placeholder-text-in-dashboard.webp
    :align: center
-   :alt: Navigation Menu
+   :alt: Dashboard example placeholder text in Activity widget
    :width: 80%
 
 |
