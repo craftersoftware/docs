@@ -20,7 +20,7 @@ Enhancements
 
 * `The Dashboard's USER filter label can be configured by using the plugin translation override system <https://github.com/craftersoftware/craftercms/issues/7886>`__
 
-   See :ref:`plugin-translations-example` for more information on overriding the translations for the ``User`` filter label in the Dashboard.
+  See :ref:`plugin-translations-example` for more information on overriding the translations for the ``User`` filter label in the Dashboard.
 
 * Removed unused Apache CXF dependency
 
