@@ -574,7 +574,7 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 |br|
 `tss-react <https://www.npmjs.com/package/tss-react>`_
 |br|
-`typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=b45daf <https://www.npmjs.com/package/typescript@patch:typescript@npm%3A5.9.3#optional!builtin<compat/typescript>::version=5.9.3&hash=b45daf>`_
+`typescript@patch <https://www.npmjs.com/package/typescript>`_
 |br|
 `uppy <https://www.npmjs.com/package/uppy>`_
 |br|
