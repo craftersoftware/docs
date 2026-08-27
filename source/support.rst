@@ -29,7 +29,7 @@ What's Supported?
       - January 23, 2026
       - :green:`Active`
       - :green:`Active`
-      - 4.5.2 (August TBD, 2026)
+      - 4.5.2 (August 27, 2026)
     * - 4.4
       - June 13, 2025
       - :maroon:`Ended on January 23, 2026`
