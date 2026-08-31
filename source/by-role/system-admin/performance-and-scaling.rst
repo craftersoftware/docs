@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.2
+:last-updated: 5.0.0
 
 .. meta::
    :description: Optimize CrafterCMS performance and scaling with horizontal delivery scaling, CDN integration, clustering, multi-region global delivery, and tuning recommendations.
@@ -591,6 +591,16 @@ Configuring Nodes in the Cluster
       #studio.notification.cluster.startupError.subject: "Action Required: Studio Cluster Error"
       #studio.notification.cluster.startupError.template: startupError.ftl
       #studio.notification.cluster.startupError.recipients: admin@example.com
+      # Enable notifications when a repository sync error occurs in the cluster
+      studio.notification.cluster.repoSyncError.enabled: true
+      # Number of errors required before triggering a repository sync error notification
+      studio.notification.cluster.repoSyncError.count.threshold: 5
+      # Subject line of the repository sync error notification email
+      studio.notification.cluster.repoSyncError.subject: "Action Required: Studio Cluster Sync Error"
+      # Template file used for formatting the repository sync error notification content
+      studio.notification.cluster.repoSyncError.template: repoSyncError.ftl
+      # List of recipients who will receive the repository sync error notification (comma-separated emails)
+      studio.notification.cluster.repoSyncError.recipients:
 
       # Cluster member registration, this registers *this* server into the pool
       # Cluster node registration data, remember to uncomment the next line
@@ -644,7 +654,9 @@ Configuring Nodes in the Cluster
    |
    |
 
-   .. _authoring-cluster-startup-failure-notification-config:
+   .. _authoring-cluster-failure-notification-config:
+
+   **Cluster Startup Failure Notification Configuration**
 
    To configure a list of email recipients to inform them of a startup failure, uncomment and configure the following:
 
@@ -653,7 +665,33 @@ Configuring Nodes in the Cluster
    - **studio.notification.cluster.startupError.recipients**: list of emails to send the notification, must be separated by commas.
 
    |
+
+   **Repository Synchronization Failure Notification Configuration**
+
+   .. version_tag::
+       :label: Since
+       :version: 5.0
+
+   To enable notifications for repo sync failures and to configure the number of continuous errors before sending out
+   an email notification for repo sync failures, set the following properties:
+
+   .. code-block:: yaml
+
+       # Enable notifications when a repository sync error occurs in the cluster
+       studio.notification.cluster.repoSyncError.enabled: true
+       # Number of errors required before triggering a repository sync error notification
+       studio.notification.cluster.repoSyncError.count.threshold: 5
+       # Subject line of the repository sync error notification email
+       studio.notification.cluster.repoSyncError.subject: "Action Required: Studio Cluster Sync Error"
+       # Template file used for formatting the repository sync error notification content
+       studio.notification.cluster.repoSyncError.template: repoSyncError.ftl
+       # List of recipients who will receive the repository sync error notification (comma-separated emails)
+       studio.notification.cluster.repoSyncError.recipients:
+
    |
+   |
+
+   **Hazelcast Configuration File**
 
    Configure the Hazelcast configuration file location in Studio, by uncommenting ``studio.hazelcast.config.location``. You will create the Hazelcast configuration file in a later step.
 
@@ -668,6 +706,8 @@ Configuring Nodes in the Cluster
 
    |
    |
+
+   **Location and Times Configuration**
 
    Configure the following times and locations. Leave the environment variables, e.g. ``${env:MARIADB_CLUSTER_NAME}``. You can see the configuration of the environment variables in a later step.
 
@@ -1174,6 +1214,15 @@ icon from the top right of the browser, then click on ``Cluster`` from the Sideb
 The above image shows a working cluster. See the :ref:`Cluster Tool <clustering-cluster-tool>` section above for more
 information on the items displayed in the tool.
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Via the Health-Check Endpoint
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Crafter Studio provides a health-check endpoint that returns the current status of a node, including the role
+(primary or replica) and status for accepting traffic when clustering is enabled. The health-check endpoint is at
+:base_url:`/studio/api/2/monitoring/status?token={your management token} <_static/api/studio.html#tag/monitoring/operation/getStatus>` |br|
+See the :ref:`cluster health-check response <cluster-health-check-response>` section above for more information on the
+endpoint response.
+
 |hr|
 
 """""""""""""""""""
@@ -1212,9 +1261,9 @@ Whenever your authoring cluster has a Git or DB sync failure, the following logs
 An email will also be sent to the configured list of recipients to inform them of the failure.
 
 See the :ref:`setup-a-two-node-cluster-with-studio` article then scroll to the
-:ref:`failure notification properties <authoring-cluster-startup-failure-notification-config>` section
+:ref:`failure notification properties <authoring-cluster-failure-notification-config>` section
 for more information on how to configure the list of recipients to be informed in case of a
-startup failure in the authoring cluster.
+startup or sync failure in the authoring cluster.
 
 This section discusses how to fix the sync failure in your authoring cluster.
 
