@@ -115,6 +115,8 @@ In this section, we will highlight some of the more commonly used properties in 
       - Configure the maximum length of configuration content
     * - :ref:`Git Configuration <git-configuration>`
       - Configure Git properties
+    * - :ref:`Content Processors Configuration <content-processors-configuration>`
+      - Configure content processors (content lifecycle) properties
     * - :ref:`Content Type Editor Configuration <content-type-editor-configuration>`
       - Configure the content types
     * - :ref:`Dependency Resolver Configuration <dependency-resolver-configuration>`
@@ -3533,6 +3535,157 @@ Remember that you need to restart Studio for the changes you make to the above p
     The ``studio.repo.git.global.update.enabled`` property allows you to opt-out of the git config update.
     Note the importance of disabling this property for local developer deployment since it's a global change
     of Git's default behavior and may affect unintended repositories.
+
+|
+
+|hr|
+
+.. _content-processors-configuration:
+
+""""""""""""""""""""""""""""""""
+Content Processors Configuration
+""""""""""""""""""""""""""""""""
+.. version_tag::
+    :label: Since
+    :version: 5.0.0
+
+|
+
+Here are the default values for the configurable properties of content processors:
+
+.. code-block:: yaml
+    :caption: *Default values for content processors properties*
+
+    ############################################################
+    ##                   Content Processors                   ##
+    ############################################################
+    # Location where groovy script for content lifecycle processor is stored.
+    studio.contentProcessor.contentLifecycle.scriptLocation: /config/studio/content-types/{content-type}/controller.groovy
+    # Indicates if application context should be available in the content lifecycle controller script.
+    studio.contentProcessor.contentLifecycle.includeApplicationContext: false
+    # List of beans that should be available in the content lifecycle controller script.
+    studio.contentProcessor.contentLifecycle.includedBeans: []
+
+|
+
+The ``applicationContext`` variable provides access to Crafter Engine's Spring beans and site beans defined in
+``config/spring/application-context.xml``. The ``applicationContext`` is disabled by default and can be enabled
+by setting the property ``studio.contentProcessor.contentLifecycle.includeApplicationContext`` to ``true``:
+
+.. code-block:: yaml
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml*
+
+    # Indicates if application context should be available in the content lifecycle controller script.
+    studio.contentProcessor.contentLifecycle.includeApplicationContext: true
+
+|
+
+When ``studio.contentProcessor.contentLifecycle.includeApplicationContext`` is set to false, administrators might
+decide to include some specific beans from the context, e.g.: contentService, searchService. Use the
+``studio.contentProcessor.contentLifecycle.includedBeans`` property to list the beans to be included:
+
+.. code-block:: yaml
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml*
+
+    # List of beans that should be available in the content lifecycle controller script.
+    studio.contentProcessor.contentLifecycle.includedBeans: [beanA, beanB]
+
+|
+
+To learn more about content lifecycle controllers, see :ref:`server-side-form-controllers`.
+
+~~~~~~~
+Example
+~~~~~~~
+Let's take a look at an example script that will read the content and create a copy with a new ``internal-name`` value set to
+"This is a test". It will also amend the "main content item" to append "-revised" to its ``internal-name``. We'll use a site
+created using the empty blueprint and add the script to the ``/page/entry`` content type ``controller.groovy`` file:
+
+.. code-block:: groovy
+
+    /*
+     * Copyright (C) 2007-2025 Crafter Software Corporation. All Rights Reserved.
+     *
+     * This program is free software: you can redistribute it and/or modify
+     * it under the terms of the GNU General Public License version 3 as published by
+     * the Free Software Foundation.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * GNU General Public License for more details.
+     *
+     * You should have received a copy of the GNU General Public License
+     * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+     */
+
+    import org.dom4j.Document
+    import org.apache.commons.lang3.StringUtils
+
+    Document doc = lifecycleContent.get(path).contentAsDocument()
+    doc.getRootElement().element('internal-name').setText('This is a test')
+    lifecycleContent.write(StringUtils.removeEnd(path, '/index.xml') + '/bk/index.xml', doc)
+
+    doc = lifecycleContent.get(path).contentAsDocument()
+    def internalNameElem = doc.getRootElement().element('internal-name')
+    internalNameElem.setText(internalNameElem.getText() + '-revised')
+    lifecycleContent.write(path, doc)
+
+We'll edit content on the page by using the :base_url:`write content<_static/api/studio.html#tag/content/operation/contentWrite>` API,
+which triggers the script above. Here's how the API response will look like:
+
+.. code-block:: json
+    :caption: *Content write API response with script added in controller.groovy*
+
+    {
+        "response": {
+            "code": 0,
+            "message": "OK",
+            "remedialAction": "",
+            "documentationUrl": ""
+        },
+        "items": [
+            {
+                "path": "/site/website/bk/index.xml",
+                "operation": "UPDATE",
+                "amended": false
+            },
+            {
+                "path": "/site/website/index.xml",
+                "operation": "UPDATE",
+                "amended": true
+            }
+        ],
+        "commitId": "7f9c36d7d99fa7754198fe7944cad730e7a5b04d"
+    }
+
+|
+
+Notice that the ``internal-name`` of the page we edited now has ``-revised`` appended to it:
+
+.. figure:: /_static/images/developer/content-processor-script-sample-result.webp
+      :alt: Page internal name edited via controller.groovy script
+      :width: 75%
+      :align: center
+
+When we look at the ``/site/website/bk/index.xml`` file, notice the internal name has been changed to ``This is a test``:
+
+.. code-block:: xml
+    :caption: */site/website/bk/index.xml*
+    :emphasize-lines: 8
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <page>
+        <content-type>/page/entry</content-type>
+        <display-template>/templates/web/entry.ftl</display-template>
+        <merge-strategy>inherit-levels</merge-strategy>
+        <placeInNav>false</placeInNav>
+        <file-name>index.xml</file-name>
+        <internal-name>This is a test</internal-name>
+        <orderDefault_f>-1</orderDefault_f>
+        ...
+        <disabled>false</disabled>
+    </page>
 
 |
 
