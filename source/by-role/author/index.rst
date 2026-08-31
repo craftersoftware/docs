@@ -2059,14 +2059,14 @@ When sending the request for publish, you have the option of requesting to publi
 or to schedule publishing of your content at a later time and date.
 
 .. image:: /_static/images/page/page-workflows.webp
-    :width: 65 %
+    :width: 85 %
     :align: center
     :alt: Workflow - Request publish now dialog
 
 |
 
 .. image:: /_static/images/page/page-workflows-request-publish-later.webp
-     :width: 65 %
+     :width: 85 %
      :align: center
      :alt: Workflow - Request publish later dialog
 
@@ -2076,7 +2076,7 @@ Users with permission to publish can also make changes and request approval for 
 by checking the ``Request approval`` checkbox in the Publish dialog
 
 .. image:: /_static/images/page/page-workflows-request-publish.webp
-     :width: 65 %
+     :width: 85 %
      :align: center
      :alt: Workflow - Request publish approval dialog
 
@@ -2090,7 +2090,7 @@ now or later), a notification email will be sent to the project's approvers. Not
 toolbar now displays the icon for **Submitted**
 
 .. image:: /_static/images/page/page-workflows-submitted-context-nav.webp
-     :width: 75 %
+     :width: 95 %
      :align: center
      :alt: Workflow - Request publish submitted context nav updated icon and text
 
@@ -2100,9 +2100,28 @@ You'll also notice the **Submitted** icon is displayed next to the content item 
 content you just submitted a request for publish and contains the text **Submitted for live**
 
 .. image:: /_static/images/page/page-workflows-submitted-nav-tree.webp
-     :width: 25 %
+     :width: 35 %
      :align: center
      :alt: Workflow - Request publish submitted Sidebar nav tree content updated icon
+
+|
+
+When clicking on **Options** (three dots) for the submitted items, the option to ``View Packages``, which
+allows you to view the packages where the current item is included, is now available:
+
+.. image:: /_static/images/page/page-workflows-submitted-view-packages-option.webp
+     :width: 65 %
+     :align: center
+     :alt: Workflow - **View Packages** option now available
+
+|
+
+Here's the ``View Packages`` dialog:
+
+.. image:: /_static/images/page/page-workflows-view-packages-dialog.webp
+     :width: 75 %
+     :align: center
+     :alt: Workflow - **View Packages** option now available
 
 |
 
