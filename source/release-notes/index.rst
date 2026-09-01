@@ -3,7 +3,7 @@
 
 .. meta::
     :description lang=en:
-        List of CrafterCMS release notes.
+        List of CrafterCMS release notes. The latest Crafter CMS version is here.
 
 .. _release-notes:
 
