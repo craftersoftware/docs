@@ -1,9 +1,9 @@
 :is-up-to-date: True
-:last-updated: 4.5.1
+:last-updated: 4.5.2
 
 .. meta::
     :description lang=en:
-        List of CrafterCMS release notes.
+        List of CrafterCMS release notes. The latest version of CrafterCMS (CMS) is listed below.
 
 .. _release-notes:
 
@@ -15,6 +15,7 @@ version release's release notes page :ref:`below <other-release-notes>`
 
 .. note:: CrafterCMS requires Java 21
 
+.. include:: /release-notes/4-5-2.rst
 .. include:: /release-notes/4-5-1.rst
 .. include:: /release-notes/4-5-0.rst
 .. include:: /release-notes/4-4-8e.rst

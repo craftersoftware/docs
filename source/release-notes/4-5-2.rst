@@ -1,0 +1,53 @@
+.. index:: CrafterCMS version 4.5.2 Release Notes
+
+------------------------
+CrafterCMS Version 4.5.2
+------------------------
+
+Released *August 27, 2026*
+
+.. important::
+
+    Please see :ref:`Breaking changes <breaking-changes-4-x>` for breaking changes and other
+    things to consider before upgrading
+
+    For instructions on how to update your CrafterCMS install, please see :ref:`upgrading-craftercms`
+
+^^^^^^^^^^^^
+Enhancements
+^^^^^^^^^^^^
+* `Improved upgrade/startup for installations with an index called group_ibfk_1 on table Group <https://github.com/craftersoftware/craftercms/issues/8744>`__
+
+* `The Dashboard's USER filter label can be configured by using the plugin translation override system <https://github.com/craftersoftware/craftercms/issues/7886>`__
+
+  See :ref:`plugin-translations-example` for more information on overriding the translations for the ``User`` filter label in the Dashboard.
+
+* Removed unused Apache CXF dependency
+
+
+^^^^^^^^^
+Bug Fixes
+^^^^^^^^^
+* `Fixed issue with states when performing Publish Everything and Publish <https://github.com/craftersoftware/craftercms/issues/8792>`__
+
+* Engine and Studio request-body endpoints that use the XML converter are now restricted to application/json
+
+^^^^^^^^^^^^^^^^^^
+Dependency Updates
+^^^^^^^^^^^^^^^^^^
+* Noteworthy dependency updates:
+
+  - Tomcat to version 11.0.24
+  - OpenSearch to version 3.8
+  - Mariadb4j to version 3.3.0.3
+  - Apache Log4j to version 2.26.1
+  - AWS SDK to version 2.49.4
+  - Tika to version 3.3.2
+  - Apache Ivy to version 2.6.0
+
+For a complete list of community tickets, please visit: `GitHub 4.5.2 <https://github.com/orgs/craftersoftware/projects/58/views/1?filterQuery=>`_
+
+For information on upgrading 3.1.x sites, see :ref:`here <compatibility-with-3.1.x>`
+
+|hr|
+
