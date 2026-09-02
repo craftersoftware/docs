@@ -1,8 +1,8 @@
 .. index:: CrafterCMS version 4.5.2 Release Notes
 
-------------------------
-CrafterCMS Version 4.5.2
-------------------------
+-----------------------------------
+CrafterCMS Version 4.5.2 and 4.5.2E
+-----------------------------------
 
 Released *August 27, 2026*
 
