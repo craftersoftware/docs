@@ -1935,8 +1935,6 @@ Here's the search results in list view:
 **Filtering Results**:  Crafter Studio supports multiple ways to filter search results. Depending on your search results, different filters will be available. Generally, you can sort your search results based on the following:
 
 * Sort By
-
-  * Auto - default filter used by Studio. If there's no keyword, sort by Name in ascending order (A → Z)  and if there's a keyword, sort by Relevance, most relevant first
   * Relevance
   * Name
   * Width
