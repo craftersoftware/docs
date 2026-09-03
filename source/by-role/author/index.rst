@@ -1935,14 +1935,16 @@ Here's the search results in list view:
 **Filtering Results**:  Crafter Studio supports multiple ways to filter search results. Depending on your search results, different filters will be available. Generally, you can sort your search results based on the following:
 
 * Sort By
-  * Relevance
-  * Name
-  * Width
-  * Content Type
-  * MIME Type
-  * Content Size
-  * Last Edit  Date
-  * Height
+
+  * Auto - default sort option used by Studio. If there's no keyword, sort by Name in ascending order (A → Z)  and if there's a keyword, sort by Relevance, most relevant first
+  * Relevance - OpenSearch relevance score
+  * Name - The item's display name
+  * Width - Image (or media) width in pixels
+  * Content Type - Studio content type
+  * MIME Type - File media type e.g. image/jpg, application/xml, etc.
+  * Content Size - File/content size (bytes)
+  * Last Edit Date - When the item was last edited
+  * Height - Image (or media) height in pixels
 
 * Path
 * Width
