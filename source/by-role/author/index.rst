@@ -1941,7 +1941,7 @@ Here's the search results in list view:
   * Name - The item's display name
   * Width - Image (or media) width in pixels
   * Content Type - Studio content type
-  * MIME Type - File media type e.g. image/jpg, application/xml, etc.
+  * MIME Type - File media type e.g. image/jpeg, application/xml, etc.
   * Content Size - File/content size (bytes)
   * Last Edit Date - When the item was last edited
   * Height - Image (or media) height in pixels
