@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.6
+:last-updated: 4.6.0
 
 .. index:: Search, Query, OpenSearch, GraphQL
 
@@ -377,7 +377,7 @@ Here's how the query will look like for the above image of a multi-index query f
     }
     '
 
-|
+Note that the Site Search REST API ``POST /api/1/site/search/search.json`` rejects request bodies that contain restricted JSON object keys, including keys in nested objects and objects contained in arrays, with an HTTP 400 response. See :ref:`engine-search-restricted-key-patterns` for more information.
 
 See :base_url:`here <_static/api/engine.html#tag/search/operation/search>` for more information on the Crafter Engine API ``search``.
 

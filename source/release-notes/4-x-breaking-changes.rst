@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.1
+:last-updated: 4.6.0
 :orphan:
 
 .. _breaking-changes-4-x:
@@ -22,6 +22,29 @@ before upgrading. Please review the following and apply changes as required:
   on the changes in the library that may affect your project/s.
 
 |hr|
+
+.. _breaking-changes-in-craftercms-4-6-0:
+
+------------------------------------
+Breaking Changes in CrafterCMS 4.6.0
+------------------------------------
+* Groovy, Freemarker, or other Engine code that called ``siteItemService.getSiteItem(url)`` or ``getSiteTree(...)`` for paths outside the allowed descriptor patterns now receives null or an empty tree. To include extra descriptor locations, extend:
+
+  ``crafter.engine.site.default.descriptors.allowed.paths=/site/.*``
+
+  See :ref:`engine-site-allowed-descriptor-paths` for more information.
+
+* Use ``siteItemService.exists(path)`` when you only need to know if a path exists. That check is not limited by the allowed-path patterns.
+
+* Search clients that send a script key (or any key matching ``crafter.engine.search.restricted.key.patterns``) in the JSON body will get 400 Bad Request.
+
+  See :ref:`engine-search-restricted-key-patterns` for more information
+
+* Users without ``Publish`` permission on a related item will no longer see that item in the publish soft-dependency list.
+
+* Engine REST Scripts No Longer Produce XML.
+
+  Clients that request XML via the ``Accept: application/xml`` header or a ``.xml`` URL will receive ``HTTP 406 Not Acceptable``. Update those clients to request JSON (``Accept: application/json`` or a ``.json`` URL) and parse JSON instead of XML.
 
 .. _breaking-changes-in-craftercms-4-5-1:
 

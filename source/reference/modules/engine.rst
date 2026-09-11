@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.0
+:last-updated: 4.6.0
 
 .. meta::
    :description: Crafter Engine is the CrafterCMS content delivery module — serving REST, GraphQL, and FreeMarker-rendered content for web and mobile apps.
@@ -729,6 +729,8 @@ In this section we will highlight some of the more commonly used properties in t
       - Allows you to set the content root folder
     * - :ref:`engine-turn-off-show-error`
       - Allows you to turn off showing errors in line with content
+    * - :ref:`engine-site-allowed-descriptor-paths`
+      - Allows you to configure allowed descriptor patterns used by ``SiteItemService``
     * - :ref:`engine-http-response-headers`
       - Allows you to add headers to responses, such as caching policies
     * - :ref:`engine-url-rewrite-configuration`
@@ -755,6 +757,8 @@ In this section we will highlight some of the more commonly used properties in t
       - Allows you to configure the search client connection timeout, socket timeout and number of threads
     * - :ref:`engine-search-default-filters`
       - Allows you to enable/disable default filters for search queries
+    * - :ref:`engine-search-restricted-key-patterns`
+      - Allows you to configure JSON keys that are not allowed in Site Search API request bodies
     * - :ref:`engine-search-connection-pool`
       - Allows you to configure the search connection pool max total connections and max connections per route
     * - :ref:`engine-content-length-headers`
@@ -821,6 +825,38 @@ Templates in CrafterCMS will display the errors in line with content as they enc
    Note that the error will not show up but is printed out in the server's log file.
 
 |
+
+|hr|
+
+.. _engine-site-allowed-descriptor-paths:
+
+""""""""""""""""""""""""
+Allowed Descriptor Paths
+""""""""""""""""""""""""
+.. version_tag::
+    :label: Since
+    :version: 4.6.0
+
+Crafter Engine limits which site URLs ``SiteItemService`` can return as content items. This is set with a
+comma-separated list of regular expressions in the following property (default: ``/site/.*``):
+
+.. code-block:: properties
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties*
+
+    # List of regular expressions for the paths that are allowed to be used as descriptor paths (the SiteItemService will only return items from these paths)
+    crafter.engine.site.default.descriptors.allowed.paths=/site/.*
+
+``SiteItemService.getSiteItem(...)`` returns an item only when the item URL matches one of the patterns.
+``SiteItemService.getSiteTree(...)`` includes only matching items in the tree.
+
+``SiteItemService.exists(path)`` is not limited by these patterns. It only checks whether the path is present in
+the site content store. Engine configuration lookups use ``exists()`` and ``getRawContent()`` rather than
+``getSiteItem()``, so configuration files outside the allowed descriptor paths can still be detected and read.
+
+If Groovy, Freemarker, or other Engine code calls ``getSiteItem`` or ``getSiteTree`` for paths outside the allowed
+patterns, those calls receive ``null`` or an empty tree. To include extra descriptor locations, add more regexes to
+the property.
+
 
 |hr|
 
@@ -1660,6 +1696,35 @@ To enable/disable the default filters for all queries, set the following:
 
     # Indicates if the default filters (-disabled:"true",-expired_dt:[* TO now]) should be enabled (applies to all queries)
     crafter.engine.search.defaultFilters.enabled=true
+
+|
+
+|hr|
+
+.. _engine-search-restricted-key-patterns:
+
+"""""""""""""""""""""""""""""""
+Search Restricted Key Patterns
+"""""""""""""""""""""""""""""""
+.. version_tag::
+    :label: Since
+    :version: 4.6.0
+
+The Site Search REST API (``POST /api/1/site/search/search.json``, and the legacy
+``POST /api/1/site/elasticsearch/search.json``) rejects request bodies that contain restricted JSON object keys.
+
+Configure the restricted key patterns used by the Site Search REST API, using the ``crafter.engine.search.restricted.key.patterns`` property. The value is a comma-separated list of Java regular expressions with a default value of ``script``:
+
+.. code-block:: properties
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties*
+    :linenos:
+
+    # Comma-separated list of regex patterns for JSON keys that are not allowed in search requests
+    crafter.engine.search.restricted.key.patterns=script
+
+
+The Site Search API checks the entire JSON payload, including nested objects and arrays, and evaluates object keys.
+If there's a match, it returns a HTTP 400 with a message such as ``Search request must not contain a 'script' key``.
 
 |
 
