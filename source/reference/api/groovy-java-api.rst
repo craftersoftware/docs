@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.6
+:last-updated: 4.6.0
 
 .. highlight:: groovy
    :linenothreshold: 5
@@ -423,6 +423,8 @@ controller then must be placed in Scripts > controllers > sitemap.groovy. The co
     response.flushBuffer()
 
     return null
+
+See :ref:`page-and-component-controllers` to find out more about page and component scripts and for a walkthrough of querying content in these controller scripts and listing the results in FreeMarker (search and Site Item Service), see :ref:`content-queries-groovy-freemarker`.
 
 |hr|
 

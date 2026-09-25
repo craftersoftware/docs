@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.1
+:last-updated: 4.6.0
 
 .. index:: Content Queries, Groovy, FreeMarker, searchClient, Site Item Service, templateModel
 
