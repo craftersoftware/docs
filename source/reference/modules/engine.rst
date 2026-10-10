@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.6.0
+:last-updated: 4.7.0
 
 .. meta::
    :description: Crafter Engine is the CrafterCMS content delivery module — serving REST, GraphQL, and FreeMarker-rendered content for web and mobile apps.
@@ -702,6 +702,8 @@ The main files for configuring Crafter Engine at the instance level are:
       - Description
     * - ``server-config.properties``
       - Contains server configurable parameters such as URLs, paths, etc.
+    * - ``users.properties``
+      - Defines Engine users for properties-based form login. See :ref:`engine-users-properties`
     * - ``services-context.xml``
       - Contains the bean definition for services layer
     * - ``rendering-context.xml``
@@ -773,6 +775,8 @@ In this section we will highlight some of the more commonly used properties in t
       - Allows you to configure logging levels
     * - :ref:`engine-project-spring-configuration`
       - Allows you to configure Spring application context
+    * - :ref:`engine-users-properties`
+      - Configure Engine users for form login
     * - :ref:`engine-mongodb-configuration`
       - Configure Engine access to MongoDB for Crafter Profile / Crafter Social |enterpriseOnly|
     * - :ref:`engine-crafter-profile-configuration`
@@ -2649,6 +2653,73 @@ required to add an extra parameter ``initClass=false`` in the annotations to pre
 Security
 --------
 
+.. _engine-users-properties:
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Engine Properties-Based Authentication
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. version_tag::
+    :label: Since
+    :version: 4.7.0
+
+CrafterCMS can authenticate Engine users from a Spring Security properties file.
+
+Remember to restart CrafterCMS after you change the file. Engine reads it when the Spring context starts.
+
+For users using the CrafterCMS Enterprise Edition, to use the properties-based users config, remember to
+enable the ``crafter_engine_propertiesAuth`` profile in ``crafter-setenv.sh`` (or env variable):
+
+.. code-block:: bash
+    :caption: `CRAFTER_HOME/bin/crafter-setenv.sh`
+
+    # Uncomment to authenticate Engine users from users.properties instead of Crafter Profile
+    # export SPRING_PROFILES_ACTIVE=crafter_engine_propertiesAuth
+    # For multiple active spring profiles, create comma separated list
+
+"""""""""""""""""""""""""""""""""
+Set Up Users in a Dev Environment
+"""""""""""""""""""""""""""""""""
+#. Edit ``CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/users.properties``.
+
+   Use the same path in the authoring environment and in the delivery environment. Each environment has its own file.
+
+#. Add users in Spring Security's format:
+
+   .. code-block:: properties
+       :caption: CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/users.properties
+
+       # Spring Security user format:
+       # username=password[,enabled|disabled],ROLE_A,ROLE_B
+       developer={noop}devpass,ROLE_USER
+       admin={noop}admin,ROLE_ADMIN
+       disabled-user={noop}password,disabled,ROLE_USER
+
+   Note that ``{noop}`` stores the password in plain text. Use it only for local development. For other environments, prefix the (hashed) password with its PasswordEncoder id such as ``bcrypt`` ({bcrypt} matches hashes starting with $2a$, $2b$, or $2y$)::
+
+   .. code-block:: properties
+
+       admin={bcrypt}$2a$10$E...hashedpassword...,ROLE_ADMIN
+
+   A line that includes ``disabled`` creates a user that cannot log in. Omit ``enabled`` and ``disabled`` to create an enabled user.
+
+#. Confirm Engine configuration ``server-config.properties`` in the same ``extension`` directory contains the two properties shown below:
+
+   .. code-block:: properties
+       :caption: CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties
+
+       crafter.security.enabled=true
+       crafter.security.users.location=classpath:crafter/engine/extension/users.properties
+
+   These properties are already present in newly generated authoring and delivery environments.
+
+#. Restart CrafterCMS/Tomcat. The properties are loaded when Engine’s Spring context starts, so editing the file does not hot-reload users.
+
+#. Log in to the secured site through its ``/login`` page. The login form posts the ``username``, ``password``, and ``rememberMe`` parameters to ``/crafter-security-login``. See :ref:`engine-project-security-guide` for the form markup and for how to restrict pages and URLs.
+
+The assigned roles on each user must match the roles used by the site's security rules or ``authorizedRoles``. A user in this file is an Engine user only. It is separate from Studio users and has no access to Studio.
+
+|hr|
+
 .. _engine-saml2-configuration:
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -3348,13 +3419,17 @@ The following guide will help you configure Crafter Engine to:
 
 Crafter Engine is able to integrate with multiple authentication providers:
 
-#. **Using SAML2**
+#. **Using a properties file**
+
+   To configure Engine authentication using a properties file, ``users.properties``, see :ref:`engine-users-properties`
+
+#. **Using SAML2** |enterpriseOnly|
 
    To configure SAML 2.0, follow the instructions: :ref:`engine-saml2-configuration`
 
 #. **Using Crafter Profile** |enterpriseOnly|
 
-   To configure Crafter Profile, follow the instructions: :ref:`engine-crafter-profile-configuration`
+   To configure Crafter Profile, follow the instructions: :ref:`engine-crafter-profile-configuration`.
 
 """"""""""""""""""
 Add Authentication
@@ -3382,6 +3457,8 @@ To add a login page:
          <br/>
          <button type="submit">Sign in</button>
      </form>
+
+   In Community Edition, the username, password, and roles accepted by this form come from ``users.properties``. See :ref:`engine-users-properties`.
 
 ~~~~~~~~~~
 Add Logout
