@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.0
+:last-updated: 4.7.0
 
 .. highlight:: xml
 
@@ -65,6 +65,8 @@ In this section, we will highlight some of the more commonly used properties in 
 
     * - :ref:`SMTP Configuration (Email) <studio-smtp-config>`
       - Configure the SMTP server to be used by Crafter Studio when sending emails
+    * - :ref:`Authoring URL <studio-authoring-url>`
+      - Configure the public Studio URL
     * - :ref:`CORS <studio-cors>`
       - Configure CORS
     * - :ref:`Blob Stores <blob-stores>`
@@ -175,6 +177,32 @@ This section allows the user to set up a mail client by configuring the SMTP ser
     # studio.mail.debug: false
 
 |
+
+|hr|
+
+.. _studio-authoring-url:
+
+"""""""""""""
+Authoring URL
+"""""""""""""
+.. version_tag::
+    :label: Since
+    :version: 4.7.0
+
+This section allows the user to configure the public Studio URL.
+
+.. code-block:: yaml
+    :caption: *bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml*
+
+    ############################################################
+    ##                    Authoring Server                    ##
+    ############################################################
+    # Public Studio base URL (including /studio) for generated links such as password recovery emails.
+    # Keep this as the externally reachable URL; do not reuse an internal service-to-service Studio URL here.
+    # If STUDIO_URL is internal-only, override this property directly with the public URL instead.
+    studio.authoring.serverUrl: https://authoring.example.com/studio
+
+The ``studio.authoring.serverUrl`` property is set to ``${env:STUDIO_URL}`` or http://localhost:8080/studio by default. While safe for local development, if not configured to an externally reachable URL, external users in production environments will receive links to an unreachable Studio URL.
 
 |hr|
 
