@@ -1383,8 +1383,10 @@ This target will:
 - Identify the changed files according to the Git repository history
 - Index all project content in the search index
 - Sync all new, updated, and deleted files to an AWS S3 bucket
-- Write a manifest listing all site files to the AWS S3 bucket before deployment events are submitted, so Crafter Engine does not need to list the bucket (since 5.0.0)
 - Execute an invalidation for all updated files in one or more AWS Cloudfront distributions
+- Write a manifest listing all site files to the AWS S3 bucket after the Cloudfront invalidation and before
+  deployment events are submitted, so Crafter Engine can answer file and folder lookups without listing the bucket
+  (since 5.0.0)
 - Submit deployments events for all Crafter Engine instances:
 
   - Rebuild the site context when there are changes in the configuration files or Groovy scripts
@@ -1448,8 +1450,10 @@ This target will:
 - Identify the changed files according to the Git repository history
 - Index all project content in the search index
 - Sync all new, updated and deleted files to an AWS S3 bucket
-- Write a manifest listing all site files to the AWS S3 bucket before deployment events are submitted, so Crafter Engine does not need to list the bucket (since 5.0.0)
 - Execute an invalidation for all updated files in the AWS CloudFront distribution
+- Write a manifest listing all site files to the AWS S3 bucket after the CloudFront invalidation and before
+  deployment events are submitted, so Crafter Engine can answer file and folder lookups without listing the bucket
+  (since 5.0.0)
 - Submit deployments events for all Crafter Engine instances:
 
   - Rebuild the site context when there are changes in the configuration files or Groovy scripts
@@ -2630,14 +2634,15 @@ S3 Content Store Manifest Processor
 Processor that writes a manifest of all the files published for a site to the AWS S3 bucket, so Crafter Engine can
 answer file and folder lookups without listing the bucket.
 
-The manifest is a single gzipped JSON file named ``content-store-manifest.json.gz``, stored under the same S3 prefix
-as the deployment events file (the base key of this processor's ``url``). It lists every regular file in the target's
-local repository. The ``.git`` folder is omitted and, when ``ignoreBlobs`` is true, blob pointer files are omitted too.
-Paths have a leading ``/`` and no trailing ``/``, backslashes are converted to ``/``, repeated slashes are collapsed,
-and the list is de-duplicated and sorted. Unknown JSON properties are ignored when the file is read. The object is
-overwritten on every deployment that runs this processor. It is a snapshot of the local clone, not a listing of the
-bucket and not only the files that changed in that deployment. ``deployment-events.properties`` is not in the list:
-that file is written outside the Git repository and uploaded by ``s3DeploymentEventsProcessor``.
+The manifest is a single gzipped JSON file named ``content-store-manifest.json.gz``, stored at the site's S3 root
+prefix (the base key of this processor's ``url``), alongside the default ``deployment-events.properties``. It lists
+every regular file in the target's local repository. The ``.git`` folder is omitted and, when ``ignoreBlobs`` is true,
+blob pointer files are omitted too. Paths have a leading ``/`` and no trailing ``/``, backslashes are converted to
+``/``, repeated slashes are collapsed, and the list is de-duplicated and sorted. Unknown JSON properties are ignored
+when the file is read. The object is overwritten on every deployment that runs this processor. It is a snapshot of the
+local clone, not a listing of the bucket and not only the files that changed in that deployment.
+``deployment-events.properties`` is not in the list because that file is written outside the Git repository, and the
+manifest lists the local clone.
 
 .. code-block:: json
   :caption: *Manifest content (before gzip)*
@@ -2662,7 +2667,10 @@ something changed only after the new manifest is already in S3.
 |                      |           |             |``s3SyncProcessor``. The manifest object is this URL's base key plus          |
 |                      |           |             |``content-store-manifest.json.gz``.                                           |
 +----------------------+-----------+-------------+------------------------------------------------------------------------------+
-||failDep|             |           |``true``     |Enables failing a deployment when there's a processor failure                 |
+||failDep|             |           |``true``     |With the default ``true``, a manifest failure fails the deployment and the    |
+|                      |           |             |events file is not uploaded, so Engine is not told to reload. With            |
+|                      |           |             |``false``, the deployment continues and the events file is uploaded, so       |
+|                      |           |             |Engine may reload a stale manifest.                                           |
 +----------------------+-----------+-------------+------------------------------------------------------------------------------+
 
 This processor also supports the common AWS processor properties (``region``, ``accessKey``, ``secretKey``,
@@ -2696,9 +2704,9 @@ processors.
   The target-configuration upgrade from ``5.0.0.0`` to ``5.0.0.1`` adds this processor immediately before
   ``s3DeploymentEventsProcessor`` when Deployer loads the target. The upgrade copies ``region``, ``accessKey``,
   ``secretKey``, ``endpoint``, ``pathStyleAccess`` and ``url`` from ``s3DeploymentEventsProcessor``, and copies
-  ``ignoreBlobs`` from ``s3SyncProcessor`` when that key is present. It does not copy ``includeFiles``,
-  ``excludeFiles``, ``alwaysRun`` or ``failDeploymentOnFailure``. Targets that already contain
-  ``s3ContentStoreManifestProcessor`` are skipped, as are targets that do not contain
+  ``ignoreBlobs`` from ``s3SyncProcessor``. Each of those properties is copied only if it is present on the source
+  processor. It does not copy ``includeFiles``, ``excludeFiles``, ``alwaysRun`` or ``failDeploymentOnFailure``.
+  Targets that already contain ``s3ContentStoreManifestProcessor`` are skipped, as are targets that do not contain
   ``s3DeploymentEventsProcessor`` (local and authoring targets). Add the processor by hand to a custom serverless
   pipeline that does not use ``s3DeploymentEventsProcessor``.
 

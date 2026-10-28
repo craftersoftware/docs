@@ -312,20 +312,20 @@ Step 2: Configure the Delivery for Serverless Mode
 
    |
 
-   .. note::
-      Since 5.0.0, Deployer writes a content store manifest (``content-store-manifest.json.gz``) next to
-      ``deployment-events.properties`` when it publishes the site to S3. Engine uses that manifest for file and
-      folder lookups instead of listing the bucket. If the manifest is missing or cannot be read, Engine lists the S3
-      bucket.
-      See :ref:`engine-s3-content-store-manifest` and
-      :ref:`deployer-s3-content-store-manifest-processor`.
-
    As you can see, the bucket name portion of the root folder S3 URL contains a prefix and then the site name. This
    prefix is mentioned also as a "namespace" later on in the Studio serverless configuration.
 
    .. important:: You can also provide the AWS region, access key and secret key without having to edit the config file
                   properties. Please see
                   `Set up AWS Credentials and Region for Development <https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html>`_.
+
+   .. note::
+      Since 5.0.0, Deployer writes a content store manifest (``content-store-manifest.json.gz``) at the site's S3
+      root prefix, alongside the default ``deployment-events.properties``, when it publishes the site to S3. Engine
+      uses that manifest for file and folder lookups instead of listing the bucket. If the manifest is missing or
+      cannot be read, Engine lists the S3 bucket.
+      See :ref:`engine-s3-content-store-manifest` and
+      :ref:`deployer-s3-content-store-manifest-processor`.
 
 #. We recommend that the AWS credentials configured belong to a user with just the following permission policy (all
    strings like ``$VAR`` are placeholders and need to be replaced):
@@ -755,6 +755,8 @@ In this section we will highlight some of the more commonly used properties in t
       - Allows you to configure the proxy for the Preview server (Crafter Engine in Preview Mode)
     * - :ref:`engine-cache`
       - Allows you to configure various cache related items such as items to be preloaded in cache, etc.
+    * - :ref:`engine-s3-content-store-manifest`
+      - Allows you to configure how Engine reads the S3 content store manifest in serverless mode
     * - :ref:`request-filtering-configuration`
       - Allows you to configure request filtering
     * - :ref:`engine-forwarded-headers`
@@ -1500,18 +1502,23 @@ The following allows you to configure a white list of paths for caching in memor
       /static-assets/js/.*,\
       /static-assets/fonts/.*
 
+|
+
+|hr|
+
 .. _engine-s3-content-store-manifest:
 
-~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""
 S3 Content Store Manifest
-~~~~~~~~~~~~~~~~~~~~~~~~~
+"""""""""""""""""""""""""
 .. version_tag::
     :label: Since
     :version: 5.0.0
 
-When Engine runs in serverless mode, it needs to know which files and folders exist in the S3 bucket. To avoid
-listing the bucket on every lookup, Engine reads the content store manifest (``content-store-manifest.json.gz``) that
-Crafter Deployer writes next to ``deployment-events.properties`` (see
+This is a serverless content-store setting, not a cache setting. When Engine runs in serverless mode, it needs to
+know which files and folders exist in the S3 bucket. To avoid listing the bucket on every file and folder lookup,
+Engine reads the content store manifest (``content-store-manifest.json.gz``) that Crafter Deployer writes at the
+site's S3 root prefix, alongside the default ``deployment-events.properties`` (see
 :ref:`deployer-s3-content-store-manifest-processor`). Engine builds an in-memory index of every file and of the
 folders derived from those paths, and uses the index to check whether a file or folder exists and to list the children
 of a folder. A path that is not in the index is not found, and Engine does not list the bucket to check it. File
@@ -1529,8 +1536,8 @@ contents are still read from S3.
   logs a warning, drops any index it was holding, and lists the S3 bucket. The deployment events watcher retries that
   load on each later cycle while the failure stands, including when the events file has not changed. The watcher
   schedule is ``crafter.engine.events.deployment.watcher.cron``, which defaults to ``0 * * ? * *`` (every minute).
-- The deployment events file is always read directly from S3 and never from the manifest. It is uploaded after the
-  manifest, so the manifest does not list it.
+- The deployment events file is always read directly from S3 and never from the manifest. The manifest does not list
+  it because the events file is written outside the Git repository, and the manifest lists the local clone.
 
 The default below is set in ``classpath:crafter/engine/mode/serverless/s3/server-config.properties``, which serverless
 S3 mode adds to Engine's configuration. If the property is not set, Engine still uses ``deployment-events.properties``.
@@ -1559,12 +1566,14 @@ default to ``deployment-events.properties``.
 +---------------------------------------------------+--------------------------------+------------------------------------------------------------------------+
 
 .. note::
-    **Memory.** Engine keeps the index of every file and folder in the manifest in memory, for each S3 site context.
-    As a rough, order-of-magnitude guide, expect about 150 MB of heap for every 500,000 files in a site. The actual
-    amount depends on the length of your paths and how your files are spread across folders, and it grows with the
-    number of files. While Engine reloads the manifest after a publish, the old and the new index are in memory at
-    the same time, so allow for temporarily double that amount for the largest sites. If a site is too large for the
-    available heap, increase Engine's heap or do not add the processor (Engine then lists S3 as before).
+    **Memory.** Engine keeps the index in memory. Plan for about 2.5x that while a reload is in progress (the old
+    index, the parsed manifest and the new index coexist). Rough synthetic examples, not guarantees: for 500,000
+    files, dense folder layouts retained roughly 70-115 MB, and folder-per-page layouts with paths of about 56
+    characters about 220 MB. Longer paths cost much more: paths of about 88 characters retained about 310 MB with 10
+    files per folder and about 840 MB with one file per folder. Deep sparse trees can exceed 1 GB. Budget roughly
+    150-450 bytes per file for paths of about 55 characters, and several times that for long, deeply nested paths.
+    Size the heap for your own site. To opt out, remove ``s3ContentStoreManifestProcessor`` from the target
+    configuration and delete ``content-store-manifest.json.gz`` from the site's S3 location.
 
 |
 
