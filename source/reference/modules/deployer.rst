@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 5.0.0
+:last-updated: 4.7.2
 
 .. index:: Modules; Crafter Deployer
 
@@ -1386,7 +1386,7 @@ This target will:
 - Execute an invalidation for all updated files in one or more AWS Cloudfront distributions
 - Write a manifest listing all site files to the AWS S3 bucket after the Cloudfront invalidation and before
   deployment events are submitted, so Crafter Engine can answer file and folder lookups without listing the bucket
-  (since 5.0.0)
+  (since 4.7.2)
 - Submit deployments events for all Crafter Engine instances:
 
   - Rebuild the site context when there are changes in the configuration files or Groovy scripts
@@ -1453,7 +1453,7 @@ This target will:
 - Execute an invalidation for all updated files in the AWS CloudFront distribution
 - Write a manifest listing all site files to the AWS S3 bucket after the CloudFront invalidation and before
   deployment events are submitted, so Crafter Engine can answer file and folder lookups without listing the bucket
-  (since 5.0.0)
+  (since 4.7.2)
 - Submit deployments events for all Crafter Engine instances:
 
   - Rebuild the site context when there are changes in the configuration files or Groovy scripts
@@ -2629,7 +2629,7 @@ S3 Content Store Manifest Processor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. version_tag::
     :label: Since
-    :version: 5.0.0
+    :version: 4.7.2
 
 Processor that writes a manifest of all the files published for a site to the AWS S3 bucket, so Crafter Engine can
 answer file and folder lookups without listing the bucket.
@@ -2701,8 +2701,8 @@ processors.
     url: s3://serverless-sites/site/mysite
 
 .. note::
-  The target-configuration upgrade from ``5.0.0.0`` to ``5.0.0.1`` adds this processor immediately before
-  ``s3DeploymentEventsProcessor`` when Deployer loads the target. The upgrade copies ``region``, ``accessKey``,
+  When Deployer loads a target, the target-configuration upgrade adds this processor immediately before
+  ``s3DeploymentEventsProcessor``. The upgrade copies ``region``, ``accessKey``,
   ``secretKey``, ``endpoint``, ``pathStyleAccess`` and ``url`` from ``s3DeploymentEventsProcessor``, and copies
   ``ignoreBlobs`` from ``s3SyncProcessor``. Each of those properties is copied only if it is present on the source
   processor. It does not copy ``includeFiles``, ``excludeFiles``, ``alwaysRun`` or ``failDeploymentOnFailure``.

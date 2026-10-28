@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 5.0.0
+:last-updated: 4.7.2
 
 .. meta::
    :description: Crafter Engine is the CrafterCMS content delivery module — serving REST, GraphQL, and FreeMarker-rendered content for web and mobile apps.
@@ -320,7 +320,7 @@ Step 2: Configure the Delivery for Serverless Mode
                   `Set up AWS Credentials and Region for Development <https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html>`_.
 
    .. note::
-      Since 5.0.0, Deployer writes a content store manifest (``content-store-manifest.json.gz``) at the site's S3
+      Since 4.7.2, Deployer writes a content store manifest (``content-store-manifest.json.gz``) at the site's S3
       root prefix, alongside the default ``deployment-events.properties``, when it publishes the site to S3. Engine
       uses that manifest for file and folder lookups instead of listing the bucket. If the manifest is missing or
       cannot be read, Engine lists the S3 bucket.
@@ -1513,7 +1513,7 @@ S3 Content Store Manifest
 """""""""""""""""""""""""
 .. version_tag::
     :label: Since
-    :version: 5.0.0
+    :version: 4.7.2
 
 This is a serverless content-store setting, not a cache setting. When Engine runs in serverless mode, it needs to
 know which files and folders exist in the S3 bucket. To avoid listing the bucket on every file and folder lookup,
