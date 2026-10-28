@@ -816,6 +816,11 @@ In order to generate a valid self-signed SSL certificate, you can do the followi
 ~~~~~~~~~~~~~~~~~
 Start the Cluster
 ~~~~~~~~~~~~~~~~~
+Before starting the cluster, if the primary database was created while Studio was a single non-clustered instance, copy
+its ``data/db`` folder to every replica volume before the first clustered start. Skip this step for a new cluster where
+no node already has a Studio database. See :ref:`here <replace-existing-data-db-in-replica>` for more information on
+copying the data/db from the primary to the replicas.
+
 Go to ``kubernetes-deployments/authoring/cluster``, then run ``kubectl apply -k .``
 
 This should deploy all necessary resources in Kubernetes. You can monitor the status of the cluster nodes by running ``kubectl get -n craftercms pods``.
