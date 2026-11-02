@@ -141,50 +141,21 @@ Here are the steps for adding a new node to the cluster:
 #. Copy the primary ``data/db`` folder onto each new replica when either of the following is true. Otherwise, skip this step.
 
    - You are upgrading from Studio version 3.1.x.
-   - The primary database was created while Studio was a single non-clustered instance. Each replica needs that ``data/db`` before it can start.
+   - The primary database was created while Studio was a single non-clustered instance. Each replica needs that copy before it can start.
 
-   On the replica, extract the new bundle, then replace its ``data/db`` with the primary copy. The primary is already stopped. Leave each replica stopped until the start step below. Repeat for every replica node. The commands below extract the archive into ``db.incoming`` and continue only when that copy contains ``ibdata1``. The previous database is renamed to a new ``db.bak.<timestamp>.<pid>`` directory, so an existing ``db.bak`` is left unchanged. An incomplete archive leaves the original ``data/db`` in place. If the swap onto ``db`` fails, the commands move that backup directory back to ``db``.
+   Extract the new bundle on the replica, then replace its ``data/db`` with the primary copy. Leave the primary and every replica stopped until the start step below. Repeat for every replica node.
 
    .. code-block:: bash
        :caption: *Make a copy of the data/db folder in Primary server*
 
        cd CRAFTER_HOME/data
        tar -czvf dbData.tar.gz db/
-       scp dbData.tar.gz <user>@<replica-host>:/path/to/crafter/data/
-
-   Where, ``/path/to/crafter`` is that replica's ``CRAFTER_HOME``.
 
    .. code-block:: bash
-      :caption: *In the Replica server, replace data/db with the primary copy*
+      :caption: *In the Replica server, paste the data/db folder copied from the Primary server*
 
       cd CRAFTER_HOME/data
-      (
-        set -e
-        rm -rf db.incoming
-        mkdir db.incoming
-        if ! tar -xzvf dbData.tar.gz -C db.incoming || ! test -f db.incoming/db/ibdata1; then
-          rm -rf db.incoming
-          echo "Archive is incomplete. The original data/db was left in place."
-          exit 1
-        fi
-        backup=db.bak.$(date +%Y%m%d%H%M%S).$$
-        if [ -e "$backup" ]; then
-          rm -rf db.incoming
-          echo "Backup path $backup already exists. The original data/db was left in place."
-          exit 1
-        fi
-        mv db "$backup"
-        if ! mv db.incoming/db db; then
-          rm -rf db
-          mv "$backup" db
-          echo "Replacement failed. Restored the original database from $backup"
-          exit 1
-        fi
-        rmdir db.incoming
-        echo "Original database saved at $backup. Remove it after the replica starts cleanly."
-      )
-
-   Remove the ``db.bak.<timestamp>.<pid>`` directory printed by the command after the replica starts cleanly.
+      tar -xvf dbData.tar.gz
 
 #. In the Replica server, review the following configuration files to start Studio in cluster mode as described
    :ref:`here <setup-a-two-node-cluster-with-studio>`:

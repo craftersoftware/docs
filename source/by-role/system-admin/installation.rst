@@ -818,207 +818,29 @@ In order to generate a valid self-signed SSL certificate, you can do the followi
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Copy an Existing Primary Database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Use this section when the Primary database was created while Studio was a single non-clustered instance. Each Authoring
-Pod needs that ``data/db`` before its first clustered start. Without the copy, the Replica fails to start with a
-database sync error. See :ref:`authoring-cluster-troubleshooting`.
+Use this section when the Primary database was created while Studio was a single non-clustered instance. Copy that
+``data/db`` onto every Authoring volume before the first clustered start. Without the copy, the Replica fails to start
+with a database sync error. See :ref:`authoring-cluster-troubleshooting`.
 
-A new cluster, where no Authoring node already has a Studio database, initializes ``data/db`` on first start. Continue
-at :ref:`start-kubernetes-authoring-cluster` and skip the steps below.
+Skip this section for a new cluster. Studio initializes ``data/db`` on first start. Continue at
+:ref:`start-kubernetes-authoring-cluster`.
 
-The example StatefulSet ``authoring`` declares a ``volumeClaimTemplates`` entry named ``data``. Kubernetes names each
-PersistentVolumeClaim ``data-<statefulset-name>-<ordinal>``: ``data-authoring-0`` and ``data-authoring-1`` in the
-``craftercms`` namespace. ``kubectl apply -k .`` creates those claims and starts the Pods in one operation. Create the
-claims first, copy ``data/db`` onto them with a temporary Pod, delete that Pod, and then start the cluster. The
-:ref:`manual copy <replace-existing-data-db-in-replica>` is for Replica hosts you can log into.
+``kubectl apply -k .`` creates the volume claims and starts the Pods together, so create the claims and finish the copy
+first. In the example the claims are ``data-authoring-0`` and ``data-authoring-1`` in the ``craftercms`` namespace
+(``data-<statefulset-name>-<ordinal>``). Add a claim for each further ordinal when the cluster is larger. Use the same
+access mode and storage request as the example ``volumeClaimTemplates`` entry, or a larger request when the data needs
+it.
 
-The Authoring ``tomcat`` container mounts each claim at ``/opt/crafter/data``, so ``data/db`` on the Studio host is
-``db`` at the root of the volume. On startup the container changes ownership of ``/opt/crafter/data`` to the
-``crafter`` user. Stop the original Studio before copying, so MariaDB is not writing to ``data/db``. These claims are
-``ReadWriteOnce``: the only Pod that may have a claim open during the copy is the temporary copy Pod.
+The Authoring container mounts each claim at ``/opt/crafter/data``, so ``data/db`` on the Studio host is the ``db``
+directory at the root of the volume. Stop the original Studio before the copy. The claims are ``ReadWriteOnce``: finish
+writing to a claim, then unmount it, before the Authoring Pod starts. How you copy onto the claim depends on your
+cluster. Hosts you can log into are covered in :ref:`replace-existing-data-db-in-replica`.
 
-#. Create the ``craftercms`` namespace if it does not exist yet.
-
-   .. code-block:: bash
-
-      kubectl create namespace craftercms --dry-run=client -o yaml | kubectl apply -f -
-
-#. When an ``authoring`` StatefulSet is already running, scale it to 0 and wait until its Pods are gone. The
-   :ref:`simple Authoring example <setup-simple-authoring-with-kubernetes-deployment>` uses this same StatefulSet name
-   and the same ``data-authoring-0`` claim. Leave that claim in place. It already holds the Primary ``data`` directory.
-   Skip this step when the StatefulSet is not installed.
-
-   .. code-block:: bash
-
-      kubectl scale statefulset authoring -n craftercms --replicas=0
-      kubectl wait -n craftercms --for=jsonpath='{.status.replicas}'=0 statefulset/authoring --timeout=300s
-
-#. Create a PersistentVolumeClaim for every ordinal that does not already have one. The example runs ``authoring-0``
-   and ``authoring-1``. Match the example request, ``ReadWriteOnce`` and ``10Gi``. When the Primary ``data`` directory
-   is larger than 10Gi, raise ``storage`` here and in the ``volumeClaimTemplates`` entry of ``authoring-deployment.yaml``.
-   Set ``storageClassName`` when the claim should use a StorageClass other than the cluster default. A claim that uses
-   ``WaitForFirstConsumer`` stays ``Pending`` until a copy Pod mounts it.
-
-   Apply the Replica claim below. When ``Replicas`` is higher than the example, apply it again with ``name`` set to
-   ``data-authoring-2``, and so on. When the Primary Studio is outside the cluster, also apply it with ``name`` set to
-   ``data-authoring-0``. Skip ``data-authoring-0`` when that claim already holds the Primary data.
-
-   .. code-block:: bash
-
-      kubectl apply -f - <<'EOF'
-      apiVersion: v1
-      kind: PersistentVolumeClaim
-      metadata:
-        name: data-authoring-1
-        namespace: craftercms
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        resources:
-          requests:
-            storage: 10Gi
-      EOF
-
-#. Copy the Primary database onto each claim that does not already contain it. Follow one of the two procedures below.
-   Use one temporary Pod per claim. A Pod can mount a claim only in the availability zone where that volume attaches.
-
-   **The Primary ``data`` directory is already on ``data-authoring-0``.** The first Pod mounts that claim read-only.
-   The second mounts the Replica claim. Stream ``db`` to the Replica, and confirm MariaDB's ``ibdata1`` file is there.
-   For another Replica, run the block again with ``authoring-db-dest`` mounted on that claim.
-
-   .. code-block:: bash
-
-      kubectl apply -f - <<'EOF'
-      apiVersion: v1
-      kind: Pod
-      metadata:
-        name: authoring-db-source
-        namespace: craftercms
-      spec:
-        restartPolicy: Never
-        containers:
-          - name: copy
-            image: busybox:1.36
-            command: ["sh", "-c", "while true; do sleep 3600; done"]
-            volumeMounts:
-              - name: data
-                mountPath: /data
-                readOnly: true
-        volumes:
-          - name: data
-            persistentVolumeClaim:
-              claimName: data-authoring-0
-      ---
-      apiVersion: v1
-      kind: Pod
-      metadata:
-        name: authoring-db-dest
-        namespace: craftercms
-      spec:
-        restartPolicy: Never
-        containers:
-          - name: copy
-            image: busybox:1.36
-            command: ["sh", "-c", "while true; do sleep 3600; done"]
-            volumeMounts:
-              - name: data
-                mountPath: /data
-        volumes:
-          - name: data
-            persistentVolumeClaim:
-              claimName: data-authoring-1
-      EOF
-      kubectl wait -n craftercms --for=condition=Ready pod/authoring-db-source pod/authoring-db-dest --timeout=180s
-      kubectl exec -n craftercms authoring-db-dest -c copy -- rm -rf /data/db
-      kubectl exec -n craftercms authoring-db-source -c copy -- tar -C /data -czf - db \
-        | kubectl exec -i -n craftercms authoring-db-dest -c copy -- tar -C /data -xzf -
-      kubectl exec -n craftercms authoring-db-dest -c copy -- mkdir -p /data/indexes
-      kubectl exec -n craftercms authoring-db-dest -c copy -- chown 1000:1000 /data/indexes
-      kubectl exec -n craftercms authoring-db-dest -c copy -- ls /data/db/ibdata1
-      kubectl delete pod -n craftercms authoring-db-source authoring-db-dest --wait=true
-
-   **The Primary Studio is outside the cluster.** Stop that Studio. Use a new ``data-authoring-0`` claim, or an existing
-   claim whose contents you will replace. Stage that Studio's ``data`` directory, including ``db`` and the repositories,
-   and replace the claim contents only after ``db/ibdata1`` is present in the staged copy. An older database,
-   repositories, or indexes already on the claim are removed by that replacement. Load only ``db`` onto each Replica
-   claim. Replace ``/path/to/crafter/data`` with that Studio's ``data`` directory. ``COPYFILE_DISABLE=1`` keeps a macOS
-   ``tar`` from adding extra archive members. The two blocks below are ``data-authoring-0``, then ``data-authoring-1``.
-   Point ``claimName`` at the next ordinal and run the ``db`` block again for each further Replica.
-
-   .. code-block:: bash
-
-      kubectl apply -f - <<'EOF'
-      apiVersion: v1
-      kind: Pod
-      metadata:
-        name: authoring-db-copy
-        namespace: craftercms
-      spec:
-        restartPolicy: Never
-        containers:
-          - name: copy
-            image: busybox:1.36
-            command: ["sh", "-c", "while true; do sleep 3600; done"]
-            volumeMounts:
-              - name: data
-                mountPath: /data
-        volumes:
-          - name: data
-            persistentVolumeClaim:
-              claimName: data-authoring-0
-      EOF
-      kubectl wait -n craftercms --for=condition=Ready pod/authoring-db-copy --timeout=180s
-      kubectl exec -n craftercms authoring-db-copy -c copy -- rm -rf /data/incoming
-      kubectl exec -n craftercms authoring-db-copy -c copy -- mkdir -p /data/incoming
-      (
-        set -e
-        set -o pipefail
-        COPYFILE_DISABLE=1 tar -C /path/to/crafter/data -czf - . \
-          | kubectl exec -i -n craftercms authoring-db-copy -c copy -- tar -C /data/incoming -xzf -
-        kubectl exec -n craftercms authoring-db-copy -c copy -- ls /data/incoming/db/ibdata1
-        kubectl exec -n craftercms authoring-db-copy -c copy -- sh -c 'find /data -mindepth 1 -maxdepth 1 ! -name incoming ! -name lost+found -exec rm -rf {} + && find /data/incoming -mindepth 1 -maxdepth 1 -exec mv {} /data/ \; && rmdir /data/incoming'
-        kubectl exec -n craftercms authoring-db-copy -c copy -- ls /data/db/ibdata1
-      )
-      copy_status=$?
-      if [ "$copy_status" -ne 0 ]; then
-        echo "Staged copy failed." >&2
-        exit "$copy_status"
-      fi
-      kubectl delete pod -n craftercms authoring-db-copy --wait=true
-
-   .. code-block:: bash
-
-      kubectl apply -f - <<'EOF'
-      apiVersion: v1
-      kind: Pod
-      metadata:
-        name: authoring-db-copy
-        namespace: craftercms
-      spec:
-        restartPolicy: Never
-        containers:
-          - name: copy
-            image: busybox:1.36
-            command: ["sh", "-c", "while true; do sleep 3600; done"]
-            volumeMounts:
-              - name: data
-                mountPath: /data
-        volumes:
-          - name: data
-            persistentVolumeClaim:
-              claimName: data-authoring-1
-      EOF
-      kubectl wait -n craftercms --for=condition=Ready pod/authoring-db-copy --timeout=180s
-      kubectl exec -n craftercms authoring-db-copy -c copy -- rm -rf /data/db
-      set -e
-      set -o pipefail
-      COPYFILE_DISABLE=1 tar -C /path/to/crafter/data -czf - db \
-        | kubectl exec -i -n craftercms authoring-db-copy -c copy -- tar -C /data -xzf -
-      kubectl exec -n craftercms authoring-db-copy -c copy -- ls /data/db/ibdata1
-      kubectl delete pod -n craftercms authoring-db-copy --wait=true
-
-.. important::
-   Terminate every copy Pod before starting the Authoring cluster. Each claim is ``ReadWriteOnce``, and the Authoring
-   Pod mounts it after the copy Pod has terminated.
+- When the Primary data is already on ``data-authoring-0``, leave that claim in place and copy ``db`` onto each Replica
+  claim. The :ref:`simple Authoring example <setup-simple-authoring-with-kubernetes-deployment>` uses this same claim.
+  Stop that StatefulSet before the copy.
+- When the Primary Studio is outside the cluster, copy its ``data`` directory, including ``db`` and the repositories,
+  onto ``data-authoring-0``. Copy only ``db`` onto each Replica claim.
 
 .. _start-kubernetes-authoring-cluster:
 
@@ -1027,8 +849,8 @@ Start the Cluster
 ~~~~~~~~~~~~~~~~~
 Go to ``kubernetes-deployments/authoring/cluster``, then run ``kubectl apply -k .``
 
-Kubernetes uses any ``data-authoring-<ordinal>`` claim that already exists, including claims seeded above, and creates
-any claim that is still missing. On a new cluster this command creates the claims and starts the Pods together.
+Kubernetes uses any ``data-authoring-<ordinal>`` claim that already exists, including claims you prepared above, and
+creates any claim that is still missing. On a new cluster this command creates the claims and starts the Pods together.
 
 This should deploy all necessary resources in Kubernetes. You can monitor the status of the cluster nodes by running ``kubectl get -n craftercms pods``.
 

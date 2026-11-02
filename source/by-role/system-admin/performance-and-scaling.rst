@@ -809,29 +809,11 @@ Configuring Nodes in the Cluster
 
    .. _replace-existing-data-db-in-replica:
 
-#. If the primary database was created while Studio was a single non-clustered instance, copy its ``data/db`` folder to every replica before the first clustered start. Skip this step for a new cluster where no node already has a Studio database.
+#. If the primary database was created while Studio was a single non-clustered instance, copy its ``data/db`` folder to every replica before the first clustered start. Skip this step for a new cluster, where no node already has a Studio database.
 
-   Stop the original Studio, and leave every replica stopped. A new install from step 1 includes its own ``data/db``. On each replica, remove that folder and replace it with the primary copy. Without this copy, the replica fails to start with a database sync error. See :ref:`authoring-cluster-troubleshooting`.
+   Stop the original Studio and leave every replica stopped until you start the cluster. A new install from step 1 ships with its own ``data/db``. Replace that folder on each replica with the copy from the primary. Without this copy, the replica fails to start with a database sync error. See :ref:`authoring-cluster-troubleshooting`.
 
-   .. code-block:: bash
-       :caption: *Make a copy of the data/db folder in Primary server*
-
-       cd CRAFTER_HOME/data
-       tar -czvf dbData.tar.gz db/
-       scp dbData.tar.gz <user>@<replica-host>:/path/to/crafter/data/
-
-   Where, ``/path/to/crafter`` is that replica's ``CRAFTER_HOME``.
-
-   .. code-block:: bash
-      :caption: *In the Replica server, paste the data/db folder copied from the Primary server*
-
-      cd CRAFTER_HOME/data
-      tar -xvf dbData.tar.gz
-
-   The same copy is required when moving an existing non-clustered Studio into the
-   :ref:`Kubernetes cluster example <setup-studio-clustering-with-kubernetes-deployment>`. Follow
-   :ref:`seed-studio-cluster-db-on-kubernetes`. In that example each Authoring volume is a PersistentVolumeClaim
-   created with its Pod, and the copy is done with a temporary Pod mounted on the claim.
+   Moving that Studio onto the :ref:`Kubernetes cluster example <setup-studio-clustering-with-kubernetes-deployment>` needs the same copy. See :ref:`seed-studio-cluster-db-on-kubernetes`.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Starting the Nodes in the Cluster
