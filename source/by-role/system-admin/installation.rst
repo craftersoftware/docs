@@ -967,14 +967,20 @@ The Authoring ``tomcat`` container mounts each claim at ``/opt/crafter/data``, s
       kubectl wait -n craftercms --for=condition=Ready pod/authoring-db-copy --timeout=180s
       kubectl exec -n craftercms authoring-db-copy -c copy -- rm -rf /data/incoming
       kubectl exec -n craftercms authoring-db-copy -c copy -- mkdir -p /data/incoming
-      ( set -e
+      (
+        set -e
         set -o pipefail
         COPYFILE_DISABLE=1 tar -C /path/to/crafter/data -czf - . \
           | kubectl exec -i -n craftercms authoring-db-copy -c copy -- tar -C /data/incoming -xzf -
         kubectl exec -n craftercms authoring-db-copy -c copy -- ls /data/incoming/db/ibdata1
         kubectl exec -n craftercms authoring-db-copy -c copy -- sh -c 'find /data -mindepth 1 -maxdepth 1 ! -name incoming ! -name lost+found -exec rm -rf {} + && find /data/incoming -mindepth 1 -maxdepth 1 -exec mv {} /data/ \; && rmdir /data/incoming'
         kubectl exec -n craftercms authoring-db-copy -c copy -- ls /data/db/ibdata1
-      ) || echo "Staged copy failed."
+      )
+      copy_status=$?
+      if [ "$copy_status" -ne 0 ]; then
+        echo "Staged copy failed." >&2
+        exit "$copy_status"
+      fi
       kubectl delete pod -n craftercms authoring-db-copy --wait=true
 
    .. code-block:: bash
