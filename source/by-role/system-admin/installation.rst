@@ -931,6 +931,8 @@ The Authoring ``tomcat`` container mounts each claim at ``/opt/crafter/data``, s
       kubectl exec -n craftercms authoring-db-dest -c copy -- rm -rf /data/db
       kubectl exec -n craftercms authoring-db-source -c copy -- tar -C /data -czf - db \
         | kubectl exec -i -n craftercms authoring-db-dest -c copy -- tar -C /data -xzf -
+      kubectl exec -n craftercms authoring-db-dest -c copy -- mkdir -p /data/indexes
+      kubectl exec -n craftercms authoring-db-dest -c copy -- chown 1000:1000 /data/indexes
       kubectl exec -n craftercms authoring-db-dest -c copy -- ls /data/db/ibdata1
       kubectl delete pod -n craftercms authoring-db-source authoring-db-dest --wait=true
 
