@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.7.0
+:last-updated: 4.7.1
 
 .. meta::
     :description lang=en:
@@ -165,8 +165,6 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 `org.apache.logging.log4j:log4j-jakarta-web <https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-jakarta-web>`_
 |br|
 `org.apache.logging.log4j:log4j-slf4j2-impl <https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl>`_
-|br|
-`org.apache.poi:poi-scratchpad <https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad>`_
 |br|
 `org.apache.tika:tika-core <https://mvnrepository.com/artifact/org.apache.tika/tika-core>`_
 |br|

@@ -19,8 +19,6 @@ Dependency Updates
 
   - Handlebars to version 4.7.10
 
-For a complete list of community tickets, please visit: `GitHub 4.7.1 <https://github.com/orgs/craftersoftware/projects/70/views/1?filterQuery=>`_
-
 For information on upgrading 3.1.x sites, see :ref:`here <compatibility-with-3.1.x>`
 
 |hr|
