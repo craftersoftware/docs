@@ -934,11 +934,13 @@ The Authoring ``tomcat`` container mounts each claim at ``/opt/crafter/data``, s
       kubectl exec -n craftercms authoring-db-dest -c copy -- ls /data/db/ibdata1
       kubectl delete pod -n craftercms authoring-db-source authoring-db-dest --wait=true
 
-   **The Primary Studio is outside the cluster.** Stop that Studio, then load its ``data`` directory onto
-   ``data-authoring-0``, including ``db`` and the repositories. Load only ``db`` onto each Replica claim. Replace
-   ``/path/to/crafter/data`` with that Studio's ``data`` directory. ``COPYFILE_DISABLE=1`` keeps a macOS ``tar`` from
-   adding extra archive members. The two blocks below are ``data-authoring-0``, then ``data-authoring-1``. Point
-   ``claimName`` at the next ordinal and run the ``db`` block again for each further Replica.
+   **The Primary Studio is outside the cluster.** Stop that Studio. Use a new ``data-authoring-0`` claim, or an existing
+   claim whose contents you will replace. Stage that Studio's ``data`` directory, including ``db`` and the repositories,
+   and replace the claim contents only after ``db/ibdata1`` is present in the staged copy. An older database,
+   repositories, or indexes already on the claim are removed by that replacement. Load only ``db`` onto each Replica
+   claim. Replace ``/path/to/crafter/data`` with that Studio's ``data`` directory. ``COPYFILE_DISABLE=1`` keeps a macOS
+   ``tar`` from adding extra archive members. The two blocks below are ``data-authoring-0``, then ``data-authoring-1``.
+   Point ``claimName`` at the next ordinal and run the ``db`` block again for each further Replica.
 
    .. code-block:: bash
 
@@ -963,9 +965,16 @@ The Authoring ``tomcat`` container mounts each claim at ``/opt/crafter/data``, s
               claimName: data-authoring-0
       EOF
       kubectl wait -n craftercms --for=condition=Ready pod/authoring-db-copy --timeout=180s
-      COPYFILE_DISABLE=1 tar -C /path/to/crafter/data -czf - . \
-        | kubectl exec -i -n craftercms authoring-db-copy -c copy -- tar -C /data -xzf -
-      kubectl exec -n craftercms authoring-db-copy -c copy -- ls /data/db/ibdata1
+      kubectl exec -n craftercms authoring-db-copy -c copy -- rm -rf /data/incoming
+      kubectl exec -n craftercms authoring-db-copy -c copy -- mkdir -p /data/incoming
+      ( set -e
+        set -o pipefail
+        COPYFILE_DISABLE=1 tar -C /path/to/crafter/data -czf - . \
+          | kubectl exec -i -n craftercms authoring-db-copy -c copy -- tar -C /data/incoming -xzf -
+        kubectl exec -n craftercms authoring-db-copy -c copy -- ls /data/incoming/db/ibdata1
+        kubectl exec -n craftercms authoring-db-copy -c copy -- sh -c 'find /data -mindepth 1 -maxdepth 1 ! -name incoming ! -name lost+found -exec rm -rf {} + && find /data/incoming -mindepth 1 -maxdepth 1 -exec mv {} /data/ \; && rmdir /data/incoming'
+        kubectl exec -n craftercms authoring-db-copy -c copy -- ls /data/db/ibdata1
+      ) || echo "Staged copy failed."
       kubectl delete pod -n craftercms authoring-db-copy --wait=true
 
    .. code-block:: bash

@@ -143,7 +143,7 @@ Here are the steps for adding a new node to the cluster:
    - You are upgrading from Studio version 3.1.x.
    - The primary database was created while Studio was a single non-clustered instance. Each replica needs that ``data/db`` before it can start.
 
-   On the replica, extract the new bundle, then replace its ``data/db`` with the primary copy. The primary is already stopped. Leave each replica stopped until the start step below. Repeat for every replica node.
+   On the replica, extract the new bundle, then replace its ``data/db`` with the primary copy. The primary is already stopped. Leave each replica stopped until the start step below. Repeat for every replica node. The commands below extract the archive into ``db.incoming`` and continue only when that copy contains ``ibdata1``. The previous database is renamed to a new ``db.bak.<timestamp>.<pid>`` directory, so an existing ``db.bak`` is left unchanged. An incomplete archive leaves the original ``data/db`` in place. If the swap onto ``db`` fails, the commands move that backup directory back to ``db``.
 
    .. code-block:: bash
        :caption: *Make a copy of the data/db folder in Primary server*
@@ -158,9 +158,33 @@ Here are the steps for adding a new node to the cluster:
       :caption: *In the Replica server, replace data/db with the primary copy*
 
       cd CRAFTER_HOME/data
-      mv db db.bak && tar -xzvf dbData.tar.gz
+      (
+        set -e
+        rm -rf db.incoming
+        mkdir db.incoming
+        if ! tar -xzvf dbData.tar.gz -C db.incoming || ! test -f db.incoming/db/ibdata1; then
+          rm -rf db.incoming
+          echo "Archive is incomplete. The original data/db was left in place."
+          exit 1
+        fi
+        backup=db.bak.$(date +%Y%m%d%H%M%S).$$
+        if [ -e "$backup" ]; then
+          rm -rf db.incoming
+          echo "Backup path $backup already exists. The original data/db was left in place."
+          exit 1
+        fi
+        mv db "$backup"
+        if ! mv db.incoming/db db; then
+          rm -rf db
+          mv "$backup" db
+          echo "Replacement failed. Restored the original database from $backup"
+          exit 1
+        fi
+        rmdir db.incoming
+        echo "Original database saved at $backup. Remove it after the replica starts cleanly."
+      )
 
-   Remember to remove ``db.bak`` once your installation starts cleanly.
+   Remove the ``db.bak.<timestamp>.<pid>`` directory printed by the command after the replica starts cleanly.
 
 #. In the Replica server, review the following configuration files to start Studio in cluster mode as described
    :ref:`here <setup-a-two-node-cluster-with-studio>`:
