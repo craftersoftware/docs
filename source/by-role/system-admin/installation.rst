@@ -1009,6 +1009,8 @@ The Authoring ``tomcat`` container mounts each claim at ``/opt/crafter/data``, s
       EOF
       kubectl wait -n craftercms --for=condition=Ready pod/authoring-db-copy --timeout=180s
       kubectl exec -n craftercms authoring-db-copy -c copy -- rm -rf /data/db
+      set -e
+      set -o pipefail
       COPYFILE_DISABLE=1 tar -C /path/to/crafter/data -czf - db \
         | kubectl exec -i -n craftercms authoring-db-copy -c copy -- tar -C /data -xzf -
       kubectl exec -n craftercms authoring-db-copy -c copy -- ls /data/db/ibdata1
