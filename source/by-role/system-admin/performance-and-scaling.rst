@@ -807,7 +807,7 @@ Configuring Nodes in the Cluster
        `Kubernetes Hazelcast Plugin  <https://github.com/hazelcast/hazelcast-kubernetes>`_ documentation
        in your Kubernetes cluster, before even starting any Studio pods.
 
-.. _replace-existing-data-db-in-replica:
+   .. _replace-existing-data-db-in-replica:
 
 #. If the primary database was created while Studio was a single non-clustered instance, copy its ``data/db`` folder to every replica before the first clustered start. Skip this step for a new cluster where no node already has a Studio database.
 
@@ -816,16 +816,22 @@ Configuring Nodes in the Cluster
    .. code-block:: bash
        :caption: *Make a copy of the data/db folder in Primary server*
 
-       cd "$CRAFTER_HOME/data"
+       cd CRAFTER_HOME/data
        tar -czvf dbData.tar.gz db/
+       scp dbData.tar.gz <user>@<replica-host>:/path/to/crafter/data/
+
+   Where, ``/path/to/crafter`` is that replica's ``CRAFTER_HOME``.
 
    .. code-block:: bash
       :caption: *In the Replica server, paste the data/db folder copied from the Primary server*
 
-      cd "$CRAFTER_HOME/data"
+      cd CRAFTER_HOME/data
       tar -xvf dbData.tar.gz
 
-   The same copy is required when moving an existing non-clustered Studio into the :ref:`Kubernetes cluster example <setup-studio-clustering-with-kubernetes-deployment>`. Place the primary ``data/db`` on each replica volume before those pods start.
+   The same copy is required when moving an existing non-clustered Studio into the
+   :ref:`Kubernetes cluster example <setup-studio-clustering-with-kubernetes-deployment>`. Follow
+   :ref:`seed-studio-cluster-db-on-kubernetes`. In that example each Authoring volume is a PersistentVolumeClaim
+   created with its Pod, and the copy is done with a temporary Pod mounted on the claim.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Starting the Nodes in the Cluster

@@ -148,14 +148,19 @@ Here are the steps for adding a new node to the cluster:
    .. code-block:: bash
        :caption: *Make a copy of the data/db folder in Primary server*
 
-       cd "$CRAFTER_HOME/data"
+       cd CRAFTER_HOME/data
        tar -czvf dbData.tar.gz db/
+       scp dbData.tar.gz <user>@<replica-host>:/path/to/crafter/data/
+
+   Where, ``/path/to/crafter`` is that replica's ``CRAFTER_HOME``.
 
    .. code-block:: bash
-      :caption: *In the Replica server, paste the data/db folder copied from the Primary server*
+      :caption: *In the Replica server, replace data/db with the primary copy*
 
-      cd "$CRAFTER_HOME/data"
-      tar -xvf dbData.tar.gz
+      cd CRAFTER_HOME/data
+      mv db db.bak && tar -xzvf dbData.tar.gz
+
+   Remember to remove ``db.bak`` once your installation starts cleanly.
 
 #. In the Replica server, review the following configuration files to start Studio in cluster mode as described
    :ref:`here <setup-a-two-node-cluster-with-studio>`:
