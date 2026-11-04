@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.2.0
+:last-updated: 4.5.2
 
 .. meta::
    :description: Install CrafterCMS via binary bundles, Docker, or Kubernetes for authoring and delivery environments with system requirements and platform support information.
@@ -1536,3 +1536,8 @@ Build from Source
 ^^^^^^^^^^^^^^^^^
 
 CrafterCMS is open source and you can always build and run it from source code `here <https://github.com/craftersoftware/craftercms>`__
+
+.. note::
+    All CrafterCMS repositories have moved to the `monorepo <https://github.com/craftersoftware/craftercms>`__.
+    Modules such as Studio, Engine, Deployer, Studio UI, and CLI are top-level folders in that repository, along with
+    Docker Compose and Kubernetes examples.
