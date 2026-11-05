@@ -176,7 +176,7 @@ Installing
 
    .. note::
       The internal global repository (``{CRAFTER_HOME}/data/repos/global/``) cannot be connected to a remote.
-      Commit locally with any Git client. There is no remote to push to. After the commit, the blueprint is available
+      Commit locally with any Git client. No push is required. After the commit, the blueprint is available
       when you create a new project.
       The only remotes on this repository are the cluster sync remotes Studio creates in an authoring cluster.
 
