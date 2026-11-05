@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.2.2
+:last-updated: 4.7.1
 :orphan:
 
 .. index:: Blueprints, Blueprint, Create a Blueprint
@@ -174,7 +174,11 @@ Installing
 
         git commit -m "<the commit’s description>"
 
-   * No need to push, there’s no remote configured. You can also use any Git client. Now, it will be available when you create a new project.
+   .. note::
+      The internal global repository (``{CRAFTER_HOME}/data/repos/global/``) cannot be connected to a remote.
+      Commit locally with any Git client. There is no remote to push to. After the commit, the blueprint is available
+      when you create a new project.
+      The only remotes on this repository are the cluster sync remotes Studio creates in an authoring cluster.
 
 .. _adding-default-image-for-bp:
 
