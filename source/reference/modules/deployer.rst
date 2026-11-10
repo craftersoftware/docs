@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.0
+:last-updated: 4.7.2
 
 .. index:: Modules; Crafter Deployer
 
@@ -1384,6 +1384,9 @@ This target will:
 - Index all project content in the search index
 - Sync all new, updated, and deleted files to an AWS S3 bucket
 - Execute an invalidation for all updated files in one or more AWS Cloudfront distributions
+- Write a manifest listing all site files to the AWS S3 bucket after the Cloudfront invalidation and before
+  deployment events are submitted, so Crafter Engine can answer file and folder lookups without listing the bucket
+  (since 4.7.2)
 - Submit deployments events for all Crafter Engine instances:
 
   - Rebuild the site context when there are changes in the configuration files or Groovy scripts
@@ -1448,6 +1451,9 @@ This target will:
 - Index all project content in the search index
 - Sync all new, updated and deleted files to an AWS S3 bucket
 - Execute an invalidation for all updated files in the AWS CloudFront distribution
+- Write a manifest listing all site files to the AWS S3 bucket after the CloudFront invalidation and before
+  deployment events are submitted, so Crafter Engine can answer file and folder lookups without listing the bucket
+  (since 4.7.2)
 - Submit deployments events for all Crafter Engine instances:
 
   - Rebuild the site context when there are changes in the configuration files or Groovy scripts
@@ -2615,6 +2621,113 @@ Processor that syncs files to an AWS S3 Bucket.
   - processorName: s3SyncProcessor
     url: s3://serverless-sites/site/mysite
 
+
+.. _deployer-s3-content-store-manifest-processor:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+S3 Content Store Manifest Processor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. version_tag::
+    :label: Since
+    :version: 4.7.2
+
+Processor that writes a manifest of all the files published for a site to the AWS S3 bucket, so Crafter Engine can
+answer file and folder lookups without listing the bucket.
+
+The manifest is a single gzipped JSON file named ``content-store-manifest.json.gz``, stored at the site's S3 root
+prefix (the base key of this processor's ``url``), alongside the default ``deployment-events.properties``. It lists
+every regular file in the target's local repository. The ``.git`` folder is omitted and, when ``ignoreBlobs`` is true,
+blob pointer files are omitted too. Paths have a leading ``/`` and no trailing ``/``, backslashes are converted to
+``/``, repeated slashes are collapsed, and the list is de-duplicated and sorted. Unknown JSON properties are ignored
+when the file is read. The object is overwritten on every deployment that runs this processor. It is a snapshot of the
+local clone, not a listing of the bucket and not only the files that changed in that deployment.
+``deployment-events.properties`` is not in the list because that file is written outside the Git repository, and the
+manifest lists the local clone.
+
+.. code-block:: json
+  :caption: *Manifest content (before gzip)*
+
+  {"files":[{"path":"/site/website/crafter-level-descriptor.level.xml"},{"path":"/site/website/index.xml"}]}
+
+Place the processor after ``s3SyncProcessor`` and before ``s3DeploymentEventsProcessor``. In the AWS S3 and AWS
+CloudFormation targets, the ``fileBasedDeploymentEventProcessor`` steps (which only write the local events file) also
+run before it. ``s3DeploymentEventsProcessor`` uploads ``deployment-events.properties``, so Engine is told that
+something changed only after the new manifest is already in S3.
+
+**Properties**
+
++----------------------+-----------+-------------+------------------------------------------------------------------------------+
+|Name                  |Required   |Default Value|Description                                                                   |
++======================+===========+=============+==============================================================================+
+|``ignoreBlobs``       |           |``true``     |Do not list blob pointer files (a relative path that ends with the blob       |
+|                      |           |             |extension, ``.blob`` by default; the match is case-sensitive). Use the same   |
+|                      |           |             |value as ``s3SyncProcessor``.                                                 |
++----------------------+-----------+-------------+------------------------------------------------------------------------------+
+|``url``               ||checkmark||             |AWS S3 bucket URL where the site is deployed. Use the same value as           |
+|                      |           |             |``s3SyncProcessor``. The manifest object is this URL's base key plus          |
+|                      |           |             |``content-store-manifest.json.gz``.                                           |
++----------------------+-----------+-------------+------------------------------------------------------------------------------+
+||failDep|             |           |``true``     |With the default ``true``, a manifest failure fails the deployment and the    |
+|                      |           |             |events file is not uploaded, so Engine is not told to reload. With            |
+|                      |           |             |``false``, the deployment continues and the events file is uploaded, so       |
+|                      |           |             |Engine may reload a stale manifest.                                           |
++----------------------+-----------+-------------+------------------------------------------------------------------------------+
+
+This processor also supports the common AWS processor properties (``region``, ``accessKey``, ``secretKey``,
+``endpoint`` and ``pathStyleAccess``) and the ``includeFiles`` and ``excludeFiles`` properties common to all
+processors.
+
+**Example**
+
+.. code-block:: yaml
+  :linenos:
+  :caption: *S3 Content Store Manifest Processor*
+
+  - processorName: s3SyncProcessor
+    url: s3://serverless-sites/site/mysite
+
+  # ... delay / CloudFront invalidation / fileBasedDeploymentEventProcessor steps ...
+
+  # Write the manifest of all site files to the bucket (after the sync, before the events are published)
+  - processorName: s3ContentStoreManifestProcessor
+    ignoreBlobs: true
+    region: ${aws.region}
+    accessKey: ${aws.accessKey}
+    secretKey: ${aws.secretKey}
+    url: s3://serverless-sites/site/mysite
+
+  # Publish the deployment events so Engine reloads the manifest
+  - processorName: s3DeploymentEventsProcessor
+    url: s3://serverless-sites/site/mysite
+
+.. note::
+  When Deployer loads a target, the target-configuration upgrade adds this processor immediately before
+  ``s3DeploymentEventsProcessor``. The upgrade copies ``region``, ``accessKey``,
+  ``secretKey``, ``endpoint``, ``pathStyleAccess`` and ``url`` from ``s3DeploymentEventsProcessor``, and copies
+  ``ignoreBlobs`` from ``s3SyncProcessor``. Each of those properties is copied only if it is present on the source
+  processor. It does not copy ``includeFiles``, ``excludeFiles``, ``alwaysRun`` or ``failDeploymentOnFailure``.
+  Targets that already contain ``s3ContentStoreManifestProcessor`` are skipped, as are targets that do not contain
+  ``s3DeploymentEventsProcessor`` (local and authoring targets). Add the processor by hand to a custom serverless
+  pipeline that does not use ``s3DeploymentEventsProcessor``.
+
+.. warning::
+  Engine reloads the manifest when the content of ``deployment-events.properties`` changes, and it loads the manifest
+  when the site context is created. A custom pipeline that publishes files without changing that events file never
+  reloads the manifest. Engine keeps the previous index, and the files from that publish stay invisible until a later
+  deployment does change the events file. The default AWS S3 and AWS CloudFormation targets avoid this: their
+  ``clearCache`` event has no file filter, so every publish that has changes updates the events file. If a custom
+  pipeline filters events so that some publishes write no event (for example a ``clearCache`` processor that excludes
+  ``/static-assets``), those publishes will not reload the manifest.
+
+.. note::
+  If you set ``includeFiles`` or ``excludeFiles`` on this processor, use the same patterns as ``s3SyncProcessor``.
+  The patterns filter both whether the processor runs and which files are listed. Like other main processors, this
+  processor runs only when the filtered change set is not empty, unless ``alwaysRun`` is true. A pattern that matches
+  none of the changed files skips the processor and leaves the previous manifest in the bucket. Set ``ignoreBlobs``
+  to the same value as ``s3SyncProcessor`` (both default to ``true``). If the sync processor uploads blob pointer
+  files and this processor does not list them, Engine reports those files as missing.
+
+See :ref:`engine-s3-content-store-manifest` for how Engine loads the manifest and for the memory used by the index.
 
 .. |defaultS3E| replace:: ``deployment-events.properties``
 
