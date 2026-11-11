@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.1
+:last-updated: 4.7.1
 
 .. meta::
     :description lang=en:
@@ -25,11 +25,21 @@ What's Supported?
       - Commercial Support
       - Latest
 
-    * - `4.5 <https://craftercms.com/download>`__
+    * - `4.7 <https://craftercms.com/download>`__
+      - October 21, 2026
+      - :green:`Active`
+      - :green:`Active`
+      - 4.7.1 (November 3, 2026)
+    * - 4.6
+      - September 21, 2026
+      - :maroon:`Ended on October 21, 2026`
+      - :green:`Active`
+      - 4.6.1 (September 29, 2026)
+    * - 4.5
       - January 23, 2026
+      - :maroon:`Ended on September 21, 2026`
       - :green:`Active`
-      - :green:`Active`
-      - 4.5.1 (June 18, 2026)
+      - 4.5.2 (August 27, 2026)
     * - 4.4
       - June 13, 2025
       - :maroon:`Ended on January 23, 2026`

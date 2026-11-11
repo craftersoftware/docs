@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.0
+:last-updated: 4.7.0
 
 .. meta::
    :description: Crafter Engine is the CrafterCMS content delivery module — serving REST, GraphQL, and FreeMarker-rendered content for web and mobile apps.
@@ -17,6 +17,8 @@ Crafter Engine
 
 Engine provides content delivery services to power any type of Web or mobile application. It consumes content published
 from Studio via the Deployer and provides developers with APIs to consume the content (content, search, GraphQL, etc.).
+
+Crafter Engine is multi-tenant: a single delivery Engine can serve many projects (sites). Each project is initialized as its own Deployer target so Engine can resolve which project to render (for example via X-Crafter-Site, the crafterSite query parameter, or a reverse-proxy virtual host).
 
 .. include:: /includes/content-retrieval-apis.rst
 
@@ -700,6 +702,8 @@ The main files for configuring Crafter Engine at the instance level are:
       - Description
     * - ``server-config.properties``
       - Contains server configurable parameters such as URLs, paths, etc.
+    * - ``users.properties``
+      - Defines Engine users for properties-based form login. See :ref:`engine-users-properties`
     * - ``services-context.xml``
       - Contains the bean definition for services layer
     * - ``rendering-context.xml``
@@ -729,6 +733,8 @@ In this section we will highlight some of the more commonly used properties in t
       - Allows you to set the content root folder
     * - :ref:`engine-turn-off-show-error`
       - Allows you to turn off showing errors in line with content
+    * - :ref:`engine-site-allowed-descriptor-paths`
+      - Allows you to configure allowed descriptor patterns used by ``SiteItemService``
     * - :ref:`engine-http-response-headers`
       - Allows you to add headers to responses, such as caching policies
     * - :ref:`engine-url-rewrite-configuration`
@@ -755,6 +761,8 @@ In this section we will highlight some of the more commonly used properties in t
       - Allows you to configure the search client connection timeout, socket timeout and number of threads
     * - :ref:`engine-search-default-filters`
       - Allows you to enable/disable default filters for search queries
+    * - :ref:`engine-search-restricted-key-patterns`
+      - Allows you to configure JSON keys that are not allowed in Site Search API request bodies
     * - :ref:`engine-search-connection-pool`
       - Allows you to configure the search connection pool max total connections and max connections per route
     * - :ref:`engine-content-length-headers`
@@ -767,10 +775,12 @@ In this section we will highlight some of the more commonly used properties in t
       - Allows you to configure logging levels
     * - :ref:`engine-project-spring-configuration`
       - Allows you to configure Spring application context
+    * - :ref:`engine-users-properties`
+      - Configure Engine users for form login
     * - :ref:`engine-mongodb-configuration`
-      - Allows you to configure Crafter Engine access to MongoDB
+      - Configure Engine access to MongoDB for Crafter Profile / Crafter Social |enterpriseOnly|
     * - :ref:`engine-crafter-profile-configuration`
-      - Allows you to configure Crafter Engine access to Crafter Profile APIs
+      - Configure Engine access to Crafter Profile APIs |enterpriseOnly|
     * - :ref:`engine-custom-properties`
       - Allows you to add custom properties to the project configuration
     * - :ref:`engine-craftersite-cookie-configuration`
@@ -821,6 +831,38 @@ Templates in CrafterCMS will display the errors in line with content as they enc
    Note that the error will not show up but is printed out in the server's log file.
 
 |
+
+|hr|
+
+.. _engine-site-allowed-descriptor-paths:
+
+""""""""""""""""""""""""
+Allowed Descriptor Paths
+""""""""""""""""""""""""
+.. version_tag::
+    :label: Since
+    :version: 4.6.0
+
+Crafter Engine limits which site URLs ``SiteItemService`` can return as content items. This is set with a
+comma-separated list of regular expressions in the following property (default: ``/site/.*``):
+
+.. code-block:: properties
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties*
+
+    # List of regular expressions for the paths that are allowed to be used as descriptor paths (the SiteItemService will only return items from these paths)
+    crafter.engine.site.default.descriptors.allowed.paths=/site/.*
+
+``SiteItemService.getSiteItem(...)`` returns an item only when the item URL matches one of the patterns.
+``SiteItemService.getSiteTree(...)`` includes only matching items in the tree.
+
+``SiteItemService.exists(path)`` is not limited by these patterns. It only checks whether the path is present in
+the site content store. Engine configuration lookups use ``exists()`` and ``getRawContent()`` rather than
+``getSiteItem()``, so configuration files outside the allowed descriptor paths can still be detected and read.
+
+If Groovy, Freemarker, or other Engine code calls ``getSiteItem`` or ``getSiteTree`` for paths outside the allowed
+patterns, those calls receive ``null`` or an empty tree. To include extra descriptor locations, add more regexes to
+the property.
+
 
 |hr|
 
@@ -1665,6 +1707,35 @@ To enable/disable the default filters for all queries, set the following:
 
 |hr|
 
+.. _engine-search-restricted-key-patterns:
+
+"""""""""""""""""""""""""""""""
+Search Restricted Key Patterns
+"""""""""""""""""""""""""""""""
+.. version_tag::
+    :label: Since
+    :version: 4.6.0
+
+The Site Search REST API (``POST /api/1/site/search/search.json``, and the legacy
+``POST /api/1/site/elasticsearch/search.json``) rejects request bodies that contain restricted JSON object keys.
+
+Configure the restricted key patterns used by the Site Search REST API, using the ``crafter.engine.search.restricted.key.patterns`` property. The value is a comma-separated list of Java regular expressions with a default value of ``script``:
+
+.. code-block:: properties
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties*
+    :linenos:
+
+    # Comma-separated list of regex patterns for JSON keys that are not allowed in search requests
+    crafter.engine.search.restricted.key.patterns=script
+
+
+The Site Search API checks the entire JSON payload, including nested objects and arrays, and evaluates object keys.
+If there's a match, it returns a HTTP 400 with a message such as ``Search request must not contain a 'script' key``.
+
+|
+
+|hr|
+
 .. _engine-content-length-headers:
 
 """"""""""""""""""""""
@@ -1784,12 +1855,13 @@ also have access to Engine's global properties (like ``crafter.engine.preview``)
 
 .. _engine-mongodb-configuration:
 
-"""""""""""""""""""""""""""""""
-Configure Engine to use MongoDB
-"""""""""""""""""""""""""""""""
-There are times when you may need access to MongoDB. This section details how you can access MongoDB by configuring Engine.
+""""""""""""""""""""""""""""""""""""""""""""""""
+Configure Engine to use MongoDB |enterpriseOnly|
+""""""""""""""""""""""""""""""""""""""""""""""""
+MongoDB is not part of the core CMS. It is used by Crafter Profile and Crafter Social |enterpriseOnly|.
+Configure Engine access to MongoDB only if those modules are in use.
 
-Here are the steps for configuring Engine to use mongoDB:
+Here are the steps for configuring Engine to use MongoDB:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 Configure the MongoDB URI
@@ -2255,8 +2327,9 @@ Environment Specific Configurations Example
 Environments are useful for managing values such as paths or database connections without the need to
 change any code directly in the servers.
 
-In this example, we show how to manage a database connection that will change depending on the server
-where the project is deployed. We will have three environments ``dev``, ``auth`` and ``delivery``
+In this example, we show how to manage a MongoDB connection (used by Crafter Profile / Crafter Social
+|enterpriseOnly|) that will change depending on the server where the project is deployed. We will have three
+environments ``dev``, ``auth`` and ``delivery``
 
 #. First create the environments by following the example above for creating the environments.
    We'll then have the following folders called ``dev``, ``auth`` and ``delivery`` under ``CRAFTER_HOME/data/repos/sites/SITENAME/sandbox/config/engine/env``
@@ -2579,6 +2652,75 @@ required to add an extra parameter ``initClass=false`` in the annotations to pre
 --------
 Security
 --------
+
+.. _engine-users-properties:
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Engine Properties-Based Authentication
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. version_tag::
+    :label: Since
+    :version: 4.7.0
+
+CrafterCMS can authenticate Engine users from a Spring Security properties file.
+
+For users using the CrafterCMS Enterprise Edition, Engine authenticates users with Crafter Profile by default. To use
+``users.properties`` instead, enable the ``crafter_engine_propertiesAuth`` Spring profile in ``crafter-setenv.sh`` (or
+through the ``SPRING_PROFILES_ACTIVE`` environment variable). While this profile is active, Crafter Profile users can't
+log in to Engine.
+
+.. code-block:: bash
+    :caption: `CRAFTER_HOME/bin/crafter-setenv.sh`
+
+    # Uncomment to authenticate Engine users from users.properties instead of Crafter Profile
+    export SPRING_PROFILES_ACTIVE=crafter_engine_propertiesAuth
+    # For multiple active spring profiles, create comma separated list
+
+"""""""""""""""""""""""""""""""""
+Set Up Users in a Dev Environment
+"""""""""""""""""""""""""""""""""
+#. Edit ``CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/users.properties``.
+
+   Use the same path in the authoring environment and in the delivery environment. Each environment has its own file.
+
+#. Add users in Spring Security's format:
+
+   .. code-block:: properties
+       :caption: CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/users.properties
+
+       # Spring Security user format:
+       # username=password[,enabled|disabled],ROLE_A,ROLE_B
+       developer={noop}devpass,ROLE_USER
+       admin={noop}admin,ROLE_ADMIN
+       disabled-user={noop}password,disabled,ROLE_USER
+
+   Note that ``{noop}`` stores the password in plain text. Use it only for local development.
+
+   For other environments, prefix the (hashed) password with its PasswordEncoder id such as ``{bcrypt}`` (it matches hashes starting with ``$2a$``, ``$2b$``, or ``$2y$``). For example, generate a bcrypt hash with Apache ``htpasswd`` and use the value after the colon: ``htpasswd -nBC 10 "" | tr -d ':\n'`` and enter the password when prompted
+
+   .. code-block:: properties
+
+       admin={bcrypt}$2a$10$E...hashedpassword...,ROLE_ADMIN
+
+   A line that includes ``disabled`` creates a user that cannot log in. Omit ``enabled`` and ``disabled`` to create an enabled user.
+
+#. Confirm Engine configuration ``server-config.properties`` in the same ``extension`` directory contains the two properties shown below:
+
+   .. code-block:: properties
+       :caption: CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties
+
+       crafter.security.enabled=true
+       crafter.security.users.location=classpath:crafter/engine/extension/users.properties
+
+   These properties are already present in newly generated authoring and delivery environments.
+
+#. Restart CrafterCMS/Tomcat. The properties are loaded when Engine’s Spring context starts, so editing the file does not hot-reload users.
+
+#. Log in to the secured site through its ``/login`` page. The login form posts the ``username``, ``password``, and ``rememberMe`` parameters to ``/crafter-security-login``. See :ref:`engine-project-security-guide` for the form markup and for how to restrict pages and URLs.
+
+The assigned roles on each user must match the roles used by the site's security rules or ``authorizedRoles``. A user in this file is an Engine user only. It is separate from Studio users and has no access to Studio.
+
+|hr|
 
 .. _engine-saml2-configuration:
 
@@ -3279,13 +3421,17 @@ The following guide will help you configure Crafter Engine to:
 
 Crafter Engine is able to integrate with multiple authentication providers:
 
-#. **Using SAML2**
+#. **Using a properties file**
+
+   To configure Engine authentication using a properties file, ``users.properties``, see :ref:`engine-users-properties`
+
+#. **Using SAML2** |enterpriseOnly|
 
    To configure SAML 2.0, follow the instructions: :ref:`engine-saml2-configuration`
 
-#. **Using Crafter Profile**
+#. **Using Crafter Profile** |enterpriseOnly|
 
-   To configure Crafter Profile, follow the instructions: :ref:`engine-crafter-profile-configuration`
+   To configure Crafter Profile, follow the instructions: :ref:`engine-crafter-profile-configuration`.
 
 """"""""""""""""""
 Add Authentication
@@ -3313,6 +3459,8 @@ To add a login page:
          <br/>
          <button type="submit">Sign in</button>
      </form>
+
+   In Community Edition (or Enterprise Edition with the ``crafter_engine_propertiesAuth`` profile enabled), the username, password, and roles accepted by this form come from ``users.properties``. See :ref:`engine-users-properties`.
 
 ~~~~~~~~~~
 Add Logout
@@ -3442,9 +3590,9 @@ authentication provider used, but you can always obtain an instance of |CustomUs
 
 |
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Migrating from Crafter Profile
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Migrating from Crafter Profile |enterpriseOnly|
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Prior to version ``3.1.5`` Crafter Profile was the only security provider available, all projects created in previous
 versions will continue to work without any changes, however if you need to migrate to a different provider like SAML2
 you will need to replace all uses of the ``profile`` and ``authentication`` variables, both have been replaced with
@@ -3468,14 +3616,27 @@ In templates and scripts you can replace all uses of ``profile`` with ``authToke
 
 .. _engine-crafter-profile-configuration:
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Engine Crafter Profile Configuration
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""""""""""""""""""""""""""""""""
+Engine Crafter Profile Configuration |enterpriseOnly|
+"""""""""""""""""""""""""""""""""""""""""""""""""""""
 .. note:: This guide includes Crafter Profile specific configuration only, for a general guide see
-          :ref:`engine-project-security-guide`
+          :ref:`engine-project-security-guide`. Crafter Profile is an optional enterprise module.
 
-Crafter Engine needs access tokens to use Crafter Profile's API. Each project must have it's own access token. Follow the
-next steps to create one:
+Crafter Engine needs an access token to use Crafter Profile's API. The token setting depends on the Engine mode:
+
+* A single-site Engine uses ``crafter.profile.rest.client.accessToken.id``, whose default value is
+  :ref:`PROFILE_ENGINE_ACCESS_TOKEN_ID <env-var-profile-access-tokens>`.
+* A multi-tenant Delivery Engine resolves the token from the current project's ``profile.api.accessTokenId`` setting in
+  ``/config/engine/site-config.xml``. This project-level setting takes precedence over the instance-wide setting:
+  the multi-tenant token resolver does not fall back to ``PROFILE_ENGINE_ACCESS_TOKEN_ID`` when the project setting is
+  absent. A Profile API call from a project without ``profile.api.accessTokenId`` fails with a configuration error.
+
+For a Delivery node that hosts multiple projects, configure ``profile.api.accessTokenId`` separately in every project.
+Using one token per project, limited to that project's Profile tenant, is recommended. A token may be shared only if
+its Profile tenant permissions include every project that uses it; this provides broader access if the token is
+compromised. ``PROFILE_ENGINE_ACCESS_TOKEN_ID`` is a single value and does not define a project-to-token mapping.
+
+Follow the next steps to create the token, then apply it with the setting used by your Engine mode:
 
 #. Login to Crafter Profile Admin Console as a ``PROFILE_SUPERADMIN`` (by default the admin user has this role). *See* :ref:`here <crafter-profile-admin-console>` *for more information on the Crafter Profile Admin Console UI.*
 #. Click on **New Access Token** in the navigation. Enter your project's name on **Application**, leave the **Master** checkbox
@@ -3494,19 +3655,37 @@ next steps to create one:
 
    |
 
-#. Now that you have created the access token, you need to "tell" Engine to use it in your project. In Admin Console,
-    click on **List Access Tokens** in the navigation menu and copy the ID of the token you just created. Then, depending
-    on the mode Engine is running, add one of the following configurations (preview is ignored because normally
-    predefined Personas are used, so there's no need to access the Crafter Profile app).
+#. In Admin Console, click on **List Access Tokens** and copy the ID of the token you just created. Configure the
+   setting that the running Engine mode reads:
 
-    .. code-block:: xml
-      :linenos:
+   **Single-site Engine.** Set ``crafter.profile.rest.client.accessToken.id`` in the Engine server configuration. The
+   single-site resolver reads this property and does not read ``profile.api.accessTokenId`` from ``site-config.xml``.
+
+   .. code-block:: properties
+      :caption: *{CrafterCMS-install-directory}/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties*
+
+      # The access token ID used by this instance of Engine to make requests to Crafter Profile.
+      crafter.profile.rest.client.accessToken.id=6604d59a-fe1b-4cb3-a76f-bdb1eb61e8c2
+
+   Restart Engine after changing the property. While the property keeps its default,
+   ``${PROFILE_ENGINE_ACCESS_TOKEN_ID:}``, Engine uses :ref:`PROFILE_ENGINE_ACCESS_TOKEN_ID <env-var-profile-access-tokens>`.
+
+   **Multi-tenant Delivery Engine.** Add the token ID to that project's Engine Project Configuration. This is the value
+   the multi-tenant resolver uses for the current project.
+
+   .. code-block:: xml
+      :caption: */config/engine/site-config.xml*
 
       <profile>
           <api>
               <accessTokenId>6604d59a-fe1b-4cb3-a76f-bdb1eb61e8c2</accessTokenId>
           </api>
       </profile>
+
+   Repeat this for every project on the Delivery node, using each project's token ID in its own ``site-config.xml``.
+   Publish the configuration changes and reload the project contexts on Delivery. If a project uses environment-specific
+   Engine configuration, set ``profile.api.accessTokenId`` in the applicable
+   ``/config/engine/env/{envName}/site-config.xml`` instead.
 
 .. TODO Discuss and see if it's safe to remove the section below
     """"""""""""""""""
@@ -3750,12 +3929,17 @@ next steps to create one:
 
           return "/templates/web/fb-login-done.ftl"
 
-""""""""""""""""""""""""""""""""""
-Accessing Crafter Profile REST API
-""""""""""""""""""""""""""""""""""
-The following property allows you to configure the access token required to call Profile REST APIs:
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+Accessing Crafter Profile REST API |enterpriseOnly|
+"""""""""""""""""""""""""""""""""""""""""""""""""""
+The following project property configures the access token required to call Profile REST APIs from a multi-tenant
+Engine:
 
-* ``profile.api.accessToken``: The access token to use for the Profile REST calls.
+* ``profile.api.accessTokenId``: The access token ID to use for Profile REST calls. It overrides the instance-wide
+  ``crafter.profile.rest.client.accessToken.id`` value; there is no fallback to the instance-wide value when this
+  project property is absent.
+
+See :ref:`engine-crafter-profile-configuration` for token permissions and multi-project configuration.
 
 |
 
@@ -4040,9 +4224,10 @@ Preview Mode
 
 In preview mode, CrafterCMS provides a security filter that can be enabled to intercept all requests and validates the following:
 
-- ``crafterPreview`` cookie exists
-- ``crafterPreview`` cookie decrypted value contains a site name and an expiration timestamp
-- Site name matches the one from ``SiteContextResolver``
+- A preview token is provided in the ``crafterPreview`` cookie or query string parameter, or the
+  ``X-Crafter-Preview`` header
+- The decrypted token contains the user, creation timestamp, permitted projects, and expiration timestamp
+- The project from ``SiteContextResolver`` is included in the token's permitted projects
 - Expiration timestamp is in the future
 
 To enable the Engine Preview Mode security filters, set ``crafter.security.preview.enabled`` to true.
@@ -4071,9 +4256,9 @@ To exclude a URL from being intercepted and validated by the security filter, ad
       /api/1/site/context/**,\
       /api/1/site/cache/**
 
-Enabling the security filter in Preview Mode requires the configuration encryption configurations (which are shared
-between Studio and Engine) and admins will need to update the default configurations for the encryption key and salt in
-:ref:`Studio <studio-cipher-configuration>` and in :ref:`Engine <engine-configuration-properties-encryption>`.
+Enabling the security filter in Preview Mode requires the dedicated preview token encryption settings shared
+by Studio and Engine. Admins must replace the default encryption key and salt and use the same key, salt,
+and prefix values for both applications. See :ref:`env-var-preview-token-encryption` for more information.
 
 .. note::
     To check if Engine is running in preview mode, use the ``modePreview`` variable available in
@@ -4096,6 +4281,32 @@ between Studio and Engine) and admins will need to update the default configurat
             // Preview-only logic
         }
 
+.. _engine-preview-token-encryption-settings:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Preview Token Encryption Settings
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. version_tag::
+	:label: Since
+	:version: 4.7.0
+
+Here are the preview token encryption settings for Crafter Engine:
+
+.. code-block:: properties
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties*
+    :emphasize-lines: 5-6
+
+    # The key used for encryption of preview tokens
+    crafter.security.preview.token.key=${CRAFTER_PREVIEW_TOKEN_KEY}
+    # The salt used for encryption of preview tokens
+    crafter.security.preview.token.salt=${CRAFTER_PREVIEW_TOKEN_SALT}
+    # Optional prefix added to preview-token ciphertext so it can be distinguished from legacy values
+    # crafter.security.preview.token.prefix=CPT-V1#
+
+The ``crafter.security.preview.token.prefix`` is optional and only needs to be added if you want to override the default
+prefix (``CPT-V1#``) added to preview-token ciphertext. Remember that if you change it, it must match the Studio
+property ``studio.security.preview.token.prefix``. See :ref:`generate-preview-token-api` for more information.
+
 .. _engine-preview-cookie:
 
 """""""""""""""
@@ -4105,8 +4316,8 @@ Preview Cookies
     :label: Since
     :version: 4.3.2
 
-When a request is sent with a ``previewToken`` query string argument (QSA), the preview Engine stores both the
-``previewToken`` and the associated ``crafterSite`` (site ID) QSA values in cookies. This allows subsequent requests
+When a request is sent with a ``crafterPreview`` query string argument (QSA), the preview Engine stores both the
+``crafterPreview`` and the associated ``crafterSite`` (site ID) QSA values in cookies. This allows subsequent requests
 to automatically reuse the token and site context without needing to resend them in the URL.
 
 To configure the behavior of the cookies, edit the following in the ``server-config.properties`` file:

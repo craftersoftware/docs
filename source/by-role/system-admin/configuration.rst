@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.4
+:last-updated: 4.7.0
 
 .. index:: Configuration, Ports, Hostnames, Apache HTTPd, Configure Reverse Proxy
 
@@ -59,10 +59,10 @@ CrafterCMS uses the following default ports and hostnames:
     * - Search
       - 9201 |br| 9202
       - localhost
-    * - Profile
+    * - Profile |enterpriseOnly|
       - 8080 |br| 9080
       - localhost
-    * - Social
+    * - Social |enterpriseOnly|
       - 8080 |br| 9080
       - localhost
 
@@ -98,6 +98,7 @@ The following is an example of the default values for the hostnames and ports us
     export SEARCH_PORT=${SEARCH_PORT:="9201"}
     export DEPLOYER_HOST=${DEPLOYER_HOST:="localhost"}
     export DEPLOYER_PORT=${DEPLOYER_PORT:="9191"}
+    # MongoDB is used only by Crafter Profile / Crafter Social (enterprise)
     export MONGODB_HOST=${MONGODB_HOST:="localhost"}
     export MONGODB_PORT=${MONGODB_PORT:="27020"}
     export MARIADB_HOST=${MARIADB_HOST:="127.0.0.1"}
@@ -127,6 +128,7 @@ The following is an example of the default values for the hostnames and ports us
     export SEARCH_PORT=${SEARCH_PORT:="9202"}
     export DEPLOYER_HOST=${DEPLOYER_HOST:="localhost"}
     export DEPLOYER_PORT=${DEPLOYER_PORT:="9192"}
+    # MongoDB is used only by Crafter Profile / Crafter Social (enterprise)
     export MONGODB_HOST=${MONGODB_HOST:="localhost"}
     export MONGODB_PORT=${MONGODB_PORT:="28020"}
     export TOMCAT_HOST=${TOMCAT_HOST:="localhost"}
@@ -183,11 +185,17 @@ The directive on line 7 below is used for setting up the websocket proxy for Stu
 
 |
 
+A delivery Engine can host multiple projects. Typical production setup is one virtual host per project,
+each setting the ``X-Crafter-Site`` header so Engine knows which tenant to render. The vhost overwrites
+that header with the project configured for the vhost and removes any ``crafterSite`` query parameter
+sent by the client, so a visitor can't make one virtual host serve another project.
+See :ref:`setup-project-for-delivery`.
+
 .. _configure-reverse-proxy-for-delivery:
 
 .. code-block:: apache
    :caption: *Delivery Configuration*
-   :emphasize-lines: 31,37,38
+   :emphasize-lines: 14,19-22,40,46,47
    :linenos:
 
    <VirtualHost *:80>
@@ -200,9 +208,18 @@ The directive on line 7 below is used for setting up the websocket proxy for Stu
         DocumentRoot /{path_to_craftercms_home}/data/repos/sites/{myproject}
 
         RewriteEngine On
-        # Assign CrafterCMS project for this vhost
 
-        RewriteRule (.*) $1?crafterSite={myproject} [QSA,PT]
+        # Assign the CrafterCMS project for this vhost. "set" replaces any
+        # X-Crafter-Site header sent by the client. Requires mod_headers.
+        RequestHeader set X-Crafter-Site "{myproject}"
+
+        # Remove any crafterSite query parameter sent by the client, keeping all
+        # other query parameters. The N flag re-runs the rules, so repeated
+        # crafterSite parameters are all removed.
+        RewriteCond %{QUERY_STRING} ^(.*&)?crafterSite=[^&]*&(.*)$ [NC]
+        RewriteRule ^/?(.*)$ /$1?%1%2 [N]
+        RewriteCond %{QUERY_STRING} ^(.*?)&?crafterSite=[^&]*$ [NC]
+        RewriteRule ^/?(.*)$ /$1?%1 [N]
 
         # Block outside access to management services
         RewriteRule ^/api/1/cache / [NC,PT,L]
@@ -305,7 +322,14 @@ Below are the directives used for setting up a reverse proxy with NGINX:
         }
 
         location / {
-            rewrite ^/(.*)$ /$1?crafterSite={myproject} break;
+            # Remove any crafterSite query parameter sent by the client, keeping all
+            # other query parameters
+            if ($args ~* "^(?<qs_head>.*?)(?:^|&)crafterSite=[^&]*(?<qs_tail>(?:&.*)?)$") {
+                set $args "$qs_head$qs_tail";
+            }
+            if ($args ~ "^&(?<qs_rest>.*)$") {
+                set $args $qs_rest;
+            }
 
             # Block outside access to management services
             rewrite ^/api/1/cache / break;
@@ -329,6 +353,10 @@ Below are the directives used for setting up a reverse proxy with NGINX:
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
+
+            # Assign the CrafterCMS project for this vhost, replacing any
+            # X-Crafter-Site header sent by the client
+            proxy_set_header X-Crafter-Site "{myproject}";
         }
 
         # Configure the log files
@@ -342,7 +370,10 @@ Depending on your setup, the following CrafterCMS properties may need to be setu
 - ``studio-config-forwarded-headers`` property under :ref:`studio-forwarded-headers` in the ``studio-config-override.yaml`` file
 
 .. note::
-    When configuring the delivery environment, it is possible to specify an HTTP header called ``X-Crafter-Site`` set to the value of ``{myproject}`` instead of using a URL rewrite as shown in the examples above.
+    The delivery examples above set the ``X-Crafter-Site`` header to ``{myproject}`` instead of injecting a
+    ``crafterSite`` query parameter. The header takes precedence over the query parameter and the cookie, so
+    content retrieval API requests through these virtual hosts no longer need to pass ``crafterSite``.
+    The Apache example requires ``mod_headers`` and ``mod_rewrite`` to be enabled.
 
 .. _environment-variables:
 
@@ -425,10 +456,10 @@ Here are the environment variables used for configuring hosts and ports:
       - Deployer port
       - 9201
     * - MONGODB_HOST
-      - MongoDB host
+      - MongoDB host (Crafter Profile / Crafter Social |enterpriseOnly|)
       - localhost
     * - MONGODB_PORT
-      - MongoDB port
+      - MongoDB port (Crafter Profile / Crafter Social |enterpriseOnly|)
       - 27020
     * - MARIADB_HOST
       - MariaDB host (authoring only)
@@ -483,10 +514,10 @@ Here are the environment variables used for setting URLs for various CrafterCMS 
       - Crafter Engine URL
       - ``http://$TOMCAT_HOST:$TOMCAT_HTTP_PORT/``
     * - PROFILE_URL
-      - Crafter Profile URL
+      - Crafter Profile |enterpriseOnly| URL
       - ``http://$TOMCAT_HOST:$TOMCAT_HTTP_PORT/crafter-profile``
     * - SOCIAL_URL
-      - Crafter Social URL
+      - Crafter Social |enterpriseOnly| URL
       - ``http://$TOMCAT_HOST:$TOMCAT_HTTP_PORT/crafter-social``
 
 See the following for examples on where the above URL environment variables are used:
@@ -624,10 +655,10 @@ Here are the environment variables used for configuring the Deployer:
 
 .. _env-var-mongodb:
 
-~~~~~~~
-MongoDB
-~~~~~~~
-Here are the environment variables used for configuring MongoDB:
+~~~~~~~~~~~~~~~~~~~~~~~~
+MongoDB |enterpriseOnly|
+~~~~~~~~~~~~~~~~~~~~~~~~
+These variables apply only when using Crafter Profile or Crafter Social |enterpriseOnly|. MongoDB is not required for the core CMS.
 
 .. list-table:: MongoDB Environment Variables
     :header-rows: 1
@@ -742,6 +773,48 @@ You must update these per installation and provide these tokens to the status mo
       - Authorization token for Social
       - defaultManagementToken
 
+.. _env-var-profile-access-tokens:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Profile Access Tokens |enterpriseOnly|
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Here are the environment variables used for configuring the Crafter Profile |enterpriseOnly| REST API access tokens used
+by Profile, Engine, and Social. When ``access-tokens.env`` does not exist, set all three, or leave all three unset.
+Startup stops when Profile is deployed, ``$CRAFTER_DATA_DIR/profile/access-tokens.env`` is missing, and either:
+
+* only some of ``PROFILE_ADMIN_ACCESS_TOKEN_ID``, ``PROFILE_ENGINE_ACCESS_TOKEN_ID``, and
+  ``PROFILE_SOCIAL_ACCESS_TOKEN_ID`` are set, or
+* none of them is set and local MongoDB data already exists, or ``MONGODB_HOST`` is not ``localhost`` or ``127.0.0.1``.
+
+.. list-table:: Profile Access Token Environment Variables
+    :header-rows: 1
+
+    * - Variable Name
+      - Description
+      - Default Value
+    * - PROFILE_ADMIN_ACCESS_TOKEN_ID
+      - Access token ID for the Profile Admin client. Profile also seeds this ID as the ``profile-admin`` token.
+      -
+    * - PROFILE_ENGINE_ACCESS_TOKEN_ID
+      - Access token ID Engine uses to call Profile. Profile also seeds this ID as the ``engine`` token.
+      -
+    * - PROFILE_SOCIAL_ACCESS_TOKEN_ID
+      - Access token ID Social uses to call Profile. Profile also seeds this ID as the ``social`` token.
+      -
+    * - PROFILE_ACCESS_TOKENS_FILE
+      - File that stores the three access token IDs
+      - $CRAFTER_DATA_DIR/profile/access-tokens.env
+
+On a new local Authoring installation, CrafterCMS generates the three IDs and writes them to ``PROFILE_ACCESS_TOKENS_FILE``
+with mode ``600``. ``PROFILE_ACCESS_TOKENS_FILE`` by default is set to ``$CRAFTER_DATA_DIR/profile/access-tokens.env``. If all three ID variables
+are already set, those values are used and the file is not created. A value already set in the environment takes
+precedence over the same value in the file.
+
+Delivery does not generate a token file. Copy Authoring's ``PROFILE_ACCESS_TOKENS_FILE`` to each Delivery node that uses
+Profile, or set the same three ID variables. An installation that does not deploy Profile skips this setup.
+
+See :ref:`upgrade-notes-for-craftercms-4.7.0` before upgrading an existing installation.
+
 .. _env-var-configuration-files-encryption:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -756,13 +829,14 @@ Here are the environment variables used to encrypt and decrypt values inside con
       - Description
       - Default Value
     * - CRAFTER_ENCRYPTION_KEY
-      - Key used for encrypting properties
+      - Key used for encrypting configuration properties
       - default_encryption_key
     * - CRAFTER_ENCRYPTION_SALT
-      - Salt used for encrypting properties
+      - Salt used for encrypting configuration properties
       - default_encryption_salt
 
 You must change the pre-configured default values for these environment variables to secure your installation.
+
 See the following for more information on using the configuration files encryption environment variables:
 
 - :ref:`change-the-defaults`
@@ -791,6 +865,42 @@ Here are the environment variables used to encrypt and decrypt values in the dat
 
 You must change the pre-configured default values for these environment variables to secure your installation.
 See :ref:`studio-cipher-configuration` for more information on using the above environment variables.
+
+.. _env-var-preview-token-encryption:
+
+~~~~~~~~~~~~~~~~~~~~~~~~
+Preview Token Encryption
+~~~~~~~~~~~~~~~~~~~~~~~~
+.. version_tag::
+    :label: Since
+    :version: 4.7.0
+
+Here are the environment variables used to encrypt and decrypt preview tokens shared by Studio and Engine:
+
+.. list-table:: Preview Token Encryption Environment Variables
+    :header-rows: 1
+
+    * - Variable Name
+      - Description
+      - Default Value
+    * - CRAFTER_PREVIEW_TOKEN_KEY
+      - Key used for encrypting preview tokens
+      - default_preview_token_key
+    * - CRAFTER_PREVIEW_TOKEN_SALT
+      - Salt used for encrypting preview tokens
+      - default_preview_token_salt
+
+You must change the pre-configured default values for these environment variables to secure your installation.
+Preview tokens are prefixed with ``CPT-V1#`` by default. If you need a different prefix, set
+``studio.security.preview.token.prefix`` in Studio and ``crafter.security.preview.token.prefix`` in Engine to the
+same value.
+
+See the following for more information on using the preview token encryption environment variables:
+
+- :ref:`change-the-defaults`
+- :ref:`preview-token`
+- :ref:`engine-security-preview-mode`
+
 
 .. _env-var-serverless-deployments:
 
@@ -945,14 +1055,14 @@ Crafter Deployer ties Studio and Engine together and is responsible for publishi
 
 |hr|
 
--------
-Profile
--------
-Crafter Profile provides a user identity augmentation capability. It allows the project/site developers to add metadata to existing identity (managed in LDAP for example) and add arbitrary metadata to it, or, it can manage the identity entirely if desired. Learn more about Crafter Profile configuration and administration in :ref:`Profile Configuration and Administration <crafter-profile-admin>`.
+------------------------
+Profile |enterpriseOnly|
+------------------------
+Crafter Profile |enterpriseOnly| provides a user identity augmentation capability. It allows the project/site developers to add metadata to existing identity (managed in LDAP for example) and add arbitrary metadata to it, or, it can manage the identity entirely if desired. Learn more about Crafter Profile configuration and administration in :ref:`Profile Configuration and Administration <crafter-profile-admin>`.
 
 |hr|
 
--------
-Social
--------
-Crafter Social provides a user generated content management system. It allows the project/site developers to handle all actions related to user-generated content (UGC), including the creation, updating and moderation of content. Learn more about Crafter Social configuration and administration in :ref:`Social Configuration and Administration <crafter-social-admin>`.
+-----------------------
+Social |enterpriseOnly|
+-----------------------
+Crafter Social |enterpriseOnly| provides a user generated content management system. It allows the project/site developers to handle all actions related to user-generated content (UGC), including the creation, updating and moderation of content. Learn more about Crafter Social configuration and administration in :ref:`Social Configuration and Administration <crafter-social-admin>`.

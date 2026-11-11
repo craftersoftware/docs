@@ -1,0 +1,58 @@
+.. index:: CrafterCMS version 4.7.0 Release Notes
+
+-----------------------------------
+CrafterCMS Version 4.7.0 and 4.7.0E
+-----------------------------------
+Released *October 21, 2026*
+
+.. important::
+
+    Please see :ref:`upgrade-notes-for-craftercms-4.7.0` for an important note and
+    :ref:`Breaking changes <breaking-changes-4-x>` for breaking changes and other
+    things to consider before upgrading
+
+    For instructions on how to update your CrafterCMS install, please see :ref:`upgrading-craftercms`
+
+^^^^^^^^^^^^
+New Features
+^^^^^^^^^^^^
+* New basic ``users.properties`` file to support Engine authentication |br|
+  See :ref:`engine-users-properties` for more information
+
+* New configuration property ``studio.authoring.serverUrl`` for external/browser-facing Studio links. |br|
+  See :ref:`studio-authoring-url` for more information
+
+* New :base_url:`generatePreviewToken <_static/api/studio.html#tag/security/operation/generatePreviewToken>` API for
+  generating preview tokens. The Token Management UI now uses this API instead of the general-purpose encryption API.
+
+^^^^^^^^^^^^
+Enhancements
+^^^^^^^^^^^^
+* Deployer target management APIs now accept the management token in the
+  ``X-Crafter-Management-Token`` header, preventing the token from being exposed in URLs and request logs.
+  See :ref:`Breaking changes <breaking-changes-in-craftercms-4-7-0>` for the required client changes.
+
+* Engine now reports detailed URL rewrite configuration errors and continues serving the site without URL rewriting
+  when the configuration is invalid.
+
+* Crafter Profile |enterpriseOnly| now uses configurable access tokens. New Authoring installations generate
+  installation-specific token IDs and store them in ``$CRAFTER_DATA_DIR/profile/access-tokens.env``. |br|
+  See :ref:`env-var-profile-access-tokens` and :ref:`upgrade-notes-for-craftercms-4.7.0` for the configuration required
+  before an existing installation can start.
+
+^^^^^^^^^^^^^^^^^^
+Dependency Updates
+^^^^^^^^^^^^^^^^^^
+* Noteworthy dependency updates:
+
+  - OpenSearch to version 3.9
+  - AWS SDK to version 2.56.0
+  - Apache Commons Lang to version 3.21.0
+  - Joda Time to version 2.15.0
+
+For a complete list of community tickets, please visit: `GitHub 4.7.0 <https://github.com/orgs/craftersoftware/projects/68/views/1?filterQuery=>`_
+
+For information on upgrading 3.1.x sites, see :ref:`here <compatibility-with-3.1.x>`
+
+|hr|
+

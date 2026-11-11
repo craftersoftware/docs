@@ -95,7 +95,10 @@ The project level permissions are defined in the file ``permission-mappings-conf
     * - encryption_tool
       - User is permitted to access the :ref:`encryption tool <studio-encryption-tool>` |br|
         Required when using the API to :base_url:`Encrypt a text value <_static/api/studio.html#tag/security/operation/encrypt>`
-
+    * - manage_access_token
+      - User is permitted to generate preview tokens for the project. |br|
+        Required when using the API to
+        :base_url:`Generate preview token <_static/api/studio.html#tag/security/operation/generatePreviewToken>`
     * - get_children
       - User is permitted to call getChildren* APIs for browsing project content |br|
         Required when using the following APIs:

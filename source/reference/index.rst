@@ -38,9 +38,9 @@ CrafterCMS comprises a set of modules that work together.
       - The content deployment system which moves content from Studio to Engine and Search.
     * - :ref:`Crafter CLI <crafter-cli>`
       - Crafter CLI allows you to authenticate with CrafterCMS and exercise its APIs via a Unix, Mac, or Windows command line interface.
-    * - :ref:`Profile<crafter-profile>`
+    * - :ref:`Profile<crafter-profile>` |enterpriseOnly|
       - Profile and attribute store
-    * - :ref:`Social<crafter-Social>`
+    * - :ref:`Social<crafter-Social>` |enterpriseOnly|
       - User generated content store
 
 .. toctree::
@@ -92,9 +92,9 @@ REST API
       - :ref:`Crafter Engine APIs <crafter-engine-api>`
     * - :ref:`Deployer<crafter-deployer>`
       - :ref:`Crafter Deployer APIs <crafter-deployer-api>`
-    * - :ref:`Profile<crafter-profile>`
+    * - :ref:`Profile<crafter-profile>` |enterpriseOnly|
       - :ref:`Crafter Profile APIs <crafter-profile-api>`
-    * - :ref:`Social<crafter-Social>`
+    * - :ref:`Social<crafter-Social>` |enterpriseOnly|
       - :ref:`Crafter Social APIs <crafter-social-api>`
 
 |hr|
@@ -116,7 +116,7 @@ Complimentary Projects
     *   - Docker Compose
         - `Docker Compose on GitHub <https://github.com/craftercms/docker-compose>`_
     *   - Docker Images
-        - `Docker Images on GitHub <https://github.com/craftercms/docker-images>`_
+        - `Docker Hub <https://hub.docker.com/u/craftercms>`__ | `Source on GitHub <https://github.com/craftercms/docker-images>`__
     *   - Kubernetes
         - `Kubernetes Deployments on GitHub <https://github.com/craftercms/kubernetes-deployments>`_
     *   - DevContentOps Toolkit (Crafter CLI)

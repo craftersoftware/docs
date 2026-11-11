@@ -57,7 +57,7 @@ CrafterCMS comprises a number of services that work together to provide a comple
     * - :ref:`Studio<crafter-studio>`
       - Studio provides all the content management services to enable authoring, management, and publishing of all content.
     * - :ref:`Engine<crafter-engine>`
-      - Engine provides content delivery services to power any type of Web or mobile application.
+      - Engine provides content delivery services to power any type of Web or mobile application. It is multi-tenant and can deliver many projects from a single instance.
     * - :ref:`Deployer<crafter-deployer>`
       - The content deployment system which moves content from Studio to Engine and Search.
 
@@ -79,7 +79,7 @@ A truly decoupled system will support disconnected delivery (think of a delivery
 
 |
 
-How can CrafterCMS deliver a dynamic experience? During ingestion, the delivery tier indexes the content into a local search engine and builds in-memory representation of content items to help drive the dynamic behavior. The search engine and in-memory store are local and therefore share nothing with other nodes, however, you're now able to search and build dynamic responses. These dynamic responses can be driven by defined user personas along with user identity or prior user behavior. If you have a user store, behavior stream, or social media profile access, you can then tailor the content dynamically in real time. CrafterCMS has two *optional* modules that support this and can be combined/layered with other systems; Crafter Profile (user identity and behavior store), and Crafter Social (User-generated-content store).
+How can CrafterCMS deliver a dynamic experience? During ingestion, the delivery tier indexes the content into a local search engine and builds an in-memory representation of content items to help drive the dynamic behavior. The search engine and in-memory store are local and therefore share nothing with other nodes; however, you're now able to search and build dynamic responses. These dynamic responses can be driven by defined user personas along with user identity or prior user behavior. If you have a user store, behavior stream, or social media profile access, you can then tailor the content dynamically in real time.
 
 ^^^^^^^^^^^^^^^^^^^^^^^
 Application Development

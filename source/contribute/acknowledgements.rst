@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.1
+:last-updated: 4.7.1
 
 .. meta::
     :description lang=en:
@@ -15,6 +15,8 @@ Open Source Acknowledgements
 CrafterCMS acknowledges the following Open Source Software used in this product:
 |br|
 `cglib:cglib <https://mvnrepository.com/artifact/cglib/cglib>`_
+|br|
+`ch.sbb.html5diff:html5diff <https://mvnrepository.com/artifact/ch.sbb.html5diff/html5diff>`_
 |br|
 `com.drewnoakes:metadata-extractor <https://mvnrepository.com/artifact/com.drewnoakes/metadata-extractor>`_
 |br|
@@ -34,19 +36,41 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 |br|
 `com.fasterxml.jackson.datatype:jackson-datatype-jsr310 <https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310>`_
 |br|
+`com.github.ben-manes.caffeine:caffeine <https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine>`_
+|br|
 `com.github.lookfirst:sardine <https://mvnrepository.com/artifact/com.github.lookfirst/sardine>`_
 |br|
+`com.google.code.findbugs:findbugs <https://mvnrepository.com/artifact/com.google.code.findbugs/findbugs>`_
+|br|
 `com.google.code.gson:gson <https://mvnrepository.com/artifact/com.google.code.gson/gson>`_
+|br|
+`com.google.guava:guava-collections <https://mvnrepository.com/artifact/com.google.guava/guava-collections>`_
 |br|
 `com.google.guava:guava <https://mvnrepository.com/artifact/com.google.guava/guava>`_
 |br|
 `com.google.protobuf:protobuf-java <https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java>`_
 |br|
+`com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer <https://mvnrepository.com/artifact/com.googlecode.owasp-java-html-sanitizer/owasp-java-html-sanitizer>`_
+|br|
 `com.graphql-java:graphql-java-extended-scalars <https://mvnrepository.com/artifact/com.graphql-java/graphql-java-extended-scalars>`_
 |br|
 `com.graphql-java:graphql-java <https://mvnrepository.com/artifact/com.graphql-java/graphql-java>`_
 |br|
+`com.icegreen:greenmail <https://mvnrepository.com/artifact/com.icegreen/greenmail>`_
+|br|
 `com.jayway.jsonpath:json-path-assert <https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path-assert>`_
+|br|
+`com.jayway.jsonpath:json-path <https://mvnrepository.com/artifact/com.jayway.jsonpath/json-path>`_
+|br|
+`com.nulab-inc:zxcvbn <https://mvnrepository.com/artifact/com.nulab-inc/zxcvbn>`_
+|br|
+`com.rometools:rome-utils <https://mvnrepository.com/artifact/com.rometools/rome-utils>`_
+|br|
+`com.squareup.okhttp3:okhttp-jvm <https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp-jvm>`_
+|br|
+`com.sun.xml.bind:jaxb-core <https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-core>`_
+|br|
+`com.sun.xml.bind:jaxb-impl <https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl>`_
 |br|
 `com.thoughtworks.xstream:xstream <https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream>`_
 |br|
@@ -60,21 +84,39 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 |br|
 `commons-codec:commons-codec <https://mvnrepository.com/artifact/commons-codec/commons-codec>`_
 |br|
+`commons-collections:commons-collections <https://mvnrepository.com/artifact/commons-collections/commons-collections>`_
+|br|
 `commons-io:commons-io <https://mvnrepository.com/artifact/commons-io/commons-io>`_
+|br|
+`commons-lang:commons-lang <https://mvnrepository.com/artifact/commons-lang/commons-lang>`_
+|br|
+`info.picocli:picocli <https://mvnrepository.com/artifact/info.picocli/picocli>`_
 |br|
 `io.methvin:directory-watcher <https://mvnrepository.com/artifact/io.methvin/directory-watcher>`_
 |br|
 `jakarta.activation:jakarta.activation-api <https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api>`_
 |br|
+`jakarta.mail:jakarta.mail-api <https://mvnrepository.com/artifact/jakarta.mail/jakarta.mail-api>`_
+|br|
 `jakarta.servlet:jakarta.servlet-api <https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api>`_
 |br|
+`jakarta.servlet.jsp:jakarta.servlet.jsp-api <https://mvnrepository.com/artifact/jakarta.servlet.jsp/jakarta.servlet.jsp-api>`_
+|br|
+`jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api <https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api>`_
+|br|
 `jakarta.validation:jakarta.validation-api <https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api>`_
+|br|
+`jakarta.xml.bind:jakarta.xml.bind-api <https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api>`_
+|br|
+`javax.inject:javax.inject <https://mvnrepository.com/artifact/javax.inject/javax.inject>`_
 |br|
 `javax.measure:unit-api <https://mvnrepository.com/artifact/javax.measure/unit-api>`_
 |br|
 `javax.transaction:jta <https://mvnrepository.com/artifact/javax.transaction/jta>`_
 |br|
 `javax.xml.bind:jaxb-api <https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api>`_
+|br|
+`jaxen:jaxen <https://mvnrepository.com/artifact/jaxen/jaxen>`_
 |br|
 `joda-time:joda-time <https://mvnrepository.com/artifact/joda-time/joda-time>`_
 |br|
@@ -83,6 +125,8 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 `net.i2p.crypto:eddsa <https://mvnrepository.com/artifact/net.i2p.crypto/eddsa>`_
 |br|
 `net.sf.saxon:Saxon-HE <https://mvnrepository.com/artifact/net.sf.saxon/Saxon-HE>`_
+|br|
+`org.apache.bcel:bcel <https://mvnrepository.com/artifact/org.apache.bcel/bcel>`_
 |br|
 `org.apache.commons:commons-collections4 <https://mvnrepository.com/artifact/org.apache.commons/commons-collections4>`_
 |br|
@@ -100,13 +144,13 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 |br|
 `org.apache.commons:commons-text <https://mvnrepository.com/artifact/org.apache.commons/commons-text>`_
 |br|
-`org.apache.cxf:cxf-rt-frontend-jaxws <https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-frontend-jaxws>`_
-|br|
-`org.apache.cxf:cxf-rt-transports-http <https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-transports-http>`_
-|br|
-`org.apache.cxf:cxf-rt-ws-policy <https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-ws-policy>`_
-|br|
 `org.apache.groovy:groovy-all <https://mvnrepository.com/artifact/org.apache.groovy/groovy-all>`_
+|br|
+`org.apache.groovy:groovy-sql <https://mvnrepository.com/artifact/org.apache.groovy/groovy-sql>`_
+|br|
+`org.apache.groovy:groovy <https://mvnrepository.com/artifact/org.apache.groovy/groovy>`_
+|br|
+`org.apache.httpcomponents:httpmime <https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime>`_
 |br|
 `org.apache.httpcomponents.client5:httpclient5 <https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5>`_
 |br|
@@ -121,8 +165,6 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 `org.apache.logging.log4j:log4j-jakarta-web <https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-jakarta-web>`_
 |br|
 `org.apache.logging.log4j:log4j-slf4j2-impl <https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl>`_
-|br|
-`org.apache.poi:poi-scratchpad <https://mvnrepository.com/artifact/org.apache.poi/poi-scratchpad>`_
 |br|
 `org.apache.tika:tika-core <https://mvnrepository.com/artifact/org.apache.tika/tika-core>`_
 |br|
@@ -174,6 +216,8 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 |br|
 `org.jdom:jdom2 <https://mvnrepository.com/artifact/org.jdom/jdom2>`_
 |br|
+`org.jenkins-ci:test-annotations <https://mvnrepository.com/artifact/org.jenkins-ci/test-annotations>`_
+|br|
 `org.jongo:jongo <https://mvnrepository.com/artifact/org.jongo/jongo>`_
 |br|
 `org.jsoup:jsoup <https://mvnrepository.com/artifact/org.jsoup/jsoup>`_
@@ -194,10 +238,6 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 |br|
 `org.mongodb:bson <https://mvnrepository.com/artifact/org.mongodb/bson>`_
 |br|
-`org.mongodb:mongodb-driver-legacy <https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-legacy>`_
-|br|
-`org.mongodb:mongodb-driver-sync <https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-sync>`_
-|br|
 `org.mybatis:mybatis-spring <https://mvnrepository.com/artifact/org.mybatis/mybatis-spring>`_
 |br|
 `org.mybatis:mybatis <https://mvnrepository.com/artifact/org.mybatis/mybatis>`_
@@ -205,8 +245,6 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 `org.opensearch.client:opensearch-java <https://mvnrepository.com/artifact/org.opensearch.client/opensearch-java>`_
 |br|
 `org.opensearch.client:opensearch-rest-high-level-client <https://mvnrepository.com/artifact/org.opensearch.client/opensearch-rest-high-level-client>`_
-|br|
-`org.owasp.esapi:esapi <https://mvnrepository.com/artifact/org.owasp.esapi/esapi>`_
 |br|
 `org.quartz-scheduler:quartz <https://mvnrepository.com/artifact/org.quartz-scheduler/quartz>`_
 |br|
@@ -244,15 +282,23 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 |br|
 `org.springframework:spring-websocket <https://mvnrepository.com/artifact/org.springframework/spring-websocket>`_
 |br|
+`org.springframework.boot:spring-boot-jackson2 <https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-jackson2>`_
+|br|
 `org.springframework.boot:spring-boot-starter-log4j2 <https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-log4j2>`_
+|br|
+`org.springframework.boot:spring-boot-starter-restclient <https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-restclient>`_
 |br|
 `org.springframework.boot:spring-boot-starter-test <https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test>`_
 |br|
 `org.springframework.boot:spring-boot-starter-web <https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web>`_
 |br|
+`org.springframework.boot:spring-boot-starter <https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter>`_
+|br|
 `org.springframework.data:spring-data-commons <https://mvnrepository.com/artifact/org.springframework.data/spring-data-commons>`_
 |br|
 `org.springframework.ldap:spring-ldap-core <https://mvnrepository.com/artifact/org.springframework.ldap/spring-ldap-core>`_
+|br|
+`org.springframework.security:spring-security-access <https://mvnrepository.com/artifact/org.springframework.security/spring-security-access>`_
 |br|
 `org.springframework.security:spring-security-config <https://mvnrepository.com/artifact/org.springframework.security/spring-security-config>`_
 |br|
@@ -301,6 +347,8 @@ CrafterCMS acknowledges the following Open Source Software used in this product:
 `@babel/preset-env <https://www.npmjs.com/package/@babel/preset-env>`_
 |br|
 `@babel/preset-react <https://www.npmjs.com/package/@babel/preset-react>`_
+|br|
+`@base-ui/react <https://www.npmjs.com/package/@base-ui/react>`_
 |br|
 `@emotion/css <https://www.npmjs.com/package/@emotion/css>`_
 |br|

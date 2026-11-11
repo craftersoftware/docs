@@ -1602,6 +1602,66 @@ To learn more about these dependencies and see examples, see :ref:`item-specific
 
 |hr|
 
+.. _renaming-a-page:
+
+^^^^^^^^^^^^^^^
+Renaming a Page
+^^^^^^^^^^^^^^^
+Renaming a page changes its file name, which is also the last part of the page URL. Authors rename pages from
+the content form, not from the Sidebar menu.
+
+To rename a page, open it for edit (see :ref:`editing-page`). In the content form, find the ``file-name`` control.
+Let's use a site created using the Editorial blueprint for this example. The ``file-name`` control's ``Title``
+for pages is **Page URL**.
+
+When you are editing an existing page, the field is locked and an **Edit** button appears next to the field name.
+
+.. image:: /_static/images/page/page-rename-edit-btn.webp
+   :width: 70 %
+   :align: center
+   :alt: Content Author - Rename Page File Name Edit Button
+
+|
+
+Click **Edit**. A **Rename Content** dialog opens. Enter the new name, then click **Rename**.
+
+.. image:: /_static/images/page/page-rename-dialog.webp
+   :width: 60 %
+   :align: center
+   :alt: Content Author - Rename Content Dialog
+
+|
+
+The dialog lists items that depend on the current path. If dependents are listed, check
+``I understand that there will be broken references`` before **Rename** is enabled. After the dialog
+closes, click **Save & Close** on the content form to apply the new name.
+
+.. image:: /_static/images/page/component-rename-with-dependency.webp
+   :width: 80 %
+   :align: center
+   :alt: Content Author - Rename Content Dialog
+
+|
+
+Page and component names must consist of **lowercase letters without accents, numbers, dash (-) and
+underscore (_)**. Spaces are converted to dashes. The name must be unique in the same folder.
+
+.. note::
+   The home page (``/site/website/index.xml``) cannot be renamed. Some content types use an automatic
+   file name; in that case the **Page URL** field is not editable.
+
+After you rename a page:
+
+* Submit the page for publish (or publish it) so the new URL is available in staging/live.
+* Update any links, menus, or other items that still point at the old path. The Rename dialog lists
+  dependents to help you find them. Remember to publish updated dependent items after path changes.
+* Until the rename is published, delivery continues to serve the page at its old URL; the new URL is not available.
+
+Renaming a component follows the same steps: open the component form, click **Edit** next to
+the ``file-name`` control, which for the Editorial bp is **Component ID**, enter the new name, then save the form.
+
+|hr|
+
 ^^^^^^^^^^^^^^^
 Deleting a Page
 ^^^^^^^^^^^^^^^
@@ -1830,6 +1890,55 @@ Once the file is uploaded, the dialog will close and the asset will now be in th
 
 |
 
+^^^^^^^^^^^^^^^^^
+Renaming an Asset
+^^^^^^^^^^^^^^^^^
+To rename a static asset (image, video, PDF, and similar files), in the Sidebar click **Static Assets**.
+Navigate to the file, click the three dots next to it, then select **Rename**.
+
+.. image:: /_static/images/page/page-asset-rename-menu.webp
+    :alt: Static Assets - Rename Menu
+    :width: 40 %
+    :align: center
+
+|
+
+The **Rename Asset** dialog opens. Enter the **New name**, including the file extension.
+
+.. image:: /_static/images/page/page-asset-rename-dialog.webp
+    :alt: Static Assets - Rename Dialog
+    :width: 60 %
+    :align: center
+
+|
+
+Asset names may consist of **letters, numbers, dot (.), dash (-) and underscore (_)**. The name must
+be unique in the same folder.
+
+If other items use the asset, they appear under **Dependent Items**. Check
+``I understand that there will be broken references`` to enable **Rename**. You can open an editable
+dependent from the list and update its path before or after the rename.
+Click **Rename** to apply the change, then publish the asset (and any items you updated) so delivery
+uses the new path.
+The same **Rename** action is available for templates and scripts from their folders in the Sidebar.
+
+"""""""""""""""""""
+Renaming a Folder
+"""""""""""""""""""
+To rename a folder, click the three dots next to the folder in the Sidebar and select **Rename**.
+Enter the new folder name and confirm the warning that the action may break references to items
+in the folder.
+When you rename (or cut/move) a folder:
+
+* Items in the folder **must** be published individually or in bulk to complete the move in the
+  staged or live project.
+* Change references so they point to the new paths. Remember to publish these changes as well.
+
+Some paths cannot be renamed. Project administrators can mark additional folders as protected.
+See :ref:`project-config-protected-folders`.
+
+.. include:: /includes/valid-file-names.rst
+
 ^^^^^^^^^^^^^^^
 Removing Assets
 ^^^^^^^^^^^^^^^
@@ -1935,14 +2044,16 @@ Here's the search results in list view:
 **Filtering Results**:  Crafter Studio supports multiple ways to filter search results. Depending on your search results, different filters will be available. Generally, you can sort your search results based on the following:
 
 * Sort By
-  * Relevance
-  * Name
-  * Width
-  * Content Type
-  * MIME Type
-  * Content Size
-  * Last Edit  Date
-  * Height
+
+  * Auto - default sort option used by Studio. If there's no keyword, sort by Name in ascending order (A → Z)  and if there's a keyword, sort by Relevance, most relevant first
+  * Relevance - OpenSearch relevance score
+  * Name - The item's display name
+  * Width - Image (or media) width in pixels
+  * Content Type - Studio content type
+  * MIME Type - File media type e.g. image/jpeg, application/xml, etc.
+  * Content Size - File/content size (bytes)
+  * Last Edit Date - When the item was last edited
+  * Height - Image (or media) height in pixels
 
 * Path
 * Width

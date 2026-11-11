@@ -21,6 +21,8 @@ Delivery
 --------
 CrafterCMS's delivery tier is designed to be perfectly horizontally scalable. The delivery tier is a shared-nothing architecture, meaning that each node in the delivery tier is independent of the other nodes. This allows for the delivery tier to be scaled horizontally by simply adding more nodes to the delivery tier. The delivery tier can also be scaled vertically by adding more resources.
 
+Each delivery Engine is also multi-tenant: one Engine can deliver many projects.
+
 Therefore, there is never a need to build traditional clusters for the delivery tier.
 
 Global distribution of delivery nodes is then a matter of deploying Crafter Engine nodes in different regions, and using a DNS service to route traffic to the region closest to the user. Crafter Deployer is capable of deploying content to multiple regions, and enabling region specific search engines to be used as well to completely decentralize the delivery tier.
@@ -272,7 +274,9 @@ Not all storage devices are created equal. The fast the read/write speeds and th
         {CRAFTER_HOME}/data/db (high-concurrency, important)
         {CRAFTER_HOME}/data/indexes
         {CRAFTER_HOME}/data/logs
-        {CRAFTER_HOME}/data/mongodb (if in use)
+        {CRAFTER_HOME}/data/mongodb (|enterpriseOnly|)
+
+MongoDB storage applies only when using Crafter Profile or Crafter Social |enterpriseOnly|.
 
 |
 
@@ -292,7 +296,7 @@ One optimization to raise effective IOPS of a system without buying very expensi
         /dev/{dev2} -> /opt/crafter/data/repos
         /dev/{dev3} -> /opt/crafter/data/indexes
         /dev/{dev4} -> /opt/crafter/logs
-        /dev/{dev5} -> /opt/crafter/data/mongodb
+        /dev/{dev5} -> /opt/crafter/data/mongodb  (Profile / Social, if in use)
         /dev/{dev6} -> /var
         /dev/{dev7} -> /home
         /dev/{dev8} -> /usr

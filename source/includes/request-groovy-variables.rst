@@ -28,7 +28,7 @@
 |                        || current request                     ||                                |
 +------------------------+--------------------------------------+---------------------------------+
 
-The following variables are provided for backward compatibility when using Crafter Profile, should be replaced
+The following variables are provided for backward compatibility when using Crafter Profile |enterpriseOnly|, should be replaced
 with ``authToken`` if possible:
 
 +------------------------+--------------------------------------+---------------------------------+

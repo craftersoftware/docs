@@ -1,0 +1,53 @@
+.. index:: CrafterCMS version 4.6.0 Release Notes
+
+-----------------------------------
+CrafterCMS Version 4.6.0 and 4.6.0E
+-----------------------------------
+
+Released *September 21, 2026*
+
+.. important::
+
+    Please see :ref:`Breaking changes <breaking-changes-4-x>` for breaking changes and other
+    things to consider before upgrading
+
+    For instructions on how to update your CrafterCMS install, please see :ref:`upgrading-craftercms`
+
+^^^^^^^^^^^^
+Enhancements
+^^^^^^^^^^^^
+* `Improved publishing <https://github.com/craftersoftware/craftercms/issues/8793>`__
+
+  Publishing soft dependencies are limited to items the current user is allowed to publish. Items the user cannot publish are omitted from the soft dependency list when requesting to publish.
+
+* ``SiteItemService`` now returns items only for URLs that match the configured descriptor paths in ``crafter.engine.site.default.descriptors.allowed.paths``.
+
+  See :ref:`engine-site-allowed-descriptor-paths` for more information.
+
+* The Site Search API now rejects restricted JSON keys in the request body.
+
+  See :ref:`engine-search-restricted-key-patterns` for more information on configuring restricted key patterns.
+
+^^^^^^^^^
+Bug Fixes
+^^^^^^^^^
+* `Fixed issue with Groovy based REST APIs defaulting to XML even when JSON extension is present <https://github.com/craftersoftware/craftercms/issues/9015>`__
+
+  See :ref:`breaking-changes-in-craftercms-4-6-0` for some important changes to Engine REST scripts.
+
+^^^^^^^^^^^^^^^^^^
+Dependency Updates
+^^^^^^^^^^^^^^^^^^
+* Noteworthy dependency updates:
+
+  - Spring Framework to version 7.0.9
+  - Spring Security to version 7.1.1
+  - Spring Boot to version 4.1.1
+  - Mybatis-Spring to version 4.1.0
+
+For a complete list of community tickets, please visit: `GitHub 4.6.0 <https://github.com/orgs/craftersoftware/projects/63/views/1?filterQuery=>`_
+
+For information on upgrading 3.1.x sites, see :ref:`here <compatibility-with-3.1.x>`
+
+|hr|
+

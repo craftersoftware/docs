@@ -1,8 +1,8 @@
 .. index:: CrafterCMS version 4.2.2 Release Notes
 
-------------------------
-CrafterCMS Version 4.2.2
-------------------------
+-----------------------------------
+CrafterCMS Version 4.2.2 and 4.2.2E
+-----------------------------------
 
 Released *January 15, 2025*
 

@@ -25,7 +25,7 @@
      - Helper class that creates navigation trees to facilitate rendering.
      - |NavTreeBuilder|
    * - tenantsResolver
-     - Can be used to retrieve the Profile tenants associated to the current site.
+     - Can be used to retrieve the Profile tenants associated to the current site. |enterpriseOnly|
      - |TenantsResolver|
    * - modePreview
      - Can be used to check whether Engine is being executed in preview mode (also the value of the ``crafter.engine.preview`` property) e.g.
@@ -66,7 +66,7 @@
      - The current authentication (if the user has logged in), created by Spring Security
      - |SpringAuthentication|
 
-The following variables are provided for backward compatibility when using Crafter Profile, should be replaced
+The following variables are provided for backward compatibility when using Crafter Profile |enterpriseOnly|, should be replaced
 with ``authToken`` if possible:
 
 .. list-table::

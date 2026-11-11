@@ -1,0 +1,25 @@
+.. index:: CrafterCMS version 4.7.1 Release Notes
+
+-----------------------------------
+CrafterCMS Version 4.7.1 and 4.7.1E
+-----------------------------------
+Released *November 3, 2026*
+
+.. important::
+
+    Please see :ref:`Breaking changes <breaking-changes-4-x>` for breaking changes and other
+    things to consider before upgrading
+
+    For instructions on how to update your CrafterCMS install, please see :ref:`upgrading-craftercms`
+
+^^^^^^^^^^^^^^^^^^
+Dependency Updates
+^^^^^^^^^^^^^^^^^^
+* Noteworthy dependency updates:
+
+  - Handlebars to version 4.7.10
+
+For information on upgrading 3.1.x sites, see :ref:`here <compatibility-with-3.1.x>`
+
+|hr|
+

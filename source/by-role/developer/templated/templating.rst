@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.8
+:last-updated: 4.6.0
 
 .. index:: Templating
 
@@ -647,6 +647,12 @@ CrafterCMS provides some out-of-the-box blueprints that shows examples of templa
 - `commerceTools Blueprint <https://github.com/craftercms/commercetools-blueprint>`_
 - `Wordify Blueprint <https://github.com/craftercms/wordify-blueprint>`_
 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Content Queries in Groovy and FreeMarker
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The article :ref:`content-queries-groovy-freemarker` shows how to query content in Groovy page and component
+controllers and render the results in FreeMarker templates, using the Website Editorial blueprint.
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Using FreeMarker Date Built-ins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -657,4 +663,5 @@ The article :ref:`working-with-dates-in-freemarker` describes how to use the Fre
    :titlesonly:
    :hidden:
 
+   content-queries-groovy-freemarker
    working-with-dates-freemarker

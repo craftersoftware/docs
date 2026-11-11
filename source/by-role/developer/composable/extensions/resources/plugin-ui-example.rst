@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.1
+:last-updated: 4.5.2
 
 .. index:: Crafter Studio UI Plugin Examples, Studio Plugins, Plugins
 
@@ -45,6 +45,9 @@ Here's a list of the plugin examples described in this article:
    * - :ref:`Navigation Menu <plugin-navmenu-example>`
      - ``navmenu``
      - A tile in the Navigation Menu (Launcher)
+   * - :ref:`Translations <plugin-translations-example>`
+     - ``library``
+     - Overriding the translations for the example placeholder text in the `Activity` widget in the Dashboard
    * - :ref:`Form Engine Control <building-plugins-controls>`
      - ``control``
      - A control in the Content Type Editor
@@ -56,15 +59,15 @@ All the examples below use a project called ``My Editorial`` created using the *
 
 |hr|
 
------------------------------------
+------------------------
 Studio UI Widget Plugins
------------------------------------
+------------------------
 
 .. _plugin-ui-example-process:
 
--------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Creating Your Studio UI Widget Plugin
--------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Here are the steps for creating your Studio UI widget plugin:
 
 #. Create the folder structure
@@ -129,18 +132,18 @@ section for your target location.
 
 .. _plugin-ui-example-positioning:
 
---------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Positioning the Widget in the UI
---------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Each section below provides the location-specific pieces for :ref:`the process above <plugin-ui-example-process>`:
 the plugin ``type``, the directory structure, the ``installation`` auto-wiring block, where to see the widget
 in action, and the resulting section in the User Interface Configuration file after installation.
 
 .. _plugin-sidebar-example:
 
-^^^^^^^
+"""""""
 Sidebar
-^^^^^^^
+"""""""
 The Sidebar is the panel located on the left side of Studio, containing the ``Dashboard``, path navigators such
 as ``Pages`` and ``Components``, and |projectTools|.
 
@@ -258,9 +261,9 @@ Here's the auto-wired section in the configuration after installing the plugin:
 
 .. _plugin-experience-builder-plugin-example:
 
-^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""
 Experience Builder Panel
-^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""
 The Experience Builder panel is the panel on the right of Studio that is enabled by clicking on ``Edit mode``
 (pencil icon) or ``Move mode`` (two vertical ellipsis icon) on the top right of Studio, or by hitting the
 ``e`` or ``m`` key on your keyboard.
@@ -373,9 +376,9 @@ Here's the auto-wired section in the configuration after installing the plugin:
 
 .. _plugin-toolbar-example:
 
-^^^^^^^
+"""""""
 Toolbar
-^^^^^^^
+"""""""
 The toolbar is a fixed element at the top of Studio. It provides contextual workflow and other options relative
 to the page you are looking at, content you have selected, or tool you are using.
 
@@ -505,9 +508,9 @@ Here's the auto-wired section in the configuration after installing the plugin:
 
 .. _plugin-dashboard-example:
 
-^^^^^^^^^
+"""""""""
 Dashboard
-^^^^^^^^^
+"""""""""
 The dashboard contains different dashlets that show, at a glance, all items currently in workflow, all items
 recently modified by the current user, etc. Dashlets shown vary depending on the user's role. For more
 information on the Dashboard, see :ref:`here <project-dashboard>`.
@@ -622,9 +625,9 @@ Here's the auto-wired section in the configuration after installing the plugin:
 
 .. _plugin-project-tools-example:
 
-^^^^^^^^^^^^^
+"""""""""""""
 Project Tools
-^^^^^^^^^^^^^
+"""""""""""""
 |projectTools| contains tools that project administrators use for daily activities. For more information on the
 available tools in |projectTools|, see :ref:`navigating-project-tools`.
 
@@ -746,9 +749,9 @@ Here's the auto-wired section in the configuration after installing the plugin:
 
 .. _plugin-navmenu-example:
 
-^^^^^^^^^^^^^^^
+"""""""""""""""
 Navigation Menu
-^^^^^^^^^^^^^^^
+"""""""""""""""
 The Navigation Menu (Launcher) contains tools that are used for daily activities by users. For more information
 on the Navigation Menu, see :ref:`here <navigating-main-menu>`.
 
@@ -864,6 +867,244 @@ Here's the auto-wired section in the configuration after installing the plugin:
 
 |hr|
 
+.. _plugin-translations-example:
+
+"""""""""""""""""""""
+Translations Override
+"""""""""""""""""""""
+This plugin example shows the user how to override the translations for the example placeholder text in the ``Author``
+filter of the *Activity* widget in the Dashboard.
+
+.. image:: /_static/images/developer/plugins/project-plugins/example-placeholder-text-in-dashboard.webp
+   :align: center
+   :alt: Dashboard example placeholder text in Activity widget
+   :width: 80%
+
+|
+
+Here's the plugin directory structure for our example:
+
+.. code-block:: text
+   :caption: *Translation Override Plugin Directory Structure*
+
+   <plugin-folder>/
+     craftercms-plugin.yaml
+     authoring/
+       static-assets/
+         plugins/
+           org/
+             craftercms/
+               examples/
+                 library/
+                   index.js
+     translations-library/
+       src/
+         components/
+           Translations.tsx
+         i18n/
+           translations/
+             de.json
+             en.json
+             es.json
+             ko.json
+
+|
+
+Below are the sample files listed in the structure above.
+For the translations files, examples for English and Korean are provided.
+Simply click on the triangle next to the summary to expand/collapse the file contents.
+
+.. raw:: html
+
+   <details>
+   <summary><a>Translation override example index.js file</a></summary>
+
+.. code-block:: js
+    :linenos:
+
+    var w7YdZu$3 = "e.g. my-user, author@mail.com";
+    var en = {
+        w7YdZu: w7YdZu$3,
+        "words.activity": "System Activity"
+    };
+
+    var w7YdZu$2 = "ej: mi-usuario, autor@mail.com";
+    var es = {
+        w7YdZu: w7YdZu$2,
+        "words.activity": "Actividad del sistema"
+    };
+
+    var w7YdZu$1 = "z.B. mein-benutzer, autor@mail.com";
+    var de = {
+        w7YdZu: w7YdZu$1,
+        "words.activity": "Systemaktivität"
+    };
+
+    var w7YdZu = "예: my-user, author@mail.com";
+    var ko = {
+        w7YdZu: w7YdZu,
+        "words.activity": "시스템 활동"
+    };
+
+    function Translations() {
+        return null;
+    }
+
+    var plugin = {
+        id: 'org.craftercms.examples.componentLibrary',
+        locales: {
+            en: en,
+            es: es,
+            de: de,
+            ko: ko
+        },
+        widgets: {
+            'org.craftercms.examples.translations': Translations
+        },
+        scripts: [
+        // Below are examples of how to load scripts into the Studio runtime
+        // {
+        //   src: 'https://code.jquery.com/jquery-3.5.1.min.js',
+        //   integrity: 'sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=',
+        //   crossorigin: 'anonymous'
+        // },
+        // 'script.js'
+        ],
+        stylesheets: [
+        // Examples of how to load stylesheets into the Studio runtime
+        // 'index.css'
+        ]
+    };
+
+    export { Translations, plugin as default };
+
+.. raw:: html
+
+   </details>
+
+.. raw:: html
+
+   <details>
+   <summary><a>Translation override example Translations.tsx file</a></summary>
+
+.. code-block:: tsx
+
+    export function Translations() {
+        return null;
+    }
+
+    export default Translations;
+
+
+.. raw:: html
+
+   </details>
+
+.. raw:: html
+
+   <details>
+   <summary><a>Translation override example en.json file</a></summary>
+
+.. code-block:: json
+
+    {
+        "w7YdZu": "e.g. my-user, author@mail.com"
+    }
+
+
+.. raw:: html
+
+   </details>
+
+.. raw:: html
+
+   <details>
+   <summary><a>Translation override example ko.json file</a></summary>
+
+.. code-block:: json
+
+    {
+        "w7YdZu": "예: my-user, author@mail.com"
+    }
+
+
+.. raw:: html
+
+   </details>
+
+|
+
+Add the following ``installation`` block to your ``craftercms-plugin.yaml`` descriptor file:
+
+.. code-block:: yaml
+   :linenos:
+   :caption: *craftercms-plugin.yaml*
+
+   installation:
+     - type: preview-app
+       parentXpath: //widget[@id='craftercms.components.ToolsPanel']
+       elementXpath: //widget[@id='org.craftercms.examples.translations']
+       element:
+         name: configuration
+         children:
+           - name: widgets
+             children:
+               - name: widget
+                 attributes:
+                   - name: id
+                     value: org.craftercms.examples.translations
+                 children:
+                   - name: plugin
+                     attributes:
+                       - name: id
+                         value: org.craftercms
+                       - name: type
+                         value: examples
+                       - name: name
+                         value: library
+                       - name: file
+                         value: index.js
+
+|
+
+To see the plugin in action, open the Dashboard then click on ``Author`` in the ``Activity`` widget:
+
+.. image:: /_static/images/developer/plugins/project-plugins/overridden-placeholder-text-in-dashboard.webp
+   :align: center
+   :alt: Dashboard placeholder text override plugin in action
+
+|
+
+Here's the auto-wired section in the configuration after installing the plugin:
+
+.. code-block:: xml
+   :linenos:
+   :emphasize-lines: 14-19
+
+   <siteUi>
+     ...
+     <widget id="craftercms.components.ToolsPanel">
+      <configuration>
+         <widgets>
+            <widget id="craftercms.components.ToolsPanelEmbeddedAppViewButton">
+               <configuration>
+                  <title id="words.dashboard" defaultMessage="Dashboard"/>
+                  <icon id="@mui/icons-material/DashboardRounded"/>
+                  <widget id="craftercms.components.SiteDashboard"/>
+               </configuration>
+            </widget>
+            ...
+            <widget id="org.craftercms.examples.translations">
+               <plugin id="org.craftercms"
+                       type="examples"
+                       name="library"
+                       file="index.js"/>
+            </widget>
+
+|
+
+|hr|
+
 -----------------------------------
 Form Engine Control and Data Source
 -----------------------------------
@@ -896,14 +1137,13 @@ covered below.
 
 .. _building-plugins-controls:
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 Form Engine Control Plugin
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
------------------
+"""""""""""""""""
 What is a Control
------------------
-
+"""""""""""""""""
 A form control is a UX element to help authors capture and edit content and metadata properties.
 Crafter Studio form controls should be written in a way that makes them independent of the data they allow the user to select so that they can be (re)used across a wide range of data sets.
 
@@ -911,10 +1151,9 @@ Out of the box controls are:
 
 .. include:: /includes/form-controls/list-form-controls.rst
 
----------------------------------------
+"""""""""""""""""""""""""""""""""""""""
 The anatomy of a Control Project Plugin
----------------------------------------
-
+"""""""""""""""""""""""""""""""""""""""
 Form Engine Control consist of (at a minimum)
 
 * A single JavaScript file which implements the control interface.
@@ -925,10 +1164,9 @@ Form Engine Control consist of (at a minimum)
 
 .. _control-interface:
 
------------------
+"""""""""""""""""
 Control Interface
------------------
-
+"""""""""""""""""
 .. code-block:: javascript
     :linenos:
 
@@ -993,10 +1231,9 @@ Control Interface
 
 .. _plugin-directory-structure:
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""""""""""""
 Control Plugin Directory and Example
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+""""""""""""""""""""""""""""""""""""
 When creating control plugins, the JS file goes in the following location:
 
 ``authoring/static-assets/plugins/{yourPluginId}/control/{yourPluginName}/JS_FILE.js``
@@ -1110,10 +1347,9 @@ Here's the complete example form control plugin file for the ``text-input`` cont
 
 |
 
-""""""""""""""""""""""""""""""""""""""""""""""
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Saving additional form control elements to XML
-""""""""""""""""""""""""""""""""""""""""""""""
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 To save additional elements from your form control into the XML content, call ``registerDynamicField`` from the form when initializing the form control. When ``updateField`` is called, your element will be saved into the XML content.
 
  .. code-block:: js
@@ -1126,10 +1362,9 @@ See `here <https://github.com/craftersoftware/craftercms/blob/support/4.x/studio
 
 .. _configure-descriptor-file-for-autowiring:
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""""""""""""""""""""""
 Auto-wiring and Installing a Control Plugin
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+"""""""""""""""""""""""""""""""""""""""""""
 To setup our form control to be automatically wired in the corresponding configuration file in Studio (which for a form control, is the Project Config Tools Configuration file) during the installation, add the following to your ``craftercms-plugin.yaml`` descriptor file:
 
 .. code-block:: yaml
@@ -1215,38 +1450,35 @@ Here's our plugin control added to the list of controls in content types:
 
 .. _building-plugins-form-ds:
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Form Engine Data Source Plugin
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
----------------------
+"""""""""""""""""""""
 What is a Data Source
----------------------
-
+"""""""""""""""""""""
 Crafter Studio form controls should be written in a way that makes them independent of the data they allow the user to select so that they can be (re)used across a wide range of data sets. To accomplish this objective we use a data source pattern where by the form control widget code is concerned with rendering and facilitating the data capture/selection process but delegates the retrieval of the content to a separate swappable component interface known as a data source.
 
 Out of the box data sources are:
 
 .. include:: /includes/form-sources/list-form-sources.rst
 
--------------------------------------------
+"""""""""""""""""""""""""""""""""""""""""""
 The anatomy of a Data Source Project Plugin
--------------------------------------------
-
+"""""""""""""""""""""""""""""""""""""""""""
 Data Sources consist of (at a minimum)
 
 * A single JavaScript file which implements the data source interface.
 
-	* The JS file name and the data source name in the configuration does not need to be the same. The JS file name can be any meaningful name, different from the data source name in the configuration.
+    * The JS file name and the data source name in the configuration does not need to be the same. The JS file name can be any meaningful name, different from the data source name in the configuration.
 
 * Configuration in a Crafter Studio project to make that data source available for use.
 
 .. _data-source-interface:
 
----------------------
+"""""""""""""""""""""
 Data Source Interface
----------------------
-
+"""""""""""""""""""""
 .. code-block:: javascript
     :linenos:
 
@@ -1293,10 +1525,9 @@ Data Source Interface
 
 .. _plugin-ds-directory-structure:
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+""""""""""""""""""""""""""""""""""""""""
 Data Source Plugin Directory and Example
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+""""""""""""""""""""""""""""""""""""""""
 When creating data source plugins, the JS file goes in the following location:
 
 ``authoring/static-assets/plugins/{yourPluginId}/datasource/{yourPluginName}/JS_FILE.js``
@@ -1433,10 +1664,9 @@ Here's the complete example form data source plugin file for the ``parent-conten
 
 .. _configure-descriptor-file-for-autowiring-datasource:
 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+"""""""""""""""""""""""""""""""""""""""""""""""
 Auto-wiring and Installing a Data Source Plugin
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+"""""""""""""""""""""""""""""""""""""""""""""""
 To setup our form data source to be automatically wired in the corresponding configuration file in Studio (which for a form data source, is the Project Config Tools Configuration file) during the installation, add the following to your ``craftercms-plugin.yaml`` descriptor file:
 
 .. code-block:: yaml

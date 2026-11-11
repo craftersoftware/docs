@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.2
+:last-updated: 4.7.0
 
 .. meta::
    :description: Crafter Profile is CrafterCMS's enterprise user profile and attribute management module — enabling personalization and access control.
@@ -40,6 +40,10 @@ All configuration for Crafter Profile is managed using a properties file:
 
   ``CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/profile/extension/server-config.properties``
 
+.. important::
+
+    Remember to change pre-configured default values for properties such as passwords, tokens, keys, etc. to secure your installation.
+
 ^^^^^^^^^^^^^^^^^^^^^
 MongoDB Configuration
 ^^^^^^^^^^^^^^^^^^^^^
@@ -78,6 +82,24 @@ Properties prefix: ``crafter.profile.mongodb.``
 | scripts.paths                      | [#]_                 || List of all MongoDB scripts to    |
 |                                    |                      || run                               |
 +------------------------------------+----------------------+------------------------------------+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Access Token Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Profile seeds its admin, Engine, and Social access tokens from these properties when the access-token collection is
+empty. Each property reads the matching :ref:`Profile access token environment variable <env-var-profile-access-tokens>`.
+
+Properties prefix: ``crafter.profile.accessTokens.``
+
++------------+-----------------------------------+------------------------------------+
+| Property   | Default Value                     | Description                        |
++============+===================================+====================================+
+| admin.id   | ${PROFILE_ADMIN_ACCESS_TOKEN_ID:} || Profile Admin access token ID     |
++------------+-----------------------------------+------------------------------------+
+| engine.id  | ${PROFILE_ENGINE_ACCESS_TOKEN_ID:}|| Engine access token ID            |
++------------+-----------------------------------+------------------------------------+
+| social.id  | ${PROFILE_SOCIAL_ACCESS_TOKEN_ID:}|| Social access token ID            |
++------------+-----------------------------------+------------------------------------+
 
 ^^^^^^^^^^^^^^^^^^^
 Email Configuration
@@ -303,8 +325,11 @@ You can change any of the default configuration, some of the more relevant prope
 
 .. code-block:: properties
 
-  crafter.profile.rest.client.url.base=http://localhost:8080/crafter-profile
-  crafter.profile.rest.client.accessToken.id=e8f5170c-877b-416f-b70f-4b09772f8e2d
+    crafter.profile.rest.client.url.base=http://localhost:8080/crafter-profile
+    crafter.profile.rest.client.accessToken.id=${PROFILE_ADMIN_ACCESS_TOKEN_ID:}
+
+.. important::
+    The Profile Admin Console uses :ref:`PROFILE_ADMIN_ACCESS_TOKEN_ID <env-var-profile-access-tokens>` to call Crafter Profile.
 
 ~~~~~~~~~~
 Properties
@@ -345,7 +370,7 @@ By default there is only one user created:
 Access Tokens Management
 """"""""""""""""""""""""
 All applications need an Access Token in order to make requests for the :ref:`crafter-profile-api`.
-By default three tokens will be created:
+On a new installation, Profile seeds three tokens from :ref:`env-var-profile-access-tokens`:
 
 +----------------+-----------------------------------------------------------------------------+
 | Application    | Description                                                                 |

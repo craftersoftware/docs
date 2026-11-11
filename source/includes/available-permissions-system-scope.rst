@@ -72,6 +72,20 @@ The system level (global) permissions are defined in the file ``global-permissio
       - User is permitted to :ref:`create new users <creating-a-user>` |br|
         Required when using the API to :base_url:`Create user <_static/api/studio.html#tag/users/operation/createUser>`
 
+        - :base_url:`Install plugin <_static/api/studio.html#tag/marketplace/operation/installPlugin>`
+        - :base_url:`Copy local plugin <_static/api/studio.html#tag/marketplace/operation/copyPlugin>`
+    * - list_plugins
+      - User is permitted to list installed plugins |br|
+        Required when using the API to :base_url:`get the list of marketplace plugins installed in the given site <_static/api/studio.html#tag/marketplace/operation/getInstalledPlugins>`
+    * - manage_access_token
+      - User is permitted to :ref:`manage the access tokens <nav-menu-token-management>` |br|
+        Required when using the following APIs:
+
+        - :base_url:`Get access tokens <_static/api/studio.html#tag/security/operation/getAccessTokens>`
+        - :base_url:`Create access token <_static/api/studio.html#tag/security/operation/createAccessToken>`
+        - :base_url:`Update access token <_static/api/studio.html#tag/security/operation/updateAccessToken>`
+        - :base_url:`Delete access token <_static/api/studio.html#tag/security/operation/deleteAccessToken>`
+        - :base_url:`Generate preview token <_static/api/studio.html#tag/security/operation/generatePreviewToken>`
     * - read_users
       - User is permitted to read users. Used in the :ref:`Users Management Console <users-management>` |br|
         Required when using the following APIs:

@@ -21,12 +21,13 @@ in ``$CRAFTER_DIR/crafter-delivery/logs/`` depending on which environment you ar
 use of these logs is an important part of maintaining your projects and are useful for keeping track
 of your system performance. To that end, please make sure that you rotate the logs.
 
-CrafterCMS ships with a Tomcat Application Server, and MongoDB included in the binary archive.
-There are three folders used by CrafterCMS for the log files,
+CrafterCMS ships with a Tomcat Application Server included in the binary archive.
+There are two folders used by CrafterCMS for the log files,
 
     - tomcat
     - deployer
-    - mongodb
+
+When using Crafter Profile or Crafter Social |enterpriseOnly|, MongoDB logs may also be present under ``mongodb``.
 
 -------------------------------------------
 Tailing Log Files From a Shell/Command Line
@@ -47,6 +48,7 @@ and locations of the log files:
 ||     projects log files      ||                                                                |
 +------------------------------+-----------------------------------------------------------------+
 || MongoDB log files           || ``$CRAFTER_LOGS_DIR/mongodb/``                                 |
+|| |enterpriseOnly|            ||                                                                |
 +------------------------------+-----------------------------------------------------------------+
 
 For the Authoring environment:
@@ -226,8 +228,8 @@ You can update the logging configuration depending on the CrafterCMS component t
 * Crafter Engine: ``$CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/logging.xml``
 * Crafter Studio: ``$CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/studio/extension/logging.xml``
 * Crafter Search: ``$CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/search/extension/logging.xml``
-* Crafter Profile: ``$CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/profile/extension/logging.xml``
-* Crafter Social: ``$CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/social/extension/logging.xml``
+* Crafter Profile |enterpriseOnly|: ``$CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/profile/extension/logging.xml``
+* Crafter Social |enterpriseOnly|: ``$CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/social/extension/logging.xml``
 * Crafter Deployer: ``$CRAFTER_HOME/bin/crafter-deployer/logging.xml``
 
 .. warning::
@@ -242,7 +244,8 @@ To add a custom appender you can follow these steps:
 
 #. Place the required JAR files in the appropriate location:
 
-   * for Engine, Studio, Search, Profile or Social use ``$CRAFTER_HOME/bin/apache-tomcat/shared/lib``
+   * for Engine, Studio, Search use ``$CRAFTER_HOME/bin/apache-tomcat/shared/lib``
+   * for Profile or Social |enterpriseOnly| use ``$CRAFTER_HOME/bin/apache-tomcat/shared/lib``
    * for Deployer use ``$CRAFTER_HOME/bin/crafter-deployer/lib``
 #. Update the required logging configuration to add the custom appender, for example if the custom appender name is
    ``AwesomeAppender`` and the class is under the package ``com.custom.logging`` the configuration will be like this:

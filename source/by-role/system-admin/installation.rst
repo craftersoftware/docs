@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.2.0
+:last-updated: 4.5.2
 
 .. meta::
    :description: Install CrafterCMS via binary bundles, Docker, or Kubernetes for authoring and delivery environments with system requirements and platform support information.
@@ -34,8 +34,8 @@ Requirements
 - Docker (if running in Docker or macOS)
 
 Please note that CrafterCMS does not require any external databases for the core system to run and deliver fully dynamic
-experiences. MongoDB is used by Crafter Profile and Crafter Social which are optional components that provide external
-(non-author) user management and social features.
+experiences. MongoDB is used only by Crafter Profile |enterpriseOnly| and Crafter Social |enterpriseOnly|, optional enterprise
+modules that provide external (non-author) user management and social features. You do not need MongoDB unless you run those modules.
 
 For more information on sizing your machines, see :ref:`authoring server requirements <authoring-server-requirements>`
 and :ref:`delivery server requirements <delivery-server-requirements>`
@@ -126,9 +126,9 @@ How to set the JAVA_HOME environment variable
 
 |
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Browsers (Crafter Studio & Crafter Social/Profile Admin Consoles)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Browsers (Crafter Studio & Crafter Social/Profile |enterpriseOnly| Admin Consoles)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The following browsers are supported:
 
     - Chrome and Chromium-based Browsers
@@ -437,15 +437,42 @@ For more information on Docker Desktop Dashboard, see https://docs.docker.com/de
 
 For more information on CrafterCMS Docker Compose, please see: https://github.com/craftercms/docker-compose.
 
-""""""
-Images
-""""""
-CrafterCMS provides Docker images on `dockerhub <https://hub.docker.com/u/craftercms>`__ for the latest release versions
-and snapshots of versions in development. The CrafterCMS Docker images may be pulled by using the tag for a release
-version, e.g. ``craftercms/authoring_tomcat:4.1.5``, the latest release, e.g. ``craftercms/authoring_tomcat:latest``
-or the tag for a snapshot of a version in development, e.g. ``craftercms/authoring_tomcat:4.1.6-SNAPSHOT``
+.. _docker-images:
 
-As mentioned, CrafterCMS is open source and you can always build Docker images from source code `here <https://github.com/craftersoftware/craftercms>`__
+"""""""""""""
+Docker Images
+"""""""""""""
+CrafterCMS provides Docker images on `Docker Hub <https://hub.docker.com/u/craftercms>`__ for the latest release versions
+and snapshots of versions in development. The CrafterCMS Docker images may be pulled by using:
+
+- the tag for a release version, e.g. craftercms/authoring_tomcat:|release| for the community version or craftercms/authoring_tomcat:|release|\ E for the enterprise version
+- the latest release, e.g. craftercms/authoring_tomcat:latest
+- the tag for a snapshot of a version in development, e.g. craftercms/authoring_tomcat:|release|\ -SNAPSHOT
+
+Here are the latest CrafterCMS release, community edition, available from `Docker Hub <https://hub.docker.com/u/craftercms>`__:
+
+.. list-table::
+    :header-rows: 1
+    :widths: 28 42 30
+
+    * - Image
+      - Description
+      - Pull
+    * - `craftercms/authoring_tomcat <https://hub.docker.com/r/craftercms/authoring_tomcat>`__
+      - Authoring Tomcat (Studio, Engine, search client)
+      - docker pull craftercms/authoring_tomcat:|release|
+    * - `craftercms/delivery_tomcat <https://hub.docker.com/r/craftercms/delivery_tomcat>`__
+      - Delivery Tomcat (Engine)
+      - docker pull craftercms/delivery_tomcat:|release|
+    * - `craftercms/deployer <https://hub.docker.com/r/craftercms/deployer>`__
+      - Deployer for authoring and delivery
+      - docker pull craftercms/deployer:|release|
+
+See the full list of images and tags on each image page on `Docker Hub <https://hub.docker.com/u/craftercms>`__.
+For Docker Compose, see https://github.com/craftercms/docker-compose.
+
+As mentioned, CrafterCMS is open source and you can always build Docker images from source code `here <https://github.com/craftersoftware/craftercms>`__ using the `docker-images <https://github.com/craftercms/docker-images>`__ project.
+
 
 |hr|
 
@@ -1509,3 +1536,8 @@ Build from Source
 ^^^^^^^^^^^^^^^^^
 
 CrafterCMS is open source and you can always build and run it from source code `here <https://github.com/craftersoftware/craftercms>`__
+
+.. note::
+    CrafterCMS source code has moved to the `monorepo <https://github.com/craftersoftware/craftercms>`__.
+    Modules such as Studio, Engine, Deployer, Studio UI, and CLI are top-level folders in that repository, along with
+    Docker Compose and Kubernetes examples.

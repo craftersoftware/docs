@@ -2,8 +2,8 @@
 :last-updated: 4.1.4
 
 .. meta::
-   :description: Backup and restore CrafterCMS environments using the provided scripts to protect indexes, repositories, MongoDB, and other critical data.
-   :keywords: backup, restore, CrafterCMS, Crafter Studio, clustered, non-clustered, MongoDB, repos, system admin
+   :description: Backup and restore CrafterCMS environments using the provided scripts to protect indexes, repositories, and other critical data.
+   :keywords: backup, restore, CrafterCMS, Crafter Studio, clustered, non-clustered, repos, system admin
 
 .. _backup-and-restore:
 
@@ -11,7 +11,7 @@
 Backup and Restore
 ==================
 
-CrafterCMS out of the box comes with a script to backup and restore your environment. The script provided will backup your environment including indexes, repos, mongodb, etc. You can then use your favorite backup tools for backing up the script-generated CrafterCMS environment backup file.
+CrafterCMS out of the box comes with a script to backup and restore your environment. The script provided will backup your environment including indexes, repos, and other data. If you use Crafter Profile or Crafter Social |enterpriseOnly|, MongoDB data is included as well. You can then use your favorite backup tools for backing up the script-generated CrafterCMS environment backup file.
 
 .. TODO add a note that Delivery can be easily reconstituted
 

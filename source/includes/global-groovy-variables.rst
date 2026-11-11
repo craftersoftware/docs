@@ -28,16 +28,16 @@
      - Helper class that creates navigation trees to facilitate rendering
      - |NavTreeBuilder|
    * - tenantsResolver
-     - Can be used to retrieve the Profile tenants associated to the current site.
+     - Can be used to retrieve the Profile tenants associated to the current site. |enterpriseOnly|
      - |TenantsResolver|
    * - profileService
-     - Provides access to the Crafter Profile API for profiles.
+     - Provides access to the Crafter Profile API for profiles. |enterpriseOnly|
      - |ProfileService|
    * - tenantService
-     - Provides access to the Crafter Profile API for tenants.
+     - Provides access to the Crafter Profile API for tenants. |enterpriseOnly|
      - |TenantService|
    * - authenticationService
-     - Provides access to the Crafter Profile API for authentication.
+     - Provides access to the Crafter Profile API for authentication. |enterpriseOnly|
      - |AuthenticationService|
    * - authenticationManager
      - Manages Crafter Security Provider based authentications.

@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.0
+:last-updated: 4.7.0
 :orphan:
 
 .. _breaking-changes-4-x:
@@ -20,6 +20,101 @@ before upgrading. Please review the following and apply changes as required:
 - CrafterCMS has upgraded the AWS client library to version 2. |br| This may contain breaking changes that impact custom Java and
   Groovy code. See https://docs.aws.amazon.com/sdk-for-java/latest/developer-guide/migration.html for more information
   on the changes in the library that may affect your project/s.
+
+|hr|
+
+.. _breaking-changes-in-craftercms-4-7-0:
+
+------------------------------------
+Breaking Changes in CrafterCMS 4.7.0
+------------------------------------
+* Crafter Social and Crafter Profile are not included in CrafterCMS Community Edition. They remain available in CrafterCMS Enterprise.
+
+* New basic ``users.properties`` file to support Engine authentication. Define Engine users in this new file.
+  Remember that roles in the file must match the roles used by the site's security rules or ``authorizedRoles``. Users in the file are Engine users only.
+
+  Community Edition projects that used Crafter Profile for Engine authentication must migrate the required users and
+  roles to ``users.properties``.
+
+  See :ref:`engine-users-properties` for more information.
+
+* Preview tokens now use a dedicated encryption configuration and token format. Preview tokens created before 4.7.0
+  are no longer valid and must be regenerated.
+
+  Before upgrading, configure matching ``CRAFTER_PREVIEW_TOKEN_KEY`` and ``CRAFTER_PREVIEW_TOKEN_SALT`` values for
+  Studio and Engine, replacing the defaults. See :ref:`env-var-preview-token-encryption` for more information.
+
+* Deployer target management APIs no longer accept the management token in the ``token`` query parameter. Update
+  clients that create, read, deploy, duplicate, unlock, reindex, or delete targets to send the configured
+  ``deployer.main.management.authorizationToken`` value in the ``X-Crafter-Management-Token`` request header.
+  Deployer monitoring APIs continue to use the ``token`` query parameter.
+
+* Crafter Profile |enterpriseOnly| now uses configurable access tokens.
+
+  A new local Authoring installation with no MongoDB data generates ``PROFILE_ADMIN_ACCESS_TOKEN_ID``,
+  ``PROFILE_ENGINE_ACCESS_TOKEN_ID``, and ``PROFILE_SOCIAL_ACCESS_TOKEN_ID``, then stores them in
+  ``$CRAFTER_DATA_DIR/profile/access-tokens.env``. Profile, Engine, and Social read those values. All three
+  environment variables must be set or unset. A new installation that uses a remote MongoDB host does not create
+  this file and stops until the three IDs are supplied.
+
+  An upgrade with existing local MongoDB data, or an installation using a remote MongoDB host, stops during Authoring
+  startup until all three access token IDs are configured. When MongoDB already contains access tokens, the configured
+  access token IDs must match those tokens. When the access token collection is empty, Profile seeds the configured IDs
+  and rejects the former default IDs. Delivery does not generate its own token file: copy Authoring's ``access-tokens.env`` to each Delivery
+  node, or set the same three variables from the secret store used to seed Profile. Installations that do not deploy
+  Profile skip this setup.
+
+  See :ref:`env-var-profile-access-tokens` for the variables, and :ref:`upgrade-notes-for-craftercms-4.7.0` for the
+  configuration required when an existing installation still uses the 4.6.x default tokens.
+
+|hr|
+
+.. _breaking-changes-in-craftercms-4-6-0:
+
+------------------------------------
+Breaking Changes in CrafterCMS 4.6.0
+------------------------------------
+* Groovy, Freemarker, or other Engine code that called ``siteItemService.getSiteItem(url)`` or ``getSiteTree(...)`` for paths outside the allowed descriptor patterns now receives null or an empty tree. To include extra descriptor locations, extend:
+
+  ``crafter.engine.site.default.descriptors.allowed.paths=/site/.*``
+
+  See :ref:`engine-site-allowed-descriptor-paths` for more information.
+
+* Use ``siteItemService.exists(path)`` when you only need to know if a path exists. That check is not limited by the allowed-path patterns.
+
+* Search clients that send a script key (or any key matching ``crafter.engine.search.restricted.key.patterns``) in the JSON body will get 400 Bad Request.
+
+  See :ref:`engine-search-restricted-key-patterns` for more information
+
+* Users without ``Publish`` permission on a related item will no longer see that item in the publish soft-dependency list.
+
+* Engine REST Scripts No Longer Produce XML.
+
+  Clients that request XML via the ``Accept: application/xml`` header or a ``.xml`` URL will receive ``HTTP 406 Not Acceptable``. Update those clients to request JSON (``Accept: application/json`` or a ``.json`` URL) and parse JSON instead of XML.
+
+|hr|
+
+.. _breaking-changes-in-craftercms-4-5-2:
+
+------------------------------------
+Breaking Changes in CrafterCMS 4.5.2
+------------------------------------
+* Engine no longer bundles the following Groovy modules: ``groovy-json``, ``groovy-xml``, ``groovy-yaml``, ``groovy-templates``, ``groovy-datetime``, ``groovy-nio``, ``groovy-servlet``, ``groovy-jsr223``, ``groovy-macro``, ``groovy-ant``, ``groovy-cli-picocli``, ``groovy-console``, ``groovy-docgenerator``, ``groovy-groovydoc``, ``groovy-groovysh``, ``groovy-jmx``, ``groovy-swing``, ``groovy-test``, and ``groovy-test-junit5``.
+
+  Scripts that use classes from those modules above, including ``groovy.json.JsonSlurper``, ``groovy.json.JsonOutput``, and ``groovy.xml.XmlUtil``, will fail at runtime.
+
+  Update your Groovy scripts to ``@Grab`` the required modules like below:
+
+  .. code-block:: groovy
+
+      @Grab(group='org.apache.groovy', module='groovy-json', version='4.0.33', initClass=false)
+      @Grab(group='org.apache.groovy', module='groovy-xml', version='4.0.33', initClass=false)
+
+  Note that Crafter Engine disables Grape downloads by default and only makes previously downloaded grapes available. See :ref:`engine-grapes-download` for more information on downloading Groovy dependencies for scripts.
+
+* Engine and Studio with request-body endpoints that use the XML converter are are now restricted to application/json.
+
+  Clients with request-body endpoints that use the XML converter must convert the request body to JSON and set the ``Content-Type`` header to ``application/json``. Requests using an unsupported content type will receive ``HTTP 415 Unsupported Media Type``.
 
 |hr|
 
@@ -47,6 +142,7 @@ Use the following monitoring APIs for retrieving version or system information:
       - :base_url:`/api/1/monitoring/version <_static/api/deployer.html#tag/monitoring/operation/version>`
       - :base_url:`/api/1/monitoring/sysinfo <_static/api/deployer.html#tag/monitoring/operation/sysinfo>`
 
+|hr|
 
 .. _breaking-changes-in-craftercms-4-5-0:
 
@@ -87,6 +183,8 @@ Breaking Changes in CrafterCMS 4.5.0
 
   See :ref:`Studio <studio-grapes-download>`, :ref:`Engine <engine-grapes-download>` and :ref:`Deployer <deployer-grapes-download>`
   grapes configuration for more information on enabling automatic grapes download.
+
+|hr|
 
 .. _breaking-changes-in-craftercms-4-4-3:
 
@@ -335,8 +433,8 @@ in previous versions:
 Upgrading 3.1.x Sites
 ---------------------
 
-  - MongoDB in CrafterCMS Social and Profile has been updated. To upgrade MongoDB in your installation, see
-    :ref:`upgrading-mongodb`
+  - MongoDB in Crafter Social and Crafter Profile |enterpriseOnly| has been updated. To upgrade MongoDB in your
+    installation, see :ref:`upgrading-mongodb`
 
   - CrafterCMS 4.1.x onward requires Git. |br| See :ref:`Requirements <requirements_supported_platforms>` for more
     information on CrafterCMS requirements.

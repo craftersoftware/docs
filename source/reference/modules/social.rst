@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.2
+:last-updated: 4.7.0
 
 .. index:: Modules; Crafter Social
 
@@ -41,6 +41,10 @@ user generated content you can follow the :ref:`social-admin-console` guides.
 All configuration for Crafter Social is managed using a properties file:
 
   ``CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/social/extension/server-config.properties``
+
+.. important::
+
+    Remember to change pre-configured default values of properties such as passwords, tokens, keys, etc. to secure your installation.
 
 ^^^^^^^^^^^^^^^^^^^^^
 MongoDB Configuration
@@ -95,10 +99,15 @@ Properties prefix: ``crafter.profile.rest.client.``
 | url.base       | \http://localhost:8080/profile         || URL where Crafter Profile is      |
 |                |                                        || deployed                          |
 +----------------+----------------------------------------+------------------------------------+
-| accessToken.id | 2ba3ac10-c43e-11e3-9c1a-0800200c9a66   || Access Token included in all      |
+| accessToken.id | ${PROFILE_SOCIAL_ACCESS_TOKEN_ID:}     || Access Token included in all      |
 |                |                                        || requests made to the Crafter      |
 |                |                                        || Profile API                       |
 +----------------+----------------------------------------+------------------------------------+
+
+.. important::
+    ``crafter.profile.rest.client.accessToken.id`` uses :ref:`PROFILE_SOCIAL_ACCESS_TOKEN_ID <env-var-profile-access-tokens>`.
+    The token ID must exist in Crafter Profile. After rotating it, update the variable, restart Social, and then delete the previous token.
+
 
 ^^^^^^^^^^^^^^^^^
 Web Configuration
@@ -371,7 +380,11 @@ You can change any of the default configuration, some of the more relevant prope
   crafter.social.app.name=crafter-social
 
   crafter.profile.rest.client.url.base=http://localhost:8080/crafter-profile
-  crafter.profile.rest.client.accessToken.id=e8f5170c-877b-416f-b70f-4b09772f8e2d
+  crafter.profile.rest.client.accessToken.id=${PROFILE_ADMIN_ACCESS_TOKEN_ID:}
+
+.. important::
+    The Social Admin Console uses :ref:`PROFILE_ADMIN_ACCESS_TOKEN_ID <env-var-profile-access-tokens>` to call Crafter Profile.
+
 
 ~~~~~~~~~~
 Properties

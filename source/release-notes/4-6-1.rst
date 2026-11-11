@@ -1,0 +1,28 @@
+.. index:: CrafterCMS version 4.6.1 Release Notes
+
+-----------------------------------
+CrafterCMS Version 4.6.1 and 4.6.1E
+-----------------------------------
+
+Released *September 29, 2026*
+
+.. important::
+
+    Please see :ref:`Breaking changes <breaking-changes-4-x>` for breaking changes and other
+    things to consider before upgrading
+
+    For instructions on how to update your CrafterCMS install, please see :ref:`upgrading-craftercms`
+
+^^^^^^^^^^^^^^^^^^
+Dependency Updates
+^^^^^^^^^^^^^^^^^^
+* Noteworthy dependency updates:
+
+  - Mariadb4j to version 3.3.1.0
+
+For a complete list of community tickets, please visit: `GitHub 4.6.1 <https://github.com/orgs/craftersoftware/projects/67/views/1?filterQuery=>`_
+
+For information on upgrading 3.1.x sites, see :ref:`here <compatibility-with-3.1.x>`
+
+|hr|
+

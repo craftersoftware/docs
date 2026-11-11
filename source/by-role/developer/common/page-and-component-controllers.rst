@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.8
+:last-updated: 4.6.0
 
 .. index:: Page Controllers, Component Controllers
 
@@ -126,6 +126,9 @@ Groovy classes to follow this convention.
     }
 
 |
+
+For a walkthrough of querying content in these scripts and listing the results in FreeMarker (search and
+Site Item Service), see :ref:`content-queries-groovy-freemarker`.
 
 For more information on the FreeMarker (Templating) APIs, please see :ref:`templating-api`.
 

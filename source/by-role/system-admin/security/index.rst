@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.2
+:last-updated: 4.7.0
 
 .. index:: Security, SAML, LDAP, Header-based, Headers-based, Headers Based, Authentication, Password, SSL, TLS, HTTPS, Secrets, Managing Secrets, External Secrets, Internal Secrets, Encryption, Encrypting Text in a Configuration File
 
@@ -25,60 +25,75 @@ Here are the parameters for which you must change the default values:
 
 * Replace default values for configuration files encryption key and salt
 
-     .. code-block:: sh
-        :caption: *CRAFTER_HOME/bin/crafter-setenv.sh*
+  .. code-block:: sh
+      :caption: *CRAFTER_HOME/bin/crafter-setenv.sh*
 
-        # -------------------- Encryption variables --------------------
-        # These variables are used to encrypt and decrypt values inside the configuration files.
-        export CRAFTER_ENCRYPTION_KEY=${CRAFTER_ENCRYPTION_KEY:="default_encryption_key"}
-        export CRAFTER_ENCRYPTION_SALT=${CRAFTER_ENCRYPTION_SALT:="default_encryption_salt"}
+      # -------------------- Encryption variables --------------------
+      # These variables are used to encrypt and decrypt values inside the configuration files.
+      export CRAFTER_ENCRYPTION_KEY=${CRAFTER_ENCRYPTION_KEY:="default_encryption_key"}
+      export CRAFTER_ENCRYPTION_SALT=${CRAFTER_ENCRYPTION_SALT:="default_encryption_salt"}
 
-     |
+  |
 
 * Replace the default values for database values encryption key and salt. Remember that these values should **not** be changed after CrafterCMS has been started if the installation has one or more of the following:
 
   * Remote repository passwords and keys
   * Cluster passwords and keys
 
-     .. code-block:: sh
+    .. code-block:: sh
         :caption: *CRAFTER_HOME/bin/crafter-setenv.sh*
 
         # These variables are used by Studio to encrypt and decrypt values in the database.
         export CRAFTER_SYSTEM_ENCRYPTION_KEY=${CRAFTER_SYSTEM_ENCRYPTION_KEY:="s0meDefaultKey"}
         export CRAFTER_SYSTEM_ENCRYPTION_SALT=${CRAFTER_SYSTEM_ENCRYPTION_SALT:="s0meDefaultSalt"}
 
-     |
+    |
+
+* Replace the default values for preview tokens encryption key and salt
+
+  .. version_tag::
+      :label: Since
+      :version: 4.7.0
+
+  .. code-block:: sh
+      :caption: *CRAFTER_HOME/bin/crafter-setenv.sh*
+
+      # These variables are used to encrypt and decrypt preview tokens shared by Studio and Engine.
+      export CRAFTER_PREVIEW_TOKEN_KEY=${CRAFTER_PREVIEW_TOKEN_KEY:="default_preview_token_key"}
+      export CRAFTER_PREVIEW_TOKEN_SALT=${CRAFTER_PREVIEW_TOKEN_SALT:="default_preview_token_salt"}
+
+  |
 
 * Replace default values for the management tokens used by Studio, Engine, Deployer, Search, Profile and Social
 
-     .. code-block:: sh
-        :caption: *CRAFTER_HOME/bin/crafter-setenv.sh*
+  .. code-block:: sh
+      :caption: *CRAFTER_HOME/bin/crafter-setenv.sh*
 
-        # -------------------- Management tokens ----------------
-        # Please update this per installation and provide these tokens to the status monitors.
-        export STUDIO_MANAGEMENT_TOKEN=${STUDIO_MANAGEMENT_TOKEN:="defaultManagementToken"}
-        export ENGINE_MANAGEMENT_TOKEN=${ENGINE_MANAGEMENT_TOKEN:="defaultManagementToken"}
-        export DEPLOYER_MANAGEMENT_TOKEN=${DEPLOYER_MANAGEMENT_TOKEN:="defaultManagementToken"}
-        export SEARCH_MANAGEMENT_TOKEN=${SEARCH_MANAGEMENT_TOKEN:="defaultManagementToken"}
-        export PROFILE_MANAGEMENT_TOKEN=${PROFILE_MANAGEMENT_TOKEN:="defaultManagementToken"}
-        export SOCIAL_MANAGEMENT_TOKEN=${SOCIAL_MANAGEMENT_TOKEN:="defaultManagementToken"}
+      # -------------------- Management tokens ----------------
+      # Please update this per installation and provide these tokens to the status monitors.
+      export STUDIO_MANAGEMENT_TOKEN=${STUDIO_MANAGEMENT_TOKEN:="defaultManagementToken"}
+      export ENGINE_MANAGEMENT_TOKEN=${ENGINE_MANAGEMENT_TOKEN:="defaultManagementToken"}
+      export DEPLOYER_MANAGEMENT_TOKEN=${DEPLOYER_MANAGEMENT_TOKEN:="defaultManagementToken"}
+      export SEARCH_MANAGEMENT_TOKEN=${SEARCH_MANAGEMENT_TOKEN:="defaultManagementToken"}
+      export PROFILE_MANAGEMENT_TOKEN=${PROFILE_MANAGEMENT_TOKEN:="defaultManagementToken"}
+      export SOCIAL_MANAGEMENT_TOKEN=${SOCIAL_MANAGEMENT_TOKEN:="defaultManagementToken"}
 
-     |
+  |
 
 * Replace default values for the DB root password, the DB ``crafter`` user password and the DB replication user password (if running in a primary/replica cluster) before starting CrafterCMS for the very first time.
 
-     .. code-block:: sh
-        :caption: *CRAFTER_HOME/bin/crafter-setenv.sh*
+  .. code-block:: sh
+      :caption: *CRAFTER_HOME/bin/crafter-setenv.sh*
 
-        # -------------------- MariaDB variables --------------------
-        ...
-        export MARIADB_ROOT_PASSWD=${MARIADB_ROOT_PASSWD:="root"}
-        ...
-        export MARIADB_PASSWD=${MARIADB_PASSWD:="crafter"}
-        ...
-        export MARIADB_REPLICATION_PASSWD=${MARIADB_REPLICATION_PASSWD:="crafter_replication"}
+      # -------------------- MariaDB variables --------------------
+      ...
+      export MARIADB_ROOT_PASSWD=${MARIADB_ROOT_PASSWD:="root"}
+      ...
+      export MARIADB_PASSWD=${MARIADB_PASSWD:="crafter"}
+      ...
+      export MARIADB_REPLICATION_PASSWD=${MARIADB_REPLICATION_PASSWD:="crafter_replication"}
 
-     |
+  |
 
   To change the values after the initial start of CrafterCMS, do the following:
 

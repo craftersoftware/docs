@@ -28,6 +28,8 @@ Then you can just point your browser to ``http://localhost:8080/studio`` and you
 
 If you are ready to start development, consult the :ref:`documentation for developers <developer>` for advice on environment setup.
 
+For all published images and tags, see :ref:`docker-images`.
+
 |hr|
 
 ^^^^^^^^^^^^^^^^^^^^^

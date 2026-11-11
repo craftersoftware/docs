@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.2.2
+:last-updated: 4.6.0
 
 .. meta::
    :description: CrafterCMS developer guide covering content modeling, headless and templated projects, composable CMS, DevContentOps, Groovy, GraphQL, and security.
@@ -80,6 +80,8 @@ Aside from the core concepts listed above, a developer needs to be familiar with
       - Provides you information on scheduling jobs
     * - :ref:`page-and-component-controllers`
       - Provides you information on page and component controllers
+    * - :ref:`content-queries-groovy-freemarker`
+      - Provides you information on querying content in Groovy and rendering it in FreeMarker
     * - :ref:`targeting`
       - Provides you information on rendering content adapted to different things
     * - :ref:`servlet-filters`
@@ -149,6 +151,7 @@ Pages aggregate content from components as needed and are associated with a Free
 can render the final page. The choice of HTML tools and frameworks doesn't matter to CrafterCMS.
 
 The article, :ref:`templating`, provides more details on CrafterCMS provided tools for creating your templated project.
+To query content in Groovy and render it in FreeMarker, see :ref:`content-queries-groovy-freemarker`.
 
 .. toctree::
     :maxdepth: 1
@@ -252,8 +255,8 @@ Below is a short set of links to other documentation for technology that Crafter
 || OpenSearch    || Search and content query    || https://opensearch.org/docs/latest/          |
 ||               ||                             ||                                              |
 +----------------+------------------------------+-----------------------------------------------+
-|| MongoDB       || Crafter Profile and Social  || https://docs.mongodb.com                     |
-||               || data store                  ||                                              |
+|| MongoDB       || Profile/Social data store   || https://docs.mongodb.com                     |
+||               || |enterpriseOnly|            ||                                              |
 +----------------+------------------------------+-----------------------------------------------+
 || GIT           || Repository Implementation   || https://git-scm.com/docs                     |
 +----------------+------------------------------+-----------------------------------------------+

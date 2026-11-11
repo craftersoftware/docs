@@ -33,20 +33,21 @@ Authoring activities such as creating or editing content, uploading images, part
 ----------------------------------------------------
 Do I need to run MongoDB in order to run CrafterCMS?
 ----------------------------------------------------
-No. MongoDB is not mandatory for CrafterCMS to operate. MongoDB backs optional functionality in the platform.
+No. MongoDB is not part of the core CMS. Core CrafterCMS (Studio, Engine, Deployer, and Search) does not require MongoDB.
 
-CrafterCMS is composed of independent services that you can activate/de-activate as needed. Two CrafterCMS services rely on MongoDB:
+MongoDB is used only by two optional enterprise modules:
 
-Crafter Profile, which provides identity management, a distributed user attribute store, and advanced targeting capabilities.
-Crafter Social which provides support for User Generated Content (UGC).
-These components add powerful capabilities to support your digital experiences but are not mandatory for CrafterCMS to deliver dynamic/personalized digital experiences.
+* Crafter Profile |enterpriseOnly|, which provides identity management, a distributed user attribute store, and advanced targeting capabilities.
+* Crafter Social |enterpriseOnly|, which provides support for User Generated Content (UGC).
+
+You only need MongoDB if you run those modules.
 
 ----------------------------------------------
 Do I need to connect CrafterCMS to a database?
 ----------------------------------------------
 No. Crafter Studio stores content in Git, not a database. It uses a small internal database for managing users and workflow. This database does not require a DBA to manage it and it is not pluggable. Crafter Engine is the delivery server and does not require a database at all. You can integrate with any database to support your specific delivery application use cases. Any common database is supported in this capacity. Crafter Deployer is the deployment agent and does not require a database at all, but can be used to push content to external systems like a database upon publish. See :ref:`crafter-deployer-processors-guide` for more information.
 
-Crafter Social and Crafter Profile leverage MongoDB. These are optional components.
+Crafter Social |enterpriseOnly| and Crafter Profile |enterpriseOnly| use MongoDB. These are optional enterprise modules, not part of the core CMS.
 
 -----------------------------------
 Can CrafterCMS be used as a portal?

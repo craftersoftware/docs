@@ -835,6 +835,23 @@ body > .skiptranslate > iframe.skiptranslate {
 /* endregion */
 
 /* region Code blocks */
+
+/* The scroll container has to be .highlight, not <pre>, so that emphasized
+   lines span the full width of the code instead of the visible area. */
+div[class^="highlight-"],
+div[class*=" highlight-"] {
+	position: relative;
+}
+div.highlight {
+	position: static;
+	overflow-x: auto;
+}
+div.highlight pre {
+	overflow: visible;
+	width: max-content;
+	min-width: 100%;
+}
+
 .highlight .err {
 	border: none;
 }

@@ -1,9 +1,9 @@
 :is-up-to-date: True
-:last-updated: 4.5.0
+:last-updated: 4.7.0
 
 .. meta::
-   :description: Complete guide to upgrading CrafterCMS on servers, Docker, Kubernetes, and clusters, including search migration to OpenSearch and MongoDB upgrades.
-   :keywords: CrafterCMS upgrade, upgrade guide, server upgrade, Docker upgrade, Kubernetes upgrade, OpenSearch migration, MongoDB upgrade, cluster upgrade
+   :description: Complete guide to upgrading CrafterCMS on servers, Docker, Kubernetes, and clusters, including search migration to OpenSearch.
+   :keywords: CrafterCMS upgrade, upgrade guide, server upgrade, Docker upgrade, Kubernetes upgrade, OpenSearch migration, cluster upgrade
 
 .. _upgrading-craftercms:
 
@@ -15,7 +15,9 @@ The following CrafterCMS versions are able to upgrade to the latest release:
 
 .. list-table::
 
-    * - **4.5**
+    * - **4.7**
+      - **4.6**
+      - **4.5**
       - **4.4**
       - **4.3**
       - **4.2**
@@ -28,8 +30,12 @@ The following CrafterCMS versions are able to upgrade to the latest release:
       - All
       - All
       - All
+      - All
+      - All
       - ``3.1.9``
     * -
+      -
+      -
       -
       -
       -
@@ -42,8 +48,12 @@ The following CrafterCMS versions are able to upgrade to the latest release:
       -
       -
       -
+      -
+      -
       - ``3.1.13``
     * -
+      -
+      -
       -
       -
       -
@@ -87,6 +97,82 @@ Here are the instructions for upgrading CrafterCMS based on how it was installed
    upgrading-server.rst
    upgrading-container.rst
    upgrading-cluster.rst
+
+|hr|
+
+.. _upgrade-notes-for-craftercms-4.7.0:
+
+----------------------------------
+Upgrade Notes for CrafterCMS 4.7.0
+----------------------------------
+- Existing installations upgrading to 4.7.0 that rely on password recovery emails **must ensure** ``studio.authoring.serverUrl`` **is configured** to the public, externally reachable Studio base URL (including ``/studio``).
+
+  .. code-block:: yaml
+      :caption: *bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml*
+
+      ############################################################
+      ##                    Authoring Server                    ##
+      ############################################################
+      # Public Studio base URL (including /studio) for generated links such as password recovery emails.
+      studio.authoring.serverUrl: https://authoring.example.com/studio
+
+  Note that if ``studio.authoring.serverUrl`` is left unconfigured, it defaults to ``${env:STUDIO_URL}`` or http://localhost:8080/studio. While safe for local development, external users in production environments will receive unreachable localhost links.
+
+- Preview tokens created before 4.7.0 were encrypted with the configuration encryption key/salt and only held
+  ``sites`` | ``expiry``. The new Engine filter expects the 4-field payload (``user`` | ``created`` | ``sites`` | ``expiry``),
+  which uses the dedicated key/salt/prefix and has no legacy fallback, so any preview tokens created before the upgrade
+  are no longer valid and must be regenerated. The same thing happens whenever an admin rotates the preview token key,
+  salt or prefix.
+
+  Before upgrading, configure matching ``CRAFTER_PREVIEW_TOKEN_KEY`` and ``CRAFTER_PREVIEW_TOKEN_SALT`` values for
+  Studio and Engine, replacing the defaults. See :ref:`env-var-preview-token-encryption` for more information.
+
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Crafter Profile Access Tokens |enterpriseOnly|
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Existing authoring installations that use Crafter Profile upgrading to 4.7.0 **must configure** all three Profile
+access token IDs. Fixed default tokens are no longer included in the server configuration.
+
+Authoring startup stops when Profile is deployed, ``$CRAFTER_DATA_DIR/profile/access-tokens.env`` is missing, and either:
+
+* only some of ``PROFILE_ADMIN_ACCESS_TOKEN_ID``, ``PROFILE_ENGINE_ACCESS_TOKEN_ID``, and
+  ``PROFILE_SOCIAL_ACCESS_TOKEN_ID`` are set, or
+* none of them is set and local MongoDB data already exists, or ``MONGODB_HOST`` is not ``localhost`` or ``127.0.0.1``.
+
+When all three variables are set, CrafterCMS uses them and does not create ``access-tokens.env``. A new local
+installation with no MongoDB data and no token variables generates the file instead.
+
+.. code-block:: bash
+    :caption: *$CRAFTER_DATA_DIR/profile/access-tokens.env*
+
+    PROFILE_ADMIN_ACCESS_TOKEN_ID=<admin token id>
+    PROFILE_ENGINE_ACCESS_TOKEN_ID=<engine token id>
+    PROFILE_SOCIAL_ACCESS_TOKEN_ID=<social token id>
+
+Create that file with mode ``600``, or export the same three variables before startup. If the Profile MongoDB
+``accesstoken`` collection is empty, provide new, non-historical IDs for all three variables; Profile seeds those IDs
+into the collection. Otherwise, use the token IDs already stored in the collection. Note that administrators must create
+the path configured by ``PROFILE_ACCESS_TOKENS_FILE``.
+
+Profile does not seed these historical fixed default token IDs into an empty access-token collection. New local Authoring
+installations generate new IDs instead. Profile logs a warning at startup while any historical ID remains in MongoDB;
+create replacement tokens, update every client, restart, and then delete the historical tokens.
+
+Note that Delivery does not generate a token file. Copy your Authoring installation's ``PROFILE_ACCESS_TOKENS_FILE``,
+which by default is set to ``$CRAFTER_DATA_DIR/profile/access-tokens.env``, to each Delivery node that uses Profile, or set the same three variables.
+A Delivery node that does not use Profile needs no token configuration.
+
+A single-site Delivery Engine uses ``PROFILE_ENGINE_ACCESS_TOKEN_ID`` through
+``crafter.profile.rest.client.accessToken.id``. ``PROFILE_ENGINE_ACCESS_TOKEN_ID`` does not configure a multi-tenant
+Delivery Engine. Each project must set ``profile.api.accessTokenId`` in ``/config/engine/site-config.xml``. When the
+project uses environment-specific Engine configuration, set it in ``/config/engine/env/{envName}/site-config.xml``.
+The multi-tenant token resolver does not fall back to ``PROFILE_ENGINE_ACCESS_TOKEN_ID`` or
+``crafter.profile.rest.client.accessToken.id``. Without ``profile.api.accessTokenId``, Profile calls from that project
+fail with a configuration error.
+
+See :ref:`env-var-profile-access-tokens` for the variables and :ref:`engine-crafter-profile-configuration` for how each
+Engine mode applies the token.
 
 |hr|
 
@@ -137,13 +223,14 @@ Starting version 4.1.0, CrafterCMS now uses OpenSearch instead of Elasticsearch.
 
 .. _upgrading-mongodb:
 
------------------
-Upgrading MongoDB
------------------
+----------------------------------
+Upgrading MongoDB |enterpriseOnly|
+----------------------------------
 .. note::
-    The following section only applies to Crafter Profile and Social installs.
+    MongoDB is used only by Crafter Profile and Crafter Social |enterpriseOnly|. The following section applies only if those
+    enterprise modules are installed.
 
-Crafter Profile and Social version 4.1.0 and later uses MongoDB v6 in the install.
+Crafter Profile and Crafter Social |enterpriseOnly| version 4.1.0 and later use MongoDB v6 in the install.
 When upgrading your 3.1.x install of Crafter Profile and Social to 4.1.0 and later, MongoDB will need to be manually upgraded.
 
 This section describes how to upgrade MongoDB in your Crafter Profile and Social version 3.1.x installed on a server.
