@@ -124,11 +124,11 @@ The system level (global) permissions are defined in the file ``global-permissio
         Required when using the following APIs:
 
         - :base_url:`Get access tokens <_static/api/studio.html#tag/security/operation/getAccessTokens>`
-        - :base_url:`Create access token <_static/api/studio.html#tag/security/operation/createAccessToken>` (globally,
-          or for every requested site)
+        - :base_url:`Create access token <_static/api/studio.html#tag/security/operation/createAccessToken>`
         - :base_url:`Update access token <_static/api/studio.html#tag/security/operation/updateAccessToken>`
         - :base_url:`Delete access token <_static/api/studio.html#tag/security/operation/deleteAccessToken>`
         - :base_url:`Generate preview token <_static/api/studio.html#tag/security/operation/generatePreviewToken>`
+          (globally, or for every requested site)
 
     * - read_cluster |enterpriseOnly|
       - User is allowed to list the cluster members and the cluster mode (PRIMARY vs REPLICA) |br|
