@@ -6,34 +6,51 @@ The system level (global) permissions are defined in the file ``global-permissio
 
     * - Permission
       - Description
+
     * - configure_log_levels
       - User is permitted to configure log levels from the :ref:`UI <override-logging-levels>`
         or via the API :base_url:`Loggers update level <_static/api/studio.html#tag/loggers/operation/loggersUpdateLevel>`
+
     * - view_logs
       - User is permitted to view logs from the :ref:`project tools UI <studio-log-console>` or
-        :ref:`Main Menu UI <main-menu-tool-log-console>` depending on where the permission is configured (project or global/system)
+        :ref:`Main Menu UI <main-menu-tool-log-console>` depending on where the permission is configured (project or global/system).
+        The Main Menu entries are shown to users with ``read_logs``
+
     * - view_log_levels
       - User is permitted to view log levels from the :ref:`Main Menu UI <override-logging-levels>`
-        or via the API :base_url:`Loggers get all <_static/api/studio.html#tag/loggers/operation/loggersGetAll>`
+        or via the API :base_url:`Get all loggers and their configured priority levels <_static/api/studio.html#tag/loggers/operation/loggersGetAll>`
+
+    * - read_logs
+      - User is permitted to see the :ref:`Logging Levels <main-menu-tool-logging-levels>` and
+        :ref:`Log Console <main-menu-tool-log-console>` entries in the Main Menu. Viewing log output
+        requires ``view_logs``. Viewing log levels requires ``view_log_levels`` or ``configure_log_levels``.
+        Changing log levels requires ``configure_log_levels``.
+
     * - audit_log
       - User is permitted to access the audit logs in the UI from the :ref:`main menu <nav-menu-audit>` or the
         :ref:`project tools <studio-logging>` via the API :base_url:`Get audit log <_static/api/studio.html#tag/audit/operation/getAuditLog>`
+
     * - duplicate_site
       - User is permitted to :ref:`duplicate a project <duplicate-project>`
+
     * - create_site
       - User is permitted to :ref:`create projects <your-first-editorial-project>`
+
     * - delete_site
       - User is permitted to delete projects |br|
         This is required when using the API to :base_url:`Delete a project <_static/api/studio.html#tag/sites/operation/deleteSite>`
+
     * - edit_site
       - User is permitted to edit sites |br|
         Required when using the following APIs:
 
         - :base_url:`Update the name and description for a given site <_static/api/studio.html#tag/sites/operation/updateSite>`
         - :base_url:`Unlock a site locked with state LOCKED <_static/api/studio.html#tag/sites/operation/unlockSite>`
+
     * - create_groups
       - User is permitted to :ref:`create new groups <create-a-new-group>` |br|
         Required when using the API to :base_url:`Create group <_static/api/studio.html#tag/groups/operation/createGroup>`
+
     * - read_groups
       - User is permitted to read groups |br|
         Used for :ref:`administering groups <groups-management>`
@@ -42,6 +59,7 @@ The system level (global) permissions are defined in the file ``global-permissio
         - :base_url:`Get all groups <_static/api/studio.html#tag/groups/operation/getGroups>`
         - :base_url:`Get group by ID <_static/api/studio.html#tag/groups/operation/getGroup>`
         - :base_url:`Get all the members of the specified group <_static/api/studio.html#tag/groups/operation/getGroupMembers>`
+
     * - update_groups
       - User is permitted to update groups |br|
         Used for :ref:`administering groups <groups-management>`
@@ -49,30 +67,58 @@ The system level (global) permissions are defined in the file ``global-permissio
 
         - :base_url:`Update group <_static/api/studio.html#tag/groups/operation/updateGroups>`
         - :base_url:`Add member(s) to the specified group <_static/api/studio.html#tag/groups/operation/addGroupMembers>`
+
     * - delete_groups
       - User is permitted to :ref:`delete groups <deleting-a-group>` |br|
         Required when using the following APIs:
 
         - :base_url:`Delete group <_static/api/studio.html#tag/groups/operation/deleteGroup>`
         - :base_url:`Remove member(s) from the specified group <_static/api/studio.html#tag/groups/operation/removeGroupMembers>`
+
     * - create_users
       - User is permitted to :ref:`create new users <creating-a-user>` |br|
         Required when using the API to :base_url:`Create user <_static/api/studio.html#tag/users/operation/createUser>`
+
+    * - read_users
+      - User is permitted to read users. Used in the :ref:`Users Management Console <users-management>` |br|
+        Required when using the following APIs:
+
+        - :base_url:`Get users <_static/api/studio.html#tag/users/operation/getUsers>`
+        - :base_url:`Get user <_static/api/studio.html#tag/users/operation/getUser>`
+        - :base_url:`Get user sites <_static/api/studio.html#tag/users/operation/getUserSites>`
+        - :base_url:`Get user site roles <_static/api/studio.html#tag/users/operation/getUserSiteRoles>`
+
+    * - update_users
+      - User is permitted to update users. Used in the :ref:`Users Management Console <users-management>` |br|
+        Required when using the following APIs:
+
+        - :base_url:`Update user <_static/api/studio.html#tag/users/operation/updateUser>`
+        - :base_url:`Enable user <_static/api/studio.html#tag/users/operation/enableUser>`
+        - :base_url:`Disable user <_static/api/studio.html#tag/users/operation/disableUser>`
+        - :base_url:`Reset user password <_static/api/studio.html#tag/users/operation/resetUserPassword>`
+
     * - delete_users
       - User is permitted to :ref:`delete users <deleting-a-user>` |br|
-        Required when using the API to :base_url:`Create user <_static/api/studio.html#tag/users/operation/deleteUser>`
+        Required when using the API to :base_url:`Delete user <_static/api/studio.html#tag/users/operation/deleteUser>`
+
     * - encryption_tool
       - User is permitted to access the :ref:`encryption tool <studio-encryption-tool>` |br|
         Required when using the API to :base_url:`Encrypt a text value <_static/api/studio.html#tag/security/operation/encrypt>`
+
     * - install_plugins
       - User is permitted to :ref:`install plugins <plugin-management>` |br|
         Required when using the following APIs:
 
         - :base_url:`Install plugin <_static/api/studio.html#tag/marketplace/operation/installPlugin>`
         - :base_url:`Copy local plugin <_static/api/studio.html#tag/marketplace/operation/copyPlugin>`
+
     * - list_plugins
       - User is permitted to list installed plugins |br|
         Required when using the API to :base_url:`get the list of marketplace plugins installed in the given site <_static/api/studio.html#tag/marketplace/operation/getInstalledPlugins>`
+
+    * - search_plugins
+      - User is permitted to :ref:`search for plugins <plugin-management>`
+
     * - manage_access_token
       - User is permitted to :ref:`manage the access tokens <nav-menu-token-management>` |br|
         Required when using the following APIs:
@@ -82,32 +128,18 @@ The system level (global) permissions are defined in the file ``global-permissio
         - :base_url:`Update access token <_static/api/studio.html#tag/security/operation/updateAccessToken>`
         - :base_url:`Delete access token <_static/api/studio.html#tag/security/operation/deleteAccessToken>`
         - :base_url:`Generate preview token <_static/api/studio.html#tag/security/operation/generatePreviewToken>`
-    * - read_users
-      - User is permitted to read users. Used in the :ref:`Users Management Console <users-management>` |br|
-        Required when using the following APIs:
+          (globally, or for every requested site)
 
-        - :base_url:`Get users <_static/api/studio.html#tag/users/operation/getUsers>`
-        - :base_url:`Get user <_static/api/studio.html#tag/users/operation/getUser>`
-        - :base_url:`Get user sites <_static/api/studio.html#tag/users/operation/getUserSites>`
-        - :base_url:`Get user site roles <_static/api/studio.html#tag/users/operation/getUserSiteRoles>`
-    * - update_users
-      - User is permitted to update users. Used in the :ref:`Users Management Console <users-management>` |br|
-        Required when using the following APIs:
-
-        - :base_url:`Update user <_static/api/studio.html#tag/users/operation/updateUser>`
-        - :base_url:`Enable user <_static/api/studio.html#tag/users/operation/enableUser>`
-        - :base_url:`Disable user <_static/api/studio.html#tag/users/operation/disableUser>`
-        - :base_url:`Reset user password <_static/api/studio.html#tag/users/operation/resetUserPassword>`
-    * - search_plugins
-      - User is permitted to :ref:`search for plugins <plugin-management>`
     * - read_cluster |enterpriseOnly|
       - User is allowed to list the cluster members and the cluster mode (PRIMARY vs REPLICA) |br|
         Required when using the following APIs:
 
         - :base_url:`Get the local Studio instance cluster mode <_static/api/studio.html#tag/cluster/operation/getClusterMode>`
         - :base_url:`Get all the members of the cluster <_static/api/studio.html#tag/cluster/operation/getClusterMembers>`
+
     * - write_global_configuration
       - User is permitted to write global configuration content for Studio
+
     * - system_properties_manage
       - User is allowed to update, write or delete system properties. |br|
         Required when using the following APIs:
