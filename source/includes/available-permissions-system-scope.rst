@@ -23,7 +23,8 @@ The system level (global) permissions are defined in the file ``global-permissio
     * - read_logs
       - User is permitted to see the :ref:`Logging Levels <main-menu-tool-logging-levels>` and
         :ref:`Log Console <main-menu-tool-log-console>` entries in the Main Menu. Viewing log output
-        requires ``view_logs``. Viewing and changing log levels require ``view_log_levels`` and ``configure_log_levels``
+        requires ``view_logs``. Viewing log levels requires ``view_log_levels`` or ``configure_log_levels``.
+        Changing log levels requires ``configure_log_levels``.
 
     * - audit_log
       - User is permitted to access the audit logs in the UI from the :ref:`main menu <nav-menu-audit>` or the
