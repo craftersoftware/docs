@@ -67,7 +67,8 @@ The project level permissions are defined in the file ``permission-mappings-conf
 
     * - view_logs
       - User is permitted to view logs from the :ref:`project tools UI <studio-log-console>` or
-        :ref:`Main Menu UI <main-menu-tool-log-console>` depending on where the permission is configured (project or global/system)
+        :ref:`Main Menu UI <main-menu-tool-log-console>` depending on where the permission is configured (project or global/system).
+        The Main Menu entries are shown to users with ``read_logs``
 
     * - audit_log
       - User is permitted to access the audit logs in the UI from the :ref:`main menu <nav-menu-audit>` or the
@@ -75,6 +76,10 @@ The project level permissions are defined in the file ``permission-mappings-conf
 
     * - content_search
       - User is permitted to search for content from the UI
+
+    * - change_content_type
+      - User is permitted to change the content type of an item from the :ref:`Sidebar <sidebar>` |br|
+        The Sidebar action is enabled by ``content_write``
 
     * - s3_read
       - User is permitted to get a list of items from an S3 bucket defined in the :ref:`AWS S3 profile <aws-profile-configuration>`

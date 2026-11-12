@@ -13,11 +13,17 @@ The system level (global) permissions are defined in the file ``global-permissio
 
     * - view_logs
       - User is permitted to view logs from the :ref:`project tools UI <studio-log-console>` or
-        :ref:`Main Menu UI <main-menu-tool-log-console>` depending on where the permission is configured (project or global/system)
+        :ref:`Main Menu UI <main-menu-tool-log-console>` depending on where the permission is configured (project or global/system).
+        The Main Menu entries are shown to users with ``read_logs``
 
     * - view_log_levels
       - User is permitted to view log levels from the :ref:`Main Menu UI <override-logging-levels>`
         or via the API :base_url:`Get all loggers and their configured priority levels <_static/api/studio.html#tag/loggers/operation/loggersGetAll>`
+
+    * - read_logs
+      - User is permitted to see the :ref:`Logging Levels <main-menu-tool-logging-levels>` and
+        :ref:`Log Console <main-menu-tool-log-console>` entries in the Main Menu. Viewing log output
+        requires ``view_logs``. Viewing and changing log levels require ``view_log_levels`` and ``configure_log_levels``
 
     * - audit_log
       - User is permitted to access the audit logs in the UI from the :ref:`main menu <nav-menu-audit>` or the
@@ -72,20 +78,6 @@ The system level (global) permissions are defined in the file ``global-permissio
       - User is permitted to :ref:`create new users <creating-a-user>` |br|
         Required when using the API to :base_url:`Create user <_static/api/studio.html#tag/users/operation/createUser>`
 
-        - :base_url:`Install plugin <_static/api/studio.html#tag/marketplace/operation/installPlugin>`
-        - :base_url:`Copy local plugin <_static/api/studio.html#tag/marketplace/operation/copyPlugin>`
-    * - list_plugins
-      - User is permitted to list installed plugins |br|
-        Required when using the API to :base_url:`get the list of marketplace plugins installed in the given site <_static/api/studio.html#tag/marketplace/operation/getInstalledPlugins>`
-    * - manage_access_token
-      - User is permitted to :ref:`manage the access tokens <nav-menu-token-management>` |br|
-        Required when using the following APIs:
-
-        - :base_url:`Get access tokens <_static/api/studio.html#tag/security/operation/getAccessTokens>`
-        - :base_url:`Create access token <_static/api/studio.html#tag/security/operation/createAccessToken>`
-        - :base_url:`Update access token <_static/api/studio.html#tag/security/operation/updateAccessToken>`
-        - :base_url:`Delete access token <_static/api/studio.html#tag/security/operation/deleteAccessToken>`
-        - :base_url:`Generate preview token <_static/api/studio.html#tag/security/operation/generatePreviewToken>`
     * - read_users
       - User is permitted to read users. Used in the :ref:`Users Management Console <users-management>` |br|
         Required when using the following APIs:
@@ -106,7 +98,7 @@ The system level (global) permissions are defined in the file ``global-permissio
 
     * - delete_users
       - User is permitted to :ref:`delete users <deleting-a-user>` |br|
-        Required when using the API to :base_url:`Create user <_static/api/studio.html#tag/users/operation/deleteUser>`
+        Required when using the API to :base_url:`Delete user <_static/api/studio.html#tag/users/operation/deleteUser>`
 
     * - encryption_tool
       - User is permitted to access the :ref:`encryption tool <studio-encryption-tool>` |br|
@@ -134,6 +126,7 @@ The system level (global) permissions are defined in the file ``global-permissio
         - :base_url:`Create access token <_static/api/studio.html#tag/security/operation/createAccessToken>`
         - :base_url:`Update access token <_static/api/studio.html#tag/security/operation/updateAccessToken>`
         - :base_url:`Delete access token <_static/api/studio.html#tag/security/operation/deleteAccessToken>`
+        - :base_url:`Generate preview token <_static/api/studio.html#tag/security/operation/generatePreviewToken>`
 
     * - read_cluster |enterpriseOnly|
       - User is allowed to list the cluster members and the cluster mode (PRIMARY vs REPLICA) |br|
