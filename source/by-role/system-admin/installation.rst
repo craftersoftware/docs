@@ -133,7 +133,7 @@ The following browsers are supported:
 
     - Chrome and Chromium-based Browsers
     - Firefox
-    - MS Edge
+    - Microsoft Edge
 
 |
 
