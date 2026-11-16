@@ -3294,11 +3294,9 @@ service reads both forms. Obtain it from the target application context:
     def context = contextFactory.getObject()
 
 
-``ContentAccessExample.groovy`` lists the size of created and updated static assets. The Java processor above logs
-``filteredChangeSet``, which already honors ``includeFiles`` and ``excludeFiles``. This script walks
-``originalChangeSet`` and keeps paths that start with ``/static-assets``. ``InputStream.available()`` is an estimate of
-how many bytes can be read without blocking. In the sample log it returned the asset size. ``Content.getLength()``
-returns the content length directly.
+``ContentAccessExample.groovy`` lists the size of created and updated static assets. It walks ``filteredChangeSet``,
+so the ``includeFiles`` and ``excludeFiles`` patterns on the ``scriptProcessor`` entry select the paths. The script
+keeps paths that start with ``/static-assets`` and logs ``Content.getLength()``.
 
 .. raw:: html
 
@@ -3308,7 +3306,7 @@ returns the content length directly.
 .. code-block:: groovy
     :linenos:
     :caption: *$CRAFTER_HOME/bin/crafter-deployer/processors/scripts/ContentAccessExample.groovy*
-    :emphasize-lines: 1-3, 7, 18, 35, 76
+    :emphasize-lines: 1-3, 7, 12, 15, 19, 25
 
     def contextFactory = applicationContext.getBean("contextFactory")
     def contentStoreService = applicationContext.getBean("crafter.contentStoreService")
@@ -3321,39 +3319,25 @@ returns the content length directly.
     logger.info("Invoking example deployer processor")
     logger.info("Target value: {}", someTargValue)
 
-    for(path : originalChangeSet.getCreatedFiles()) {
+    for(path : filteredChangeSet.getCreatedFiles()) {
         if(contentAccessHelper.isAsset(path)) {
-            def is
-
-            try {
-                is = contentAccessHelper.retrieveStaticAsset(path)
-                logger.info("CREATE w bytes: {} {}", path, is.available())
-            }
-            finally {
-                if(is) is.close()
-            }
+            def content = contentAccessHelper.retrieveStaticAsset(path)
+            logger.info("CREATE w bytes: {} {}", path, content.getLength())
         }
     }
 
-    for(path : originalChangeSet.getUpdatedFiles()) {
+    for(path : filteredChangeSet.getUpdatedFiles()) {
         // Note: Update is only called if the file is different.
         // The deployer ignores repeated deployments of the same file
 
         if(contentAccessHelper.isAsset(path)) {
-            def is
-
-            try {
-                is = contentAccessHelper.retrieveStaticAsset(path)
-                logger.info("UPDATE w bytes: {} {}", path, is.available())
-            }
-            finally {
-                if(is) is.close()
-            }
+            def content = contentAccessHelper.retrieveStaticAsset(path)
+            logger.info("UPDATE w bytes: {} {}", path, content.getLength())
         }
     }
 
     // don't do anything with deleted files
-    // for(path : originalChangeSet.getDeletedFiles()) {
+    // for(path : filteredChangeSet.getDeletedFiles()) {
     // }
 
     logger.info("Invoking example deployer processor complete")
@@ -3373,9 +3357,9 @@ returns the content length directly.
         }
 
         /**
-         * get the input stream of an asset
-         *  This service should be used to get asset input streams for the following 3 reasons:
-         * 1. This code works with blob store and without
+         * Get the content for an asset.
+         * This service should be used for the following 3 reasons:
+         * 1. This code works with a blob store and without one
          * 2. This code does not assume direct access to system resources (which is
          * disabled for scripting)
          * 3. This code future-proofs your code for other repository updates
@@ -3388,15 +3372,15 @@ returns the content length directly.
                 def binaryContent = contentStoreService.findContent(this.context, binaryPath)
 
                 if(binaryContent != null) {
-                    return binaryContent.getInputStream()
+                    return binaryContent
                 }
                 else {
-                    throw new Exception("Content at path returned null via findContent {}", binaryPath)
+                    throw new Exception("Content at path returned null via findContent " + binaryPath)
                 }
             }
             else {
                 // item is remote
-                throw new Exception("Remote assets not supported by processor at this time {}", binaryPath)
+                throw new Exception("Remote assets not supported by processor at this time " + binaryPath)
             }
         }
 
