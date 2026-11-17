@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.7.0
+:last-updated: 4.7.2
 
 .. meta::
    :description: Crafter Engine is the CrafterCMS content delivery module — serving REST, GraphQL, and FreeMarker-rendered content for web and mobile apps.
@@ -318,6 +318,14 @@ Step 2: Configure the Delivery for Serverless Mode
    .. important:: You can also provide the AWS region, access key and secret key without having to edit the config file
                   properties. Please see
                   `Set up AWS Credentials and Region for Development <https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html>`_.
+
+   .. note::
+      Since 4.7.2, Deployer writes a content store manifest (``content-store-manifest.json.gz``) at the site's S3
+      root prefix, alongside the default ``deployment-events.properties``, when it publishes the site to S3. Engine
+      uses that manifest for file and folder lookups instead of listing the bucket. If the manifest is missing or
+      cannot be read, Engine lists the S3 bucket.
+      See :ref:`engine-s3-content-store-manifest` and
+      :ref:`deployer-s3-content-store-manifest-processor`.
 
 #. We recommend that the AWS credentials configured belong to a user with just the following permission policy (all
    strings like ``$VAR`` are placeholders and need to be replaced):
@@ -747,6 +755,8 @@ In this section we will highlight some of the more commonly used properties in t
       - Allows you to configure the proxy for the Preview server (Crafter Engine in Preview Mode)
     * - :ref:`engine-cache`
       - Allows you to configure various cache related items such as items to be preloaded in cache, etc.
+    * - :ref:`engine-s3-content-store-manifest`
+      - Allows you to configure how Engine reads the S3 content store manifest in serverless mode
     * - :ref:`request-filtering-configuration`
       - Allows you to configure request filtering
     * - :ref:`engine-forwarded-headers`
@@ -1403,7 +1413,8 @@ Engine has multiple caches:
 - **System cache** for objects cached by Engine itself. |br|
   The system cache is cleared by the Deployer on publish calling the API, when the Deployer runs alongside Engine.
   When Engine runs in serverless mode and detects a change in the ``deployment-events.properties`` file in S3, a new
-  version of the system cache is built and then swapped with the old system cache version.
+  version of the system cache is built and then swapped with the old system cache version. Engine also reloads the
+  content store manifest on any change to that file (see :ref:`engine-s3-content-store-manifest`).
 
 The ``system`` and ``application`` cache uses the same API to :base_url:`clear <_static/api/engine.html#tag/cache/operation/cacheClear>`
 and to get :base_url:`statistics <_static/api/engine.html#tag/cache/operation/cacheStatistics>`. Simply pass the parameter
@@ -1490,6 +1501,79 @@ The following allows you to configure a white list of paths for caching in memor
       /static-assets/css/.*,\
       /static-assets/js/.*,\
       /static-assets/fonts/.*
+
+|
+
+|hr|
+
+.. _engine-s3-content-store-manifest:
+
+"""""""""""""""""""""""""
+S3 Content Store Manifest
+"""""""""""""""""""""""""
+.. version_tag::
+    :label: Since
+    :version: 4.7.2
+
+This is a serverless content-store setting, not a cache setting. When Engine runs in serverless mode, it needs to
+know which files and folders exist in the S3 bucket. To avoid listing the bucket on every file and folder lookup,
+Engine reads the content store manifest (``content-store-manifest.json.gz``) that Crafter Deployer writes at the
+site's S3 root prefix, alongside the default ``deployment-events.properties`` (see
+:ref:`deployer-s3-content-store-manifest-processor`). Engine builds an in-memory index of every file and of the
+folders derived from those paths, and uses the index to check whether a file or folder exists and to list the children
+of a folder. A path that is not in the index is not found, and Engine does not list the bucket to check it. File
+contents are still read from S3.
+
+- Engine loads the manifest when it creates the site context, and loads it on the first lookup if the index has not
+  been resolved yet.
+- Engine reloads the manifest whenever the content of the deployment events file changes. The reload happens before
+  Engine handles ``clearCache``, ``rebuildContext`` or ``rebuildGraphQL``, so a change to any of those events reloads
+  it. With the default AWS targets the events file changes on every publish that has file changes, because the
+  ``clearCache`` event has no file filter.
+- If the manifest does not exist (for example, the site has not been published since the processor was added), Engine
+  falls back to listing the S3 bucket.
+- If the manifest cannot be read (it is corrupt, it is not gzip, or S3 returns an error other than not found), Engine
+  logs a warning, drops any index it was holding, and lists the S3 bucket. The deployment events watcher retries that
+  load on each later cycle while the failure stands, including when the events file has not changed. The watcher
+  schedule is ``crafter.engine.events.deployment.watcher.cron``, which defaults to ``0 * * ? * *`` (every minute).
+- The deployment events file is always read directly from S3 and never from the manifest. The manifest does not list
+  it because the events file is written outside the Git repository, and the manifest lists the local clone.
+
+The default below is set in ``classpath:crafter/engine/mode/serverless/s3/server-config.properties``, which serverless
+S3 mode adds to Engine's configuration. If the property is not set, Engine still uses ``deployment-events.properties``.
+Administrators override it in
+``CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties``
+(``DELIVERY_INSTALL_DIR/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties`` on a
+delivery install; the same file edited in :ref:`setup-serverless-delivery`). The value is a store path relative to the
+site root and must match the ``deploymentEventsFileUrl`` of the ``s3DeploymentEventsProcessor`` in Deployer. Both
+default to ``deployment-events.properties``.
+
+.. code-block:: properties
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/engine/extension/server-config.properties*
+
+    # Store path of the deployment events file. Engine reads this object directly from S3 so a
+    # content store manifest that does not list it still reports new publishes.
+    crafter.engine.store.s3.deploymentEventsFileUrl=deployment-events.properties
+
+**Properties**
+
++---------------------------------------------------+--------------------------------+------------------------------------------------------------------------+
+|Name                                               |Default Value                   |Description                                                             |
++===================================================+================================+========================================================================+
+|``crafter.engine.store.s3.deploymentEventsFileUrl``|``deployment-events.properties``|Store path of the deployment events file in the site's S3 location. It  |
+|                                                   |                                |must match the ``deploymentEventsFileUrl`` of the                       |
+|                                                   |                                |``s3DeploymentEventsProcessor`` in Deployer.                            |
++---------------------------------------------------+--------------------------------+------------------------------------------------------------------------+
+
+.. note::
+    **Memory.** Engine keeps the index in memory. Plan for about 2.5x that while a reload is in progress (the old
+    index, the parsed manifest and the new index coexist). Rough synthetic examples, not guarantees: for 500,000
+    files, dense folder layouts retained roughly 70-115 MB, and folder-per-page layouts with paths of about 56
+    characters about 220 MB. Longer paths cost much more: paths of about 88 characters retained about 310 MB with 10
+    files per folder and about 840 MB with one file per folder. Deep sparse trees can exceed 1 GB. Budget roughly
+    150-450 bytes per file for paths of about 55 characters, and several times that for long, deeply nested paths.
+    Size the heap for your own site. To opt out, remove ``s3ContentStoreManifestProcessor`` from the target
+    configuration and delete ``content-store-manifest.json.gz`` from the site's S3 location.
 
 |
 
