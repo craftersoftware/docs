@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.1.1
+:last-updated: 5.0.0
 
 .. index:: Publishing Status, Bulk Publish, Publish by Commit Id
 
@@ -12,7 +12,7 @@
 =================
 Publishing Status
 =================
-The **Publishing** tool under |projectTools| allows the user to view the publishing status,
+The **Publishing** tool under ``Project Tools`` allows the user to view the publishing status,
 publish multiple items from a specified path, publish commits from sandbox repository by commit id or tag and
 view the publishing queue.
 
@@ -25,30 +25,12 @@ The **Status** section allows the user to view the publishing status, such as th
 
 - The publisher was stopped by an administrator.
 - The publisher was stopped due to an error.
-- Preparing items for publishing. {numberOfItems} out of {totalItems} processed so far.
 
 It also allows the user to **Start** or **Stop** Studio publishing
 
 .. image:: /_static/images/site-admin/project-tools-publish-status.webp
     :alt: Project Tools Publishing - Status
 	:align: center
-
-|
-
-Publishing is locked when content is being published. From the Status tab, you can unlock publishing by clicking on the ``unlock`` button that is displayed during content publishing.
-
-.. image:: /_static/images/site-admin/project-tools-unlock-publish.webp
-    :alt: Project Tools Publishing - Unlock icon
- 	:align: center
-
-|
-
-After clicking on the ``unlock`` button, the user will be prompted to confirm the action:
-
-.. image:: /_static/images/site-admin/project-tools-unlock-publish-confirm.webp
-    :alt: Project Tools Publishing - Unlock icon
-    :width: 35%
-    :align: center
 
 |
 
@@ -71,7 +53,12 @@ The user will first be asked to publish the entire project, if the project has n
 .. image:: /_static/images/site-admin/project-tools-publish-on-demand-initial.webp
     :alt: Project Tools Publishing - Initial Publish
 	:align: center
-    :width: 75%
+
+|
+
+.. image:: /_static/images/site-admin/project-tools-publish-on-demand-initial-detail.webp
+    :alt: Project Tools Publishing - Initial Publish details
+	:align: center
 
 |
 
@@ -80,9 +67,9 @@ Publish by path
 ^^^^^^^^^^^^^^^
 The **Publish changes made in Studio via the UI** selection allows the user to publish multiple items under a specified path. This should be used to publish changes made in Studio via the UI.
 
-For example, using the Website Editorial blueprint, to publish all the articles in the year 2021, in the **Path to Publish** field, enter ``/site/website/articles/2021``. To publish everything in your project, the user will enter ``/`` in the **Path to Publish** field
+For example, using the Website Editorial blueprint, to publish all the articles in the year 2021, in the **Path to Publish** field, enter ``/site/website/articles/2021``. Fill in the ``Package Title`` and ``Submission Comment`` and choose the ``Publishing Target``, then click on the ``Publish`` button.
 
-.. image:: /_static/images/site-admin/project-tools-publish-bulk.webp
+.. image:: /_static/images/site-admin/project-tools-publish-path.webp
     :alt: Project Tools Publishing - Publish changes made in Studio via the UI
 	:align: center
 
@@ -131,10 +118,10 @@ To publish by commit id, let's use a project created using the Website Editorial
 
   The commit id we want to publish by commit id is ``f47c9a5bae4184e7b5ff2cb03b90b8ff86adec37``
 
-- Go back to Studio and click on |projectTools| -> Publishing
+- Go back to Studio and click on ``Project Tools`` -> ``Publishing``
 - Scroll down to the ``Publish on Demand`` section
 - Select the ``Publish changes made via direct git actions against the repository or pulled from a remote repository`` radio button
-- Paste the commit id from the step where we got the commit id, then click on the ``Publish`` button
+- Paste the commit id from the earlier step, fill in the ``Package Title`` and ``Submission Comment``, select the ``Publishing Target``, then click the ``Publish`` button
 
 .. _publish-everything:
 
@@ -149,7 +136,9 @@ The **Publish everything** selection allows the user to publish all changes on t
 target you choose.
 
 For example, using the Website Editorial blueprint, to publish all the changes made in the sandbox repo,
-simply select ``Publish everything`` and then choose the publishing target, then click on the ``Publish`` button.
+simply select ``Publish everything`` and then fill in the ``Package Title`` and ``Submission Comment`` and choose the
+``Publishing Target``. Remember to check the box confirming that you understand the entire site will be published.
+Finally click on the ``Publish`` button.
 
 
 .. image:: /_static/images/site-admin/project-tools-publish-bulk.webp
@@ -171,18 +160,24 @@ The **Publishing Queue** tab allows the user to see the items(publishing package
 
 |
 
-**Publishing packages** contains the following information:
+**Publishing packages** contain the following information:
 
-* An ``id`` for the publishing package
-* The ``target`` item is published to/to be published
-* ``Username`` that sent/requested publishing package
-* ``Submission comment``
-* ``State`` of the publishing package
-* ``Scheduled Date`` for publishing the package
+* ``Package Title``: title for the publishing package
+* ``Publishing Target``: publishing package destination
+* ``Submitter``:  user that sent/requested publishing package
+* ``Submission Comment``: submission comment for publishing package
+* ``Status``: status of the publishing package and depending on the status, may contain the following:
+
+  - ``Reviewer``: user that reviewed and approved/rejected the package
+  - ``Approved`` / ``Rejected``: whether the package is approved/rejected
+  - ``Comment`` / ``Reason``: approval comment provided/ rejection reason provided
+
+* ``Submitted On``: date package was submitted for publishing
+* ``Scheduled For``: schedule for publishing the package
 * A list of file(s) contained in the publishing package with the following information:
 
-    * The ``content type``
-    * The ``content path``
+    * The content title
+    * The content path
 
 
 .. image:: /_static/images/site-admin/project-tools-publishing-package.webp
@@ -193,18 +188,21 @@ The **Publishing Queue** tab allows the user to see the items(publishing package
 
 You can filter the publishing queue displayed, based on the following:
 
-* ``Path Expression`` (e.g. simple regex ``/SOME/PATH/*``)
 * ``Publishing Target`` (a list of all available targets)
 * ``State`` of the publishing packages
 
-  The following are the applicable states to publishing packages.
+  The following are the applicable states for publishing packages.
 
-    * **All**
-    * **Ready for Live**: Item is scheduled and waiting in the queue to be published
-    * **Processing**: Item is being published
-    * **Completed**: Item has been published
-    * **Cancelled**: Item has been removed from the queue (publishing was cancelled)
-    * **Blocked**: Item is blocking the publishing queue
+    * **Ready for Live**: The package is ready to be published (this is conditional on package approvalState)
+    * **Processing**: The package is currently being processed
+    * **Live Success**: The package has been published to live target
+    * **Live Completed with Errors**: The package has been partially published to live target due to errors
+    * **Live Failed**: The package failed to be published to live target
+    * **Staging Success**: The package has been published to staging
+    * **Staging Completed with Errors**: The package has been partially published to staging target due to errors
+    * **Staging Failed**: The package failed to be published to staging target
+    * **Completed**: The package has been completed in at least one target
+    * **Cancelled**: The package has been cancelled
 
 
 .. image:: /_static/images/site-admin/project-tools-publish-queue-filter.webp
@@ -230,3 +228,4 @@ Packages in the ``READY_FOR_LIVE`` state can be selected and the publishing pack
     :alt: Project Tools Publishing - Publishing Queue Filter Completed
     :align: center
 
+|
