@@ -813,10 +813,44 @@ In order to generate a valid self-signed SSL certificate, you can do the followi
 #. Run ``openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout server.key -out server.crt`` and follow the prompts. It's up to you what to enter in each field, *EXCEPT* for the Common Name (CN). This should match
    the Pods' base domain name. If following the example, the CN value should be ``*.authoring-svc-headless.craftercms``.
 
+.. _seed-studio-cluster-db-on-kubernetes:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Copy an Existing Primary Database
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Use this section when the Primary database was created while Studio was a single non-clustered instance. Copy that
+``data/db`` onto every Authoring volume before the first clustered start. Without the copy, the Replica fails to start
+with a database sync error. See :ref:`authoring-cluster-troubleshooting`.
+
+Skip this section for a new cluster. Studio initializes ``data/db`` on first start. Continue at
+:ref:`start-kubernetes-authoring-cluster`.
+
+``kubectl apply -k .`` creates the volume claims and starts the Pods together, so create the claims and finish the copy
+first. In the example the claims are ``data-authoring-0`` and ``data-authoring-1`` in the ``craftercms`` namespace
+(``data-<statefulset-name>-<ordinal>``). Add a claim for each further ordinal when the cluster is larger. Use the same
+access mode and storage request as the example ``volumeClaimTemplates`` entry, or a larger request when the data needs
+it.
+
+The Authoring container mounts each claim at ``/opt/crafter/data``, so ``data/db`` on the Studio host is the ``db``
+directory at the root of the volume. Stop the original Studio before the copy. The claims are ``ReadWriteOnce``: finish
+writing to a claim, then unmount it, before the Authoring Pod starts. How you copy onto the claim depends on your
+cluster. Hosts you can log into are covered in :ref:`replace-existing-data-db-in-replica`.
+
+- When the Primary data is already on ``data-authoring-0``, leave that claim in place and copy ``db`` onto each Replica
+  claim. The :ref:`simple Authoring example <setup-simple-authoring-with-kubernetes-deployment>` uses this same claim.
+  Stop that StatefulSet before the copy.
+- When the Primary Studio is outside the cluster, copy its ``data`` directory, including ``db`` and the repositories,
+  onto ``data-authoring-0``. Copy only ``db`` onto each Replica claim.
+
+.. _start-kubernetes-authoring-cluster:
+
 ~~~~~~~~~~~~~~~~~
 Start the Cluster
 ~~~~~~~~~~~~~~~~~
 Go to ``kubernetes-deployments/authoring/cluster``, then run ``kubectl apply -k .``
+
+Kubernetes uses any ``data-authoring-<ordinal>`` claim that already exists, including claims you prepared above, and
+creates any claim that is still missing. On a new cluster this command creates the claims and starts the Pods together.
 
 This should deploy all necessary resources in Kubernetes. You can monitor the status of the cluster nodes by running ``kubectl get -n craftercms pods``.
 
@@ -914,7 +948,7 @@ You can use the Delivery Simple example under https://github.com/craftercms/kube
 Updating and Shutting Down the Cluster
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The Authoring Cluster's ``StatefulSet`` is configured with ``.spec.updateStrategy`` ``OnDelete``. This means that whenever the Kubernetes configuration for the ``StatefulSet`` is updated, you will need to manually delete the Pods to create new Pods in order
-for the modifications to be reflected. We prefer this ``updateStrategy`` instead of ``RollingUpdate`` so administrators can restart the cluster replicas first (by killing their Pods), wait for them to come up, and finally restart the primary, whenever a small
+for the modifications to be reflected. We prefer this ``updateStrategy`` instead of ``RollingUpdate`` so administrators can restart the cluster Replicas first (by killing their Pods), wait for them to come up, and finally restart the Primary, whenever a small
 update to the configuration needs to be applied (like changing a small flag in one of the Crafter configuration files under ``/opt/crafter/bin/apache-tomcat/shared/classes``).
 
 For bigger updates, like a version upgrade or any other update that could cause modifications to the project content or the database, progressively scaling down the StatefulSet is recommended, by running
