@@ -2163,6 +2163,8 @@ A custom Groovy processor that can process published content.
 
 .. note::  The default path scripts are loaded from is ``$CRAFTER_HOME/bin/crafter-deployer/processors/scripts``
 
+A complete script that reads published content is included in :ref:`deployer-groovy-script-processor-option`.
+
 **Example**
 
 .. code-block:: yaml
@@ -2981,7 +2983,9 @@ The following example shows how the deployment processors work together to deliv
 Custom Processors
 ^^^^^^^^^^^^^^^^^
 Crafter Deployer can be easily configured to match different needs but in case additional features are needed it is
-also possible to include custom libraries by following this guide:
+also possible to include custom libraries by following this guide. These steps add a Java class to the Deployer
+classpath and register it as a Spring bean. To run Groovy with the built-in script processor, follow
+:ref:`deployer-groovy-script-processor-option`.
 
 """""""""""""""""""""""""""""""""""
 Step 1: Create the custom processor
@@ -2991,7 +2995,9 @@ that implements the ``DeploymentProcessor`` interface.
 
 .. note::
     It is highly recommended to extend ``AbstractDeploymentProcessor`` or ``AbstractMainDeploymentProcessor`` instead of
-    just implementing the interface.
+    just implementing the interface. Extend ``AbstractMainDeploymentProcessor`` when the processor runs during the main
+    deployment phase, while the change set is available. Extend ``AbstractPostDeploymentProcessor`` when the processor
+    runs after the deployment has finished.
 
 These classes can be accessed by adding a dependency in your project:
 
@@ -3023,8 +3029,9 @@ All configuration files for targets will be placed in the following folder:
 
   ``INSTALL_DIR/data/deployer/targets``
 
-First you need to create or update a context file to define all beans required by the custom processor, the file should
-have the name ``{site}-{env}-context.xml``:
+First you need to create or update a context file to define all beans required by the custom processor. The file is
+loaded from the same targets folder as the YAML file. Its name is the YAML file name with ``-context.xml`` in place of
+``.yaml`` (``editorial-preview.yaml`` uses ``editorial-preview-context.xml``):
 
 .. code-block:: xml
 
@@ -3041,8 +3048,9 @@ have the name ``{site}-{env}-context.xml``:
     The parent bean is provided by Crafter Deployer and it includes common configuration used by the
     ``AbstractDeploymentProcessor`` and ``AbstractMainDeploymentProcessor`` classes.
 
-Once the bean has been defined it can be added to the target's pipeline in the yaml file with the matching name
-``{site}-{env}.yaml``:
+Once the bean has been defined, add it to that target's pipeline. ``processorName`` is the Spring bean id. Crafter
+Deployer loads that bean from the target application context and passes the YAML entry to the processor's ``init``
+method:
 
 .. code-block:: yaml
 
@@ -3061,26 +3069,222 @@ Once the bean has been defined it can be added to the target's pipeline in the y
       port: 8080
 
 
+YAML keys on the processor entry, such as ``username`` and ``password`` above, are available from the ``Configuration``
+passed to ``init``. Placeholders such as ``${service.url}`` are resolved from the target configuration when the context
+is loaded.
+
 Any change in the classpath will require a restart of Crafter Deployer, changes in configuration files will be
 applied when the target is reloaded.
 
-"""""""
-Example
-"""""""
-Let's take a look at an example of creating and configuring your own script deployment processor that lists the
-approximate number of bytes for created and updated files. We'll use a site created using the website editorial
-blueprint named ``ed``
+.. _deployer-custom-java-processor-example:
 
-First, we'll create our custom deployment processor. We'll then look at how to configure our custom deployment processor
-in a target.
+""""""""""""""""""""""
+Java Processor Example
+""""""""""""""""""""""
+The following example follows steps 1-3 for a site created from the Website Editorial blueprint, named ``ed``.
+The processor logs the size of each created or updated file under ``/static-assets``. It reads those files through the
+content store service (bean ``crafter.contentStoreService``) and the target context factory (bean ``contextFactory``).
+``Content.getLength()`` returns the size for filesystem content and for blob-store content.
 
-For this example, to be able to access the number of bytes of the files being created and updated, we'll need a way to
-access those files securely since the scripting sandbox does not give you direct access to files on the operating system.
-Note also that files may be deployed in various ways in CrafterCMS. It could be on the file system, or it could be
-"blobs", an xml file that points to where the actual content is, such as a S3 bucket.
+``ContentAccessProcessor`` extends ``AbstractMainDeploymentProcessor``. Package it, and any libraries it needs, in a
+JAR built with the ``crafter-deployer`` dependency from step 1. Copy that JAR into
+``$CRAFTER_HOME/bin/crafter-deployer/lib``, the folder from step 2.
 
-There's an out-of-the-box service that does everything that we just mentioned called the content store service that we
-can use. To get the content store service in our deployer processor, we'll perform the following actions against Spring:
+.. raw:: html
+
+    <details>
+    <summary><a>ContentAccessProcessor.java</a></summary>
+
+.. code-block:: java
+    :linenos:
+    :caption: *com.example.ContentAccessProcessor*
+
+    package com.example;
+
+    import org.apache.commons.configuration2.Configuration;
+    import org.craftercms.core.service.Content;
+    import org.craftercms.core.service.ContentStoreService;
+    import org.craftercms.core.service.Context;
+    import org.craftercms.deployer.api.ChangeSet;
+    import org.craftercms.deployer.api.Deployment;
+    import org.craftercms.deployer.api.ProcessorExecution;
+    import org.craftercms.deployer.api.exceptions.DeployerException;
+    import org.craftercms.deployer.impl.processors.AbstractMainDeploymentProcessor;
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+    import org.springframework.beans.factory.ObjectFactory;
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.ApplicationContextAware;
+
+    import java.util.List;
+
+    /**
+     * Logs the size of created and updated static assets during a deployment.
+     */
+    public class ContentAccessProcessor extends AbstractMainDeploymentProcessor
+            implements ApplicationContextAware {
+
+        private static final Logger logger = LoggerFactory.getLogger(ContentAccessProcessor.class);
+
+        private ObjectFactory<Context> contextFactory;
+        private ContentStoreService contentStoreService;
+        private ApplicationContext applicationContext;
+
+        public void setContextFactory(ObjectFactory<Context> contextFactory) {
+            this.contextFactory = contextFactory;
+        }
+
+        public void setContentStoreService(ContentStoreService contentStoreService) {
+            this.contentStoreService = contentStoreService;
+        }
+
+        @Override
+        public void setApplicationContext(ApplicationContext applicationContext) {
+            this.applicationContext = applicationContext;
+        }
+
+        @Override
+        protected void doInit(Configuration config) {
+            // Keys on this processor's YAML entry are read from config. For the username and
+            // password in step 3, that is config.getString("username") and config.getString("password").
+        }
+
+        @Override
+        protected void doDestroy() {
+        }
+
+        @Override
+        protected ChangeSet doMainProcess(Deployment deployment, ProcessorExecution execution,
+                                           ChangeSet filteredChangeSet, ChangeSet originalChangeSet)
+                throws DeployerException {
+            String someTargetValue = applicationContext.getEnvironment()
+                    .getProperty("target.myCustomParams.myParam");
+
+            logger.info("Invoking example deployer processor");
+            logger.info("Target value: {}", someTargetValue);
+
+            if (filteredChangeSet != null) {
+                Context context = contextFactory.getObject();
+                logAssets(context, filteredChangeSet.getCreatedFiles(), "CREATE");
+                logAssets(context, filteredChangeSet.getUpdatedFiles(), "UPDATE");
+            }
+
+            logger.info("Invoking example deployer processor complete");
+            // Keep the change set produced by the previous processors.
+            return null;
+        }
+
+        private void logAssets(Context context, List<String> paths, String label) throws DeployerException {
+            if (paths == null) {
+                return;
+            }
+            for (String path : paths) {
+                if (path == null || !path.startsWith("/static-assets")) {
+                    continue;
+                }
+                try {
+                    Content content = contentStoreService.findContent(context, path);
+                    if (content == null) {
+                        throw new DeployerException(
+                                "Content at path returned null via findContent " + path);
+                    }
+                    logger.info("{} w bytes: {} {}", label, path, content.getLength());
+                } catch (DeployerException e) {
+                    throw e;
+                } catch (Exception e) {
+                    throw new DeployerException("Failed to read content at " + path, e);
+                }
+            }
+        }
+
+    }
+
+.. raw:: html
+
+    </details>
+
+Register the class in ``$CRAFTER_HOME/data/deployer/targets/ed-authoring-context.xml``. That name pairs with the target
+file ``ed-authoring.yaml``. The bean id is the ``processorName`` used in the pipeline. ``parent="deploymentProcessor"``
+supplies the environment, site name, and target id used by ``AbstractDeploymentProcessor``. The parent bean is a
+prototype. ``scope="prototype"`` gives each pipeline entry its own instance. The ``<property>`` elements are the same
+kind of dependency injection as the ``externalService`` bean in step 3.
+
+.. code-block:: xml
+    :linenos:
+    :caption: *$CRAFTER_HOME/data/deployer/targets/ed-authoring-context.xml*
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.springframework.org/schema/beans
+                               http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+        <bean id="contentAccessProcessor"
+              class="com.example.ContentAccessProcessor"
+              parent="deploymentProcessor"
+              scope="prototype">
+            <property name="contextFactory" ref="contextFactory"/>
+            <property name="contentStoreService" ref="crafter.contentStoreService"/>
+        </bean>
+
+    </beans>
+
+Add the bean to the existing ``ed-authoring.yaml`` pipeline after ``gitDiffProcessor``, which builds the change set.
+``AbstractDeploymentProcessor`` reads ``includeFiles`` and ``excludeFiles``. ``AbstractMainDeploymentProcessor`` reads
+``failDeploymentOnFailure``. ``myCustomParams`` is a target-level value. The processor reads it from the Spring
+environment with the key shown in :ref:`custom-configuration-parameters`.
+
+.. code-block:: yaml
+    :linenos:
+    :emphasize-lines: 8-11
+    :caption: *Lines to merge into $CRAFTER_HOME/data/deployer/targets/ed-authoring.yaml*
+
+    target:
+      myCustomParams:
+        myParam: "a value"
+
+      deployment:
+        pipeline:
+          - processorName: gitDiffProcessor
+          - processorName: contentAccessProcessor
+            includeFiles: ['^/static-assets/.*$']
+            excludeFiles: ['^/.*\.keep$']
+            failDeploymentOnFailure: true
+          - processorName: authoringSearchIndexingProcessor
+
+Restart Crafter Deployer after adding the JAR. The process is started with ``-Dloader.path`` set to
+``$CRAFTER_HOME/bin/crafter-deployer/lib``, so new JARs are picked up on startup. Edits to the context XML or the target
+YAML are applied when the target is reloaded.
+
+Upload an image under ``/static-assets/images`` in Studio. ``$CRAFTER_HOME/logs/deployer/crafter-deployer.out`` then
+includes the processor's log lines. The ``----- < contentAccessProcessor ... > -----`` markers are written by
+``AbstractDeploymentProcessor`` and use the bean id:
+
+.. code-block:: text
+    :caption: *Example log lines for ContentAccessProcessor*
+
+    ----- < contentAccessProcessor @ ed-authoring > -----
+    Invoking example deployer processor
+    Target value: a value
+    CREATE w bytes: /static-assets/images/example.jpg 2160375
+    Invoking example deployer processor complete
+    ----- </ contentAccessProcessor @ ed-authoring > -----
+
+.. _deployer-groovy-script-processor-option:
+
+"""""""""""""""""""""""""""""""
+Option: Groovy Script Processor
+"""""""""""""""""""""""""""""""
+The built-in :ref:`Groovy script processor <deployer-script-processor>` runs custom logic from a Groovy script. Follow
+the steps in this section when using that processor. The pipeline entry names the existing ``scriptProcessor`` bean,
+which is already defined in the Deployer base context.
+
+**Step 1: Create the script**
+
+The script can use ``logger``, ``applicationContext``, ``deployment``, ``execution``, ``filteredChangeSet``, and
+``originalChangeSet``. The scripting sandbox blocks direct access to files on the operating system. Published content
+is sometimes a plain file and sometimes a blob, an XML pointer to storage such as an S3 bucket. The content store
+service reads both forms. Obtain it from the target application context:
 
 .. code-block:: groovy
     :caption: *To get access to the out-of-the-box content store service, add the following:*
@@ -3090,18 +3294,19 @@ can use. To get the content store service in our deployer processor, we'll perfo
     def context = contextFactory.getObject()
 
 
-Here's our custom deployment processor ``ContentAccessExample.groovy`` showing you how to use the content store service
-to retrieve static assets and display the number of bytes for created and updated files:
+``ContentAccessExample.groovy`` lists the size of created and updated static assets. It walks ``filteredChangeSet``,
+so the ``includeFiles`` and ``excludeFiles`` patterns on the ``scriptProcessor`` entry select the paths. The script
+keeps paths that start with ``/static-assets`` and logs ``Content.getLength()``.
 
 .. raw:: html
 
     <details>
-    <summary><a>Custom Processor Example</a></summary>
+    <summary><a>ContentAccessExample.groovy</a></summary>
 
 .. code-block:: groovy
     :linenos:
-    :caption: *CRAFTER_HOME/bin/crafter-deployer/ContentAccessExample.groovy*
-    :emphasize-lines: 1-3, 7, 18, 35, 76
+    :caption: *$CRAFTER_HOME/bin/crafter-deployer/processors/scripts/ContentAccessExample.groovy*
+    :emphasize-lines: 1-3, 7, 12, 15, 19, 25
 
     def contextFactory = applicationContext.getBean("contextFactory")
     def contentStoreService = applicationContext.getBean("crafter.contentStoreService")
@@ -3114,39 +3319,25 @@ to retrieve static assets and display the number of bytes for created and update
     logger.info("Invoking example deployer processor")
     logger.info("Target value: {}", someTargValue)
 
-    for(path : originalChangeSet.getCreatedFiles()) {
+    for(path : filteredChangeSet.getCreatedFiles()) {
         if(contentAccessHelper.isAsset(path)) {
-            def is
-
-            try {
-                is = contentAccessHelper.retrieveStaticAsset(path)
-                logger.info("CREATE w bytes: {} {}", path, is.available())
-            }
-            finally {
-                if(is) is.close()
-            }
+            def content = contentAccessHelper.retrieveStaticAsset(path)
+            logger.info("CREATE w bytes: {} {}", path, content.getLength())
         }
     }
 
-    for(path : originalChangeSet.getUpdatedFiles()) {
+    for(path : filteredChangeSet.getUpdatedFiles()) {
         // Note: Update is only called if the file is different.
         // The deployer ignores repeated deployments of the same file
 
         if(contentAccessHelper.isAsset(path)) {
-            def is
-
-            try {
-                is = contentAccessHelper.retrieveStaticAsset(path)
-                logger.info("UPDATE w bytes: {} {}", path, is.available())
-            }
-            finally {
-                if(is) is.close()
-            }
+            def content = contentAccessHelper.retrieveStaticAsset(path)
+            logger.info("UPDATE w bytes: {} {}", path, content.getLength())
         }
     }
 
     // don't do anything with deleted files
-    // for(path : originalChangeSet.getDeletedFiles()) {
+    // for(path : filteredChangeSet.getDeletedFiles()) {
     // }
 
     logger.info("Invoking example deployer processor complete")
@@ -3166,12 +3357,12 @@ to retrieve static assets and display the number of bytes for created and update
         }
 
         /**
-         * get the input stream of an asset
-         *  This service should be used to get asset input streams for the following 3 reasosns:
-         * 1. This code works with blob store and without
+         * Get the content for an asset.
+         * This service should be used for the following 3 reasons:
+         * 1. This code works with a blob store and without one
          * 2. This code does not assume direct access to system resources (which is
          * disabled for scripting)
-          * 3. This code future proofs your code for other repository updates
+         * 3. This code future-proofs your code for other repository updates
          */
         def retrieveStaticAsset(binaryPath)
         throws Exception {
@@ -3181,15 +3372,15 @@ to retrieve static assets and display the number of bytes for created and update
                 def binaryContent = contentStoreService.findContent(this.context, binaryPath)
 
                 if(binaryContent != null) {
-                    return binaryContent.getInputStream()
+                    return binaryContent
                 }
                 else {
-                    throw new Exception("Content at path returned null via findContent {}", binaryPath)
+                    throw new Exception("Content at path returned null via findContent " + binaryPath)
                 }
             }
             else {
                 // item is remote
-                throw new Exception("Remote assets not supported by processor at this time {}", binaryPath)
+                throw new Exception("Remote assets not supported by processor at this time " + binaryPath)
             }
         }
 
@@ -3212,63 +3403,59 @@ to retrieve static assets and display the number of bytes for created and update
 
    </details>
 
-Finally, to use the custom processor above, we'll need to configure it in a target. For our example, we'll configure
-it in the authoring target ``ed-authoring.yaml`` like below:
+**Step 2: Install the script**
 
-.. raw:: html
+Save the script as ``$CRAFTER_HOME/bin/crafter-deployer/processors/scripts/ContentAccessExample.groovy``. That folder is
+the default scripting classpath. ``deployer.main.scripting.classpath`` is ``processors/scripts``, relative to the
+Deployer working directory, and ``scriptPath`` is resolved against those locations. An absolute ``scriptPath`` is also
+accepted.
 
-    <details>
-    <summary><a>Configuring your custom processor in a target</a></summary>
+**Step 3: Configure the target**
+
+Add ``myCustomParams`` under ``target`` and insert ``scriptProcessor`` after ``gitDiffProcessor`` in the existing
+``ed-authoring.yaml`` pipeline. Merge these entries into the generated file. On a stock authoring target the processor
+after the diff is ``authoringSearchIndexingProcessor``.
 
 .. code-block:: yaml
     :linenos:
-    :emphasize-lines: 17-22
-    :caption: *CRAFTER_HOME/data/deployer/targets/ed-authoring.yaml*
+    :emphasize-lines: 8-13
+    :caption: *Lines to merge into $CRAFTER_HOME/data/deployer/targets/ed-authoring.yaml*
 
-    version: 4.1.3.0
     target:
-    env: preview
-    siteName: ed
-    localRepoPath: CRAFTER_HOME/data/repos/sites/ed/sandbox
-
-    myCustomParams:
+      myCustomParams:
         myParam: "a value"
 
-    search:
-        indexIdFormat: '%s-authoring'
-    deployment:
-        scheduling:
-        enabled: false
+      deployment:
         pipeline:
-        - processorName: gitDiffProcessor
-        - processorName: scriptProcessor
-          scriptPath: 'CRAFTER_HOME/bin/crafter-deployer/ContentAccessExample.groovy'
-          excludeFiles:
-          - ^/.*\.keep$
-          includeFiles: ["^/site/website/.*$", "^/static-assets/.*$"]
-          failDeploymentOnFailure: true
-        - processorName: searchIndexingProcessor
-          excludeFiles:
-          - ^/sources/.*$
-        - processorName: httpMethodCallProcessor
-          method: GET
-          url: ${target.engineUrl}/api/1/site/cache/clear.json?crafterSite=${target.siteName}&token=${target.engineManagementToken}
-        - processorName: httpMethodCallProcessor
-          includeFiles:
-          - ^/?config/studio/content-types.*$
-          method: GET
-          url: ${target.engineUrl}/api/1/site/context/graphql/rebuild.json?crafterSite=${target.siteName}&token=${target.engineManagementToken}
-        - processorName: fileOutputProcessor
-          processorLabel: fileOutputProcessor
+          - processorName: gitDiffProcessor
+          - processorName: scriptProcessor
+            scriptPath: 'ContentAccessExample.groovy'
+            excludeFiles:
+              - '^/.*\.keep$'
+            includeFiles: ["^/site/website/.*$", "^/static-assets/.*$"]
+            failDeploymentOnFailure: true
+          - processorName: authoringSearchIndexingProcessor
+            excludeFiles:
+              - '^/sources/.*$'
+          - processorName: httpMethodCallProcessor
+            method: GET
+            url: ${target.engineUrl}/api/1/site/cache/clear.json?crafterSite=${target.siteName}&token=${target.engineManagementToken}
+          - processorName: httpMethodCallProcessor
+            includeFiles:
+              - '^/?config/studio/content-types.*$'
+            method: GET
+            url: ${target.engineUrl}/api/1/site/context/graphql/rebuild.json?crafterSite=${target.siteName}&token=${target.engineManagementToken}
+          - processorName: fileOutputProcessor
+            processorLabel: fileOutputProcessor
 
-.. raw:: html
+Add the ``scriptProcessor`` entry to the pipeline already in the file. The ``httpMethodCallProcessor`` and
+``fileOutputProcessor`` entries are the rest of the sample pipeline this script was run with.
 
-   </details>
+YAML and script edits are applied when the target is reloaded. The script engine loads ``scriptPath`` on each run.
 
-After configuring our custom deployment processor, remember to restart your install for the changes to take effect.
-We'll now test our custom deployment processor by logging in to Studio and uploading an image under
-``/static-assets/images``. To check that our custom processor ran, open the deployer log under
-``CRAFTER_HOME/logs/deployer/crafter-deployer.out`` and look for the lines we log in our custom processor:
+Upload an image under ``/static-assets/images`` in Studio. The script's ``logger`` writes through ``ScriptProcessor``,
+which is why those lines use that logger name. With ``myCustomParams`` nested under ``target``, the script logs the
+configured value:
 
 .. code-block:: text
     :linenos:
@@ -3284,17 +3471,15 @@ We'll now test our custom deployment processor by logging in to Studio and uploa
     2025-05-07 10:48:02.777  INFO 72679 --- [deployment-5] org.craftercms.deployer.impl.TargetImpl  : Deployment for ed-preview finished in 0.003 secs
     2025-05-07 10:48:02.777  INFO 72679 --- [deployment-5] org.craftercms.deployer.impl.TargetImpl  : ============================================================
     2025-05-07 10:48:03.308  INFO 72679 --- [deployment-3] deployer.impl.processors.ScriptProcessor : Invoking example deployer processor
-    2025-05-07 10:48:03.311  INFO 72679 --- [deployment-3] deployer.impl.processors.ScriptProcessor : Target value: null
+    2025-05-07 10:48:03.311  INFO 72679 --- [deployment-3] deployer.impl.processors.ScriptProcessor : Target value: a value
     2025-05-07 10:48:03.389  INFO 72679 --- [deployment-3] deployer.impl.processors.ScriptProcessor : CREATE w bytes: /static-assets/images/15905722779_2901cdeefd_o.jpg 2160375
     2025-05-07 10:48:03.394  INFO 72679 --- [deployment-3] deployer.impl.processors.ScriptProcessor : Invoking example deployer processor complete
-    2025-05-07 10:48:03.394  INFO 72679 --- [deployment-3] deployer.impl.processors.ScriptProcessor : Completed execution of script /Users/home/crafter-authoring/bin/crafter-deployer/ContentAccessExample.groovy
+    2025-05-07 10:48:03.394  INFO 72679 --- [deployment-3] deployer.impl.processors.ScriptProcessor : Completed execution of script ContentAccessExample.groovy
     2025-05-07 10:48:03.394  INFO 72679 --- [deployment-3] l.processors.AbstractDeploymentProcessor : ----- </ scriptProcessor @ ed-authoring > -----
     2025-05-07 10:48:03.394  INFO 72679 --- [deployment-3] l.processors.AbstractDeploymentProcessor : ----- < authoringSearchIndexingProcessor @ ed-authoring > -----
     2025-05-07 10:48:03.395  INFO 72679 --- [deployment-3] ocessors.AbstractSearchIndexingProcessor : Performing search indexing...
     2025-05-07 10:48:03.395  INFO 72679 --- [deployment-3] ocessors.AbstractSearchIndexingProcessor : Ensuring that index ed-authoring exists
     ...
-
-|
 
 .. _custom-configuration-parameters:
 
@@ -3319,13 +3504,16 @@ deployment target you want to add the custom parameter using your favorite edito
       myCustomParams:
         myParam: "a value"
 
-To get the custom configuration parameter values defined in a deployment target configuration file for use in a
-deployment processor:
+To get the custom configuration parameter values defined in a deployment target configuration file from a Groovy
+script processor, read them with the ``applicationContext`` binding:
 
-.. code-block:: yaml
-    :caption: *Retrieving a custom value defined in a deployment target configuration file*
+.. code-block:: groovy
+    :caption: *Retrieving a custom value from a Groovy script*
 
     def someTargetValue = applicationContext.getEnvironment().getProperty('target.myCustomParams.myParam')
+
+A Java processor reads the same key from the target application context environment, as the
+:ref:`Java example <deployer-custom-java-processor-example>` does.
 
 
 |hr|
