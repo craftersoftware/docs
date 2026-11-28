@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.7.1
+:last-updated: 5.0.0
 
 .. meta::
     :description lang=en:
@@ -14,6 +14,11 @@ This section contains release notes for CrafterCMS version 4. For other version 
 version release's release notes page :ref:`below <other-release-notes>`
 
 .. note:: CrafterCMS requires Java 21
+
+.. important::
+
+    Upgrading to CrafterCMS 5 requires action when Studio uses an external database.
+    See :ref:`breaking changes in CrafterCMS 5.0 <breaking-changes-in-craftercms-5-0>`.
 
 .. include:: /release-notes/4-7-1.rst
 .. include:: /release-notes/4-7-0.rst

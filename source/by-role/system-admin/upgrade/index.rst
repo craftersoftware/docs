@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.7.0
+:last-updated: 5.0.0
 
 .. meta::
    :description: Complete guide to upgrading CrafterCMS on servers, Docker, Kubernetes, and clusters, including search migration to OpenSearch.
@@ -97,6 +97,29 @@ Here are the instructions for upgrading CrafterCMS based on how it was installed
    upgrading-server.rst
    upgrading-container.rst
    upgrading-cluster.rst
+
+|hr|
+
+.. _upgrade-notes-for-craftercms-5.0:
+
+--------------------------------
+Upgrade Notes for CrafterCMS 5.0
+--------------------------------
+Studio will not start against an external database until you opt in.
+See :ref:`breaking changes in CrafterCMS 5.0 <breaking-changes-in-craftercms-5-0>`.
+
+- Add the opt-in to the existing ``studio-config-override.yaml`` before starting Studio. The property is YAML only.
+  See :ref:`studio-external-database` for a binary install, Docker (bind-mount the override file), and Kubernetes
+  (the override lives in a ConfigMap).
+- Embedded-database installs need no change. Crafter Engine is unaffected.
+- ``localhost`` and ``::1`` in ``MARIADB_HOST`` are normalized to ``127.0.0.1``. A remote ``MARIADB_HOST`` is still
+  honored in this release and logs a warning. ``CRAFTER_DEPRECATED_EXTERNAL_DB_HOST`` takes precedence and is kept as
+  written, including ``localhost`` and ``::1``. An empty value counts as unset.
+- The setting and those environment variables will be removed in a future release
+  (`#9536 <https://github.com/craftersoftware/craftercms/issues/9536>`__).
+
+See :ref:`breaking changes in CrafterCMS 5 <breaking-changes-5-x>` for what Studio treats as an external database and
+the startup failure.
 
 |hr|
 

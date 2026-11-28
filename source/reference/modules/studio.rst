@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.7.0
+:last-updated: 5.0.0
 
 .. highlight:: xml
 
@@ -136,10 +136,52 @@ In this section, we will highlight some of the more commonly used properties in 
       - Configure Box integration
     * - :ref:`WebDAV Profiles Configuration <webdav-profiles-configuration>`
       - Configure WebDAV integration
+    * - :ref:`Database <studio-database>`
+      - Embedded MariaDB. External databases are deprecated and unsupported
 
 .. TODO Add more configuration properties
 
 |
+
+|hr|
+
+.. _studio-database:
+
+""""""""
+Database
+""""""""
+.. version_tag::
+    :label: Since
+    :version: 5.0.0
+
+Crafter Studio uses its own embedded MariaDB. The connection settings under ``studio.db.*`` must point at that
+database. External databases, including AWS RDS, are deprecated and unsupported.
+
+``studio.db.allowExternal`` allows Studio to start when a connection URL points at an external database. The default
+in ``studio-config.yaml`` is ``false``. The property is YAML only. It is not mapped from an environment variable.
+The setting will be removed in a future release (`#9536 <https://github.com/craftersoftware/craftercms/issues/9536>`__).
+Migrate to the embedded database.
+
+.. code-block:: yaml
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml*
+
+    # Allows Studio to start against an external database.
+    # DEPRECATED and unsupported: this setting will be removed in a future release. Migrate to the embedded database.
+    studio.db.allowExternal: true
+
+Studio checks ``studio.db.url``, ``studio.db.scriptRunnerUrl``, and ``studio.db.initializer.url``. The guard decides
+that a URL is external from the URL's host and port only. The URL is the embedded database when that host is
+``127.0.0.1``, ``localhost``, or ``::1`` and that port is ``studio.db.port``. A URL that cannot be parsed fails closed.
+
+Without ``studio.db.allowExternal: true``, Studio logs one ERROR and fails to start. The message names
+``studio.db.allowExternal`` and ``studio-config-override.yaml``. With the opt-in, Studio starts and logs one
+deprecation warning at every start. The log line includes the host, the port, and the property name.
+
+The shipped override comments the property out and no longer includes
+``studio.db.initializer.url: ${studio.db.url}`` (the old AWS RDS example).
+
+See :ref:`studio-external-database` for the binary, Docker, and Kubernetes opt-in, for
+``CRAFTER_DEPRECATED_EXTERNAL_DB_HOST`` and ``MARIADB_HOST``, and for the startup messages.
 
 |hr|
 
