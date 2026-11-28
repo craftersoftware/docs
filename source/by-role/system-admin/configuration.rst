@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.7.0
+:last-updated: 5.0.0
 
 .. index:: Configuration, Ports, Hostnames, Apache HTTPd, Configure Reverse Proxy
 
@@ -101,7 +101,9 @@ The following is an example of the default values for the hostnames and ports us
     # MongoDB is used only by Crafter Profile / Crafter Social (enterprise)
     export MONGODB_HOST=${MONGODB_HOST:="localhost"}
     export MONGODB_PORT=${MONGODB_PORT:="27020"}
-    export MARIADB_HOST=${MARIADB_HOST:="127.0.0.1"}
+    # Embedded MariaDB on the loopback interface. localhost and ::1 are normalized to 127.0.0.1.
+    # A remote MARIADB_HOST is deprecated. See the MariaDB section below.
+    export MARIADB_HOST="127.0.0.1"
     export MARIADB_PORT=${MARIADB_PORT:="33306"}
     export TOMCAT_HOST=${TOMCAT_HOST:="localhost"}
     export TOMCAT_HTTP_PORT=${TOMCAT_HTTP_PORT:="8080"}
@@ -462,8 +464,11 @@ Here are the environment variables used for configuring hosts and ports:
       - MongoDB port (Crafter Profile / Crafter Social |enterpriseOnly|)
       - 27020
     * - MARIADB_HOST
-      - MariaDB host (authoring only)
+      - Embedded MariaDB host (authoring only). ``localhost`` and ``::1`` are normalized to ``127.0.0.1``. A remote host is deprecated. See :ref:`studio-external-database`.
       - 127.0.0.1
+    * - CRAFTER_DEPRECATED_EXTERNAL_DB_HOST
+      - Deprecated external MariaDB host (authoring only). When set, overrides ``MARIADB_HOST``. Removed in a future release. See :ref:`studio-external-database`.
+      -
     * - MARIADB_PORT
       - MariaDB port  (authoring only)
       - 33306
@@ -695,6 +700,9 @@ Here are the environment variables used for configuring MariaDB:
     * - MARIADB_SCHEMA
       - MariaDB schema
       - crafter
+    * - CRAFTER_DEPRECATED_EXTERNAL_DB_HOST
+      - Deprecated external MariaDB host. When set, overrides ``MARIADB_HOST``. Removed in a future release. See :ref:`studio-external-database`.
+      -
     * - MARIADB_HOME
       - MariaDB files path
       - $CRAFTER_BIN_DIR/dbms
@@ -725,6 +733,166 @@ Here are the environment variables used for configuring MariaDB:
 
 You must change the pre-configured default values for environment variables for passwords such as ``MARIADB_PASSWD``
 to secure your installation. See :ref:`system-admin-security` for more information on changing the values.
+
+.. _studio-external-database:
+
+''''''''''''''''''''''''''''''''
+External databases (deprecated)
+''''''''''''''''''''''''''''''''
+.. version_tag::
+    :label: Since
+    :version: 5.0.0
+
+Crafter Studio uses its own embedded MariaDB. External databases, including AWS RDS, are deprecated and unsupported.
+The bundle and Kubernetes ``studio-config-override.yaml`` files no longer include the commented AWS RDS example
+``studio.db.initializer.url: ${studio.db.url}``. Migrate to the embedded database. The temporary opt-in below, and the
+environment variables that point Studio at a remote host, will be removed in a future release
+(`#9536 <https://github.com/craftersoftware/craftercms/issues/9536>`__).
+
+.. important::
+
+    **Action required if Studio uses an external database.** After upgrading to CrafterCMS 5, Studio won't start
+    against an external database until you add ``studio.db.allowExternal: true`` to ``studio-config-override.yaml``.
+    Studio then starts and logs a deprecation warning at every start. Embedded-database installs need no change.
+    See :ref:`breaking changes in CrafterCMS 5 <breaking-changes-5-x>`.
+
+``studio.db.allowExternal`` defaults to ``false`` in ``studio-config.yaml``. The property is YAML only. It is not
+mapped from an environment variable. Crafter Engine does not use this database and is unaffected.
+
+Studio checks ``studio.db.url``, ``studio.db.scriptRunnerUrl``, and ``studio.db.initializer.url`` before it opens a
+connection. A URL counts as the embedded database only when it is a single-host ``jdbc:mariadb://`` or
+``jdbc:mysql://`` URL whose host is ``127.0.0.1``, ``localhost``, or ``::1`` (the host comparison ignores case) and
+whose port is ``studio.db.port``. Anything else is external and fails closed: a different host, a different port, a
+missing port, an IPv6 address that is not written as ``[::1]``, multiple hosts, credentials in the authority, another
+driver, or any URL that cannot be parsed.
+
+The log line names the host, the port, and the property. It does not include the user, the password, the query
+string, or the full JDBC URL. An address that cannot be parsed is logged as ``<unrecognized address>``.
+
+**Without the opt-in,** Studio logs one ERROR and fails to start:
+
+.. code-block:: text
+
+    Crafter Studio is configured to use an external database at <host>:<port> (<property>). External databases are deprecated and unsupported. Migrate to the embedded database, or set 'studio.db.allowExternal: true' in studio-config-override.yaml to start anyway. This setting will be removed in a future release.
+
+**With the opt-in,** Studio starts and logs one deprecation warning at every start:
+
+.. code-block:: text
+
+    Crafter Studio is using an external database at <host>:<port> (<property>) because 'studio.db.allowExternal' is true. External databases are deprecated and unsupported. Migrate to the embedded database. This setting will be removed in a future release.
+
+When more than one of the three URLs is external, they are listed in that single message, separated by commas.
+
+Add the property to the existing override file. The shipped file leaves it commented out:
+
+.. code-block:: yaml
+    :caption: *studio-config-override.yaml*
+
+    # Crafter Studio uses its own embedded MariaDB. Do not change these values
+    # Allows Studio to start against an external database.
+    # DEPRECATED and unsupported: this setting will be removed in a future release. Migrate to the embedded database.
+    studio.db.allowExternal: true
+
+.............
+Binary bundle
+.............
+Edit ``CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml`` and restart.
+The same property in ``CRAFTER_HOME/data/repos/global/configuration/studio-config-override.yaml`` is loaded as well.
+Edit the file on disk before starting when Studio is failing to start. See :ref:`studio-database`.
+
+.. code-block:: yaml
+    :caption: *CRAFTER_HOME/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml*
+
+    studio.db.allowExternal: true
+
+......
+Docker
+......
+Supply the override file yourself. ``studio.db.allowExternal`` is not read from the environment, and
+``MARIADB_HOST`` does not turn the opt-in on.
+
+Copy the ``studio-config-override.yaml`` that ships in the image (or in the binary bundle), add
+``studio.db.allowExternal: true`` to that file, and bind-mount it. A mount replaces the whole file, so keep the rest
+of the shipped override, including the connection URLs.
+
+The file inside the authoring image is
+``/opt/crafter/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml``.
+
+.. code-block:: yaml
+    :caption: *authoring/docker-compose.yml*
+
+    services:
+      tomcat:
+        image: craftercms/authoring_tomcat:latest
+        volumes:
+          - ./studio-config-override.yaml:/opt/crafter/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml
+
+.. code-block:: bash
+    :caption: *docker run*
+
+    docker run -p 8080:8080 \
+      -v "$PWD/studio-config-override.yaml:/opt/crafter/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml" \
+      craftercms/authoring_local:latest
+
+..........
+Kubernetes
+..........
+The override lives in a ConfigMap and is mounted onto the same path inside the Tomcat container.
+
+The CrafterCMS 5 authoring cluster example generates a ConfigMap named ``studio-config`` from
+``kubernetes-deployments/authoring/cluster/resources/config/studio/studio-config-override.yaml`` and mounts it at
+``/opt/crafter/bin/apache-tomcat/shared/classes/crafter/studio/extension/studio-config-override.yaml``.
+That file ships with ``studio.db.allowExternal`` commented out. Uncomment it, set it to ``true``, and apply the
+kustomization again. Keep the rest of the file. The simple authoring example does not generate this ConfigMap. Add
+one and mount ``studio-config-override.yaml`` at that path:
+
+.. code-block:: yaml
+    :caption: *ConfigMap mounted as studio-config-override.yaml*
+
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: studio-config
+      namespace: craftercms
+    data:
+      studio-config-override.yaml: |
+        studio.db.allowExternal: true
+        # Keep the rest of the shipped override in this file.
+
+................................
+External database host variables
+................................
+``crafter-setenv.sh`` sets ``MARIADB_HOST`` as follows:
+
+- When ``CRAFTER_DEPRECATED_EXTERNAL_DB_HOST`` is set, that value becomes ``MARIADB_HOST``. It takes precedence over
+  ``MARIADB_HOST``. This path does not print the ``crafter-setenv.sh`` warning below.
+- When ``MARIADB_HOST`` is set to a host other than ``127.0.0.1``, ``localhost``, or ``::1``, the remote value is
+  still honored in this release, and ``crafter-setenv.sh`` prints:
+
+  .. code-block:: text
+
+      WARN: Setting MARIADB_HOST to an external database host is deprecated. Use CRAFTER_DEPRECATED_EXTERNAL_DB_HOST instead. External databases are deprecated and unsupported.
+
+- Otherwise ``MARIADB_HOST`` is set to ``127.0.0.1``. The exact values ``localhost`` and ``::1`` are normalized to
+  ``127.0.0.1``.
+
+The comparison in ``crafter-setenv.sh`` is case-sensitive. Studio's URL check ignores host case.
+
+``crafter.sh`` prints a warning when ``MARIADB_HOST`` is not ``127.0.0.1``, ``localhost``, or ``::1``. The warning is
+printed for ``start``, ``debug``, ``start_tomcat``, ``debug_tomcat``, ``backup``, ``restore``, ``upgradedb``, and
+``upgradedb_if_needed``. A remote ``CRAFTER_DEPRECATED_EXTERNAL_DB_HOST`` is copied into ``MARIADB_HOST``, so these
+actions warn in that case too:
+
+.. code-block:: text
+
+    WARN: The database host is <host>, an external database.
+    External databases are deprecated and unsupported. Migrate to the embedded database.
+    Crafter Studio will not start unless 'studio.db.allowExternal: true' is set in
+    studio-config-override.yaml. This setting will be removed in a future release.
+
+The shipped override builds ``studio.db.url``, ``studio.db.scriptRunnerUrl``, and ``studio.db.initializer.url`` from
+``MARIADB_HOST``. Pointing that host at a remote database makes those URLs external, and Studio then applies the
+check above. Setting either environment variable does not set ``studio.db.allowExternal``.
 
 .. _env-var-git:
 

@@ -1,5 +1,5 @@
 :is-up-to-date: True
-:last-updated: 4.5.2
+:last-updated: 5.0.0
 
 .. meta::
    :description: Install CrafterCMS via binary bundles, Docker, or Kubernetes for authoring and delivery environments with system requirements and platform support information.
@@ -34,7 +34,9 @@ Requirements
 - Docker (if running in Docker or macOS)
 
 Please note that CrafterCMS does not require any external databases for the core system to run and deliver fully dynamic
-experiences. MongoDB is used only by Crafter Profile |enterpriseOnly| and Crafter Social |enterpriseOnly|, optional enterprise
+experiences. Crafter Studio keeps its own data in an embedded MariaDB. External databases for Studio, including AWS RDS,
+are deprecated and unsupported. See :ref:`studio-external-database` before upgrading an installation that points Studio
+at a remote database. MongoDB is used only by Crafter Profile |enterpriseOnly| and Crafter Social |enterpriseOnly|, optional enterprise
 modules that provide external (non-author) user management and social features. You do not need MongoDB unless you run those modules.
 
 For more information on sizing your machines, see :ref:`authoring server requirements <authoring-server-requirements>`
@@ -299,6 +301,12 @@ Docker
 ^^^^^^
 You can run CrafterCMS locally using Docker:
 
+.. note::
+
+    Starting with CrafterCMS 5.0, Studio will not start against an external database unless
+    ``studio.db.allowExternal: true`` is set in ``studio-config-override.yaml``. The property is YAML only, so the
+    override file has to be bind-mounted into the container. See :ref:`studio-external-database`.
+
 """"""""""""""""""""""""""""""""""""
 Quick Start for Evaluation in Docker
 """"""""""""""""""""""""""""""""""""
@@ -484,6 +492,12 @@ Kubernetes
 CrafterCMS provides Kubernetes example deployments, which can be found here: https://github.com/craftercms/kubernetes-deployments.
 
 This article will describe examples of deploying CrafterCMS in Kubernetes.
+
+.. note::
+
+    Starting with CrafterCMS 5.0, Studio will not start against an external database unless
+    ``studio.db.allowExternal: true`` is set in ``studio-config-override.yaml``. In Kubernetes that override lives in
+    a ConfigMap. See :ref:`studio-external-database`.
 
 .. _setup-simple-authoring-with-kubernetes-deployment:
 
@@ -1429,7 +1443,8 @@ Select your operating system then click on the ``Download`` link next to ``Autho
 needs.  For the authoring, the file downloaded will be ``crafter-cms-authoring-*.tar.gz``  and ``crafter-cms-delivery*.tar.gz``
 for delivery. The ``.tar.gz`` file will install a fully functional authoring/delivery instance. Out of the box, the
 authoring instance uses a local directory as the repository and an embedded database, which allows a quick and easy set
-up for local development.
+up for local development. External databases for Studio are deprecated and unsupported. To keep one running on
+CrafterCMS 5.0, edit ``studio-config-override.yaml`` as described in :ref:`studio-external-database`.
 
 """""""""""""""""""""""""""""""
 Extract the CrafterCMS binaries
