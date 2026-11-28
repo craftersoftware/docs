@@ -17,16 +17,8 @@ version release's release notes page :ref:`below <other-release-notes>`
 
 .. important::
 
-    **Action required if Studio uses an external database** when upgrading to CrafterCMS 5.
-    External databases for Crafter Studio are deprecated and unsupported. After upgrading, Studio won't start
-    against an external database until you add ``studio.db.allowExternal: true`` to ``studio-config-override.yaml``.
-    Studio then starts and logs a deprecation warning at every start. Embedded-database installs need no change.
-    Setting ``MARIADB_HOST`` to a remote host still works in this release but logs a warning. Use
-    ``CRAFTER_DEPRECATED_EXTERNAL_DB_HOST`` instead. Both the setting and the env vars will be removed in a future
-    release (`#9536 <https://github.com/craftersoftware/craftercms/issues/9536>`__). Plan your migration to the
-    embedded database.
-
-    See :ref:`breaking changes in CrafterCMS 5 <breaking-changes-5-x>` and :ref:`studio-external-database`.
+    Upgrading to CrafterCMS 5 requires action when Studio uses an external database.
+    See :ref:`breaking changes in CrafterCMS 5.0 <breaking-changes-in-craftercms-5-0>`.
 
 .. include:: /release-notes/4-7-1.rst
 .. include:: /release-notes/4-7-0.rst

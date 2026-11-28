@@ -105,16 +105,16 @@ Here are the instructions for upgrading CrafterCMS based on how it was installed
 --------------------------------
 Upgrade Notes for CrafterCMS 5.0
 --------------------------------
-.. important::
-
-    **Action required if Studio uses an external database.** External databases for Crafter Studio are deprecated and unsupported. After upgrading, Studio won't start against an external database until you add ``studio.db.allowExternal: true`` to ``studio-config-override.yaml``. Studio then starts and logs a deprecation warning at every start. Embedded-database installs need no change. Setting ``MARIADB_HOST`` to a remote host still works in this release but logs a warning. Use ``CRAFTER_DEPRECATED_EXTERNAL_DB_HOST`` instead. Both the setting and the env vars will be removed in a future release (`#9536 <https://github.com/craftersoftware/craftercms/issues/9536>`__). Plan your migration to the embedded database.
+Studio will not start against an external database until you opt in.
+See :ref:`breaking changes in CrafterCMS 5.0 <breaking-changes-in-craftercms-5-0>`.
 
 - Add the opt-in to the existing ``studio-config-override.yaml`` before starting Studio. The property is YAML only.
   See :ref:`studio-external-database` for a binary install, Docker (bind-mount the override file), and Kubernetes
   (the override lives in a ConfigMap).
 - Embedded-database installs need no change. Crafter Engine is unaffected.
 - ``localhost`` and ``::1`` in ``MARIADB_HOST`` are normalized to ``127.0.0.1``. A remote ``MARIADB_HOST`` is still
-  honored in this release and logs a warning. Prefer ``CRAFTER_DEPRECATED_EXTERNAL_DB_HOST``, which takes precedence.
+  honored in this release and logs a warning. ``CRAFTER_DEPRECATED_EXTERNAL_DB_HOST`` takes precedence and is kept as
+  written, including ``localhost`` and ``::1``. An empty value counts as unset.
 - The setting and those environment variables will be removed in a future release
   (`#9536 <https://github.com/craftersoftware/craftercms/issues/9536>`__).
 

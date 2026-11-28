@@ -301,12 +301,6 @@ Docker
 ^^^^^^
 You can run CrafterCMS locally using Docker:
 
-.. note::
-
-    Starting with CrafterCMS 5.0, Studio will not start against an external database unless
-    ``studio.db.allowExternal: true`` is set in ``studio-config-override.yaml``. The property is YAML only, so the
-    override file has to be bind-mounted into the container. See :ref:`studio-external-database`.
-
 """"""""""""""""""""""""""""""""""""
 Quick Start for Evaluation in Docker
 """"""""""""""""""""""""""""""""""""
@@ -317,6 +311,12 @@ For a quick start to evaluate CrafterCMS, follow these simple instructions. If y
     docker run -p 8080:8080 craftercms/authoring_local:latest
 
 Then point your browser to ``http://localhost:8080/studio`` and you will be presented with the Crafter Studio login page. The default username is ``admin`` and the default password is ``admin``.
+
+.. note::
+
+    Starting with CrafterCMS 5.0, Studio will not start against an external database unless
+    ``studio.db.allowExternal: true`` is set in ``studio-config-override.yaml``. The property is YAML only, so the
+    override file has to be bind-mounted into the container. See :ref:`studio-external-database`.
 
 """"""""""""""
 Docker Compose

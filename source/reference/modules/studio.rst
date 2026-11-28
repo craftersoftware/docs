@@ -169,9 +169,9 @@ Migrate to the embedded database.
     # DEPRECATED and unsupported: this setting will be removed in a future release. Migrate to the embedded database.
     studio.db.allowExternal: true
 
-Studio checks ``studio.db.url``, ``studio.db.scriptRunnerUrl``, and ``studio.db.initializer.url``. A URL is external
-when its host is not ``127.0.0.1``, ``localhost``, or ``::1``, when its port is not ``studio.db.port``, or when the
-URL cannot be parsed. An unparseable URL fails closed.
+Studio checks ``studio.db.url``, ``studio.db.scriptRunnerUrl``, and ``studio.db.initializer.url``. The guard decides
+that a URL is external from the URL's host and port only. The URL is the embedded database when that host is
+``127.0.0.1``, ``localhost``, or ``::1`` and that port is ``studio.db.port``. A URL that cannot be parsed fails closed.
 
 Without ``studio.db.allowExternal: true``, Studio logs one ERROR and fails to start. The message names
 ``studio.db.allowExternal`` and ``studio-config-override.yaml``. With the opt-in, Studio starts and logs one

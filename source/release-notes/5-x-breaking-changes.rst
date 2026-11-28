@@ -29,11 +29,11 @@ Crafter Studio uses its own embedded MariaDB. The default in ``studio-config.yam
 The property is YAML only. It is not mapped from an environment variable, so a Docker or Kubernetes install has to supply
 ``studio-config-override.yaml`` (a bind mount, or a ConfigMap). Crafter Engine is unaffected.
 
-Studio checks ``studio.db.url``, ``studio.db.scriptRunnerUrl``, and ``studio.db.initializer.url``. A URL is external
-when its host is not ``127.0.0.1``, ``localhost``, or ``::1``, when its port is not ``studio.db.port``, or when the URL
-cannot be parsed. An unparseable URL fails closed. Without the opt-in, Studio logs one ERROR that names the property
-and ``studio-config-override.yaml``, then fails to start. With the opt-in, Studio logs one deprecation warning at every
-start.
+Studio checks ``studio.db.url``, ``studio.db.scriptRunnerUrl``, and ``studio.db.initializer.url``. The guard decides
+that a URL is external from the URL's host and port only. The URL is the embedded database when that host is
+``127.0.0.1``, ``localhost``, or ``::1`` and that port is ``studio.db.port``. A URL that cannot be parsed fails closed.
+Without the opt-in, Studio logs one ERROR that names the property and ``studio-config-override.yaml``, then fails to
+start. With the opt-in, Studio logs one deprecation warning at every start.
 
 The shipped bundle and Kubernetes override files no longer include the commented AWS RDS example
 (``studio.db.initializer.url: ${studio.db.url}``). An existing override that still points those URLs at a remote
